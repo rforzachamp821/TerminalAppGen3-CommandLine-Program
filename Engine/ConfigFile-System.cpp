@@ -86,7 +86,7 @@ public:
 	// Settings Variables/Switches
 	//
 	bool bDisplayDirections = true;
-	bool bDisplayVerboseMessages = false; // TRUE for debugging; temporary and not for final release'
+	bool bDisplayVerboseMessages = false;
 	bool bRandomColoursOnStartup = false;
 	bool bShowCursor = true;
 	bool bWordWrapToggle = true;

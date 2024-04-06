@@ -1168,7 +1168,7 @@ bool SetWindowTitle(std::string sTitle) {
 			return true;
 		}
 		else {
-			VerbosityDisplay("ERROR: In SetWindowTitle() - String argument incorrect due to Win32 API 256 max string char limit for title.\n");
+			VerbosityDisplay("ERROR: In SetWindowTitle() - String argument incorrect due to WIN32 API 256 max string char limit for title.\n");
 			return false;
 		}
 	}
@@ -1179,7 +1179,7 @@ bool SetWindowTitle(std::string sTitle) {
 // Clear screen function (Flushes whole screen buffer)
 void cls() {
 
-	// Using ANSI escape codes to clear the screen is a lot faster and cross-platform
+	// Using ANSI escape codes to clear the screen is a lot neater and cross-platform
 	if (bAnsiVTSequences == true) {
 		std::cout << "\033c"; // fully clear the scrollback buffer
 		// As everything was reset, set everything back to normal

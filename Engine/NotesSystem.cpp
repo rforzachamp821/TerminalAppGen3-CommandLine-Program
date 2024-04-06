@@ -49,7 +49,7 @@ public:
 	~NotesSystem()
 	{
 		// Firstly, re-initialise the sNotes part of the heap for security measures to 0 (so notes don't get accessed from memory by malicious actor)
-		for (int i = 0; i < nArraySize; i++) {
+		for (size_t i = 0; i < nArraySize; i++) {
 			sNotes[i] = "\0";
 		}
 
@@ -68,7 +68,7 @@ public:
 	//            sNoteText - The text to be used in the note.
 	// Return values: TRUE or 1 for success, FALSE or 0 for fail.
 	//
-	bool AddNoteToArray(unsigned int nArrayIndex, std::string sNoteText) {
+	bool AddNoteToArray(size_t nArrayIndex, std::string sNoteText) {
 		// Check if the array index is too high
 		if (nArrayIndex > GetCurrentNotesCount()) {
 			VerbosityDisplay("In NotesSystem::AddNoteToArray() - ERROR: Note index is too high, and is higher than NotesSystem::GetCurrentNotesCount().\n", nObjectID);
@@ -78,8 +78,8 @@ public:
 		// Check if notes text is empty - if so, shift everything behind the option by 1 to the left (deleting a note)
 		if (sNoteText == "") {
 			// Use for loop to shift all elements to the left
-			unsigned int nNotesCount = GetCurrentNotesCount();
-			for (unsigned int i = nArrayIndex; i < nNotesCount; i++) {
+			size_t nNotesCount = GetCurrentNotesCount();
+			for (size_t i = nArrayIndex; i < nNotesCount; i++) {
 				if (i < nNotesCount - 1) {
 					// Assign nArrayIndex/i to the note above it
 					sNotes[i] = sNotes[i + 1];
@@ -120,7 +120,7 @@ public:
 		}
 
 		// 3. Write every line of notes into file, with every line separated by a newline character (exit if failed)
-		for (int i = 0; i < nArraySize && !NotesOut.fail(); i++) {
+		for (size_t i = 0; i < nArraySize && !NotesOut.fail(); i++) {
 
 			// Exit when nothing found - there is no need to continue when there will be nothing else afterwards
 			if (sNotes[i] == "") {
@@ -164,7 +164,7 @@ public:
 		std::ifstream FileNotesIn(sDefaultFileName);
 
 		// 4. Assign each line to spot in notes array
-		for (int i = 0; !FileNotesIn.eof() && !FileNotesIn.fail() && i < nArraySize; i++) {
+		for (size_t i = 0; !FileNotesIn.eof() && !FileNotesIn.fail() && i < nArraySize; i++) {
 			std::string sBuffer = "";
 			std::getline(FileNotesIn, sBuffer, '\n');
 			sNotes[i] = sBuffer;
@@ -183,7 +183,7 @@ public:
 	//
 	bool ClearAllNotes() {
 		// Initialise all notes to nothing
-		for (int i = 0; i < nArraySize; i++) {
+		for (size_t i = 0; i < nArraySize; i++) {
 			sNotes[i] = "";
 		}
 
@@ -202,7 +202,7 @@ public:
 		// Use a for loop to convert array into a singular string in the heap
 		std::string* sNotesBuffer = new std::string;
 
-		for (int i = 0; i < nArraySize; i++) {
+		for (size_t i = 0; i < nArraySize; i++) {
 			if (sNotes[i] == "") break; // Exit when nothing found, as there would be nothing wanted after that
 			*sNotesBuffer += sNotes[i] + "\n";
 		}
@@ -255,13 +255,13 @@ public:
 	// Arguments: None
 	// Return value(s): The number of notes in memory, base 1.
 	//
-	unsigned int GetCurrentNotesCount() 
+	size_t GetCurrentNotesCount()
 	{
 		// Declare count variable
-		unsigned int nCount = 0;
+		size_t nCount = 0;
 
 		// Use for loop to count number of notes
-		for (int i = 0; i < nArraySize; i++, nCount++) {
+		for (size_t i = 0; i < nArraySize; i++, nCount++) {
 			if (sNotes[i] == "") break; // Exit when nothing found, as there would be nothing wanted after that - final count
 		}
 
@@ -340,7 +340,7 @@ public:
 
 		bool bIteratorChange = false;
 		size_t nPreviousIterator = 0;
-		for (size_t i = NotesMain.GetCurrentNotesCount(); i < NotesMain.GetMaxNotesArraySize(); i++) {
+		for (size_t i = NotesMain.GetCurrentNotesCount(); i < NotesMain.GetMaxNotesArraySize(); bIteratorChange ? i = i : i++) {
 			std::cout << "Note ";
 			colour(NumberToColour(RandNum(16, 1)), ConfigObjMain.sColourGlobalBack);
 			std::cout << i + 1;
@@ -364,24 +364,23 @@ public:
 				return;
 			}
 			else if (sNoteBuffer == "^prev") {
-				bIteratorChange = true;
-				nPreviousIterator = i;
-				i -= 2;
-				if (i <= -1) {
-					bIteratorChange = false;
-					i = nPreviousIterator;
-					nPreviousIterator = 0;
-					NotesMain.AddNoteToArray(i, sNoteBuffer);
-					// Save notes
-					NotesMain.WriteToNotesFile();
+				// We are using size_t (unsigned 64-bit), so it can't go negative
+				if (i > 0) {
+					bIteratorChange = true;
+					nPreviousIterator = i;
+					i -= 1;
+
+					continue; // to avoid write to notes array
 				}
-				else continue; // to avoid write to notes array
+				else {
+					bIteratorChange = false;
+					nPreviousIterator = 0;
+				}
 			}
 			else if (sNoteBuffer.find("^") == 0) {
 				// Possibly a number - search until the end of a string
 				std::string sNumberCandidate = sNoteBuffer.substr(1, std::string::npos);
 				if (isNumberull(sNumberCandidate)) {
-					bIteratorChange = true;
 					nPreviousIterator = i;
 					i = std::stoull(sNumberCandidate);
 
@@ -389,12 +388,10 @@ public:
 						i = nPreviousIterator;
 						nPreviousIterator = 0;
 						bIteratorChange = false;
-						NotesMain.AddNoteToArray(i, sNoteBuffer);
-						// Save notes
-						NotesMain.WriteToNotesFile();
 					}
 					else {
-						i -= 2;
+						bIteratorChange = true;
+						i -= 1;
 						continue; // to avoid write to notes aray
 					}
 				}
@@ -431,7 +428,7 @@ public:
 			std::cout << "No notes are saved on memory.\n";
 		}
 		else {
-			for (int i = 0; !ssMemoryNotes.eof(); i++) {
+			for (size_t i = 0; !ssMemoryNotes.eof(); i++) {
 				std::string sNoteBuffer = "";
 
 				// Get a line up to next newline
@@ -458,7 +455,7 @@ public:
 			std::cout << "No notes are saved on the Notes file.\n";
 		}
 		else {
-			for (int i = 0; !ssFileNotes.eof(); i++) {
+			for (size_t i = 0; !ssFileNotes.eof(); i++) {
 				std::string sNoteBuffer = "";
 
 				// Get a line up to next newline

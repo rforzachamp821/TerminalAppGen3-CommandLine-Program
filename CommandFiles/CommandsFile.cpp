@@ -778,7 +778,7 @@ void help(bool bFromTutorial) {
 		"This is an early alpha build of ZeeTerminal, with an entirely new engine and components.\nThis program is made in C++, with a few very small parts of C." +
 		"\n\nThis program uses the DirectShow API in the MediaPlayer command, which is licensed by Microsoft Corporation. (c) Microsoft Corporation.\n\n" +
 		"This program uses the BASS API in the AudioPlayer command, which is licensed by Un4Seen Developments. (c) Un4Seen Developments.\n\n" +
-		"\n(c) Ryan Zorkot, 2024. ZeeTerminal is licensed under the MIT License. The license and credits can be viewed on Page 4.\n\n"
+		"\nZeeTerminal is licensed under the MIT License. The license and credits can be viewed on Page 4.\n\n"
 		"  _____        _____                   _             _ \n"
 		" |__  /___  __|_   _|__ _ __ _ __ ___ (_)_ __   __ _| |\n"
 		"   / // _ \\/ _ \\| |/ _ \\ '__| '_ \\` _ \\| | '_ \\ / _\\` |\n"

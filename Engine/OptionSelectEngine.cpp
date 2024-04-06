@@ -39,10 +39,12 @@ protected:
 	}
 
 	// SimpleOptionSelect - A simple selection UI that allows for easy number-typing input.
+	// 	
+	// nLeftPaddingWidth - Specify padding width for the options, in characters. Default is 0 (no padding).
 	// 
 	// Pressing ESC (exit) leads to returning code -1, error returns -2, and the index of the option when input is finished is returned otherwise.
 	//
-	int SimpleOptionSelect(std::string sPrompt, std::string sTitle) 
+	int SimpleOptionSelect(std::string sPrompt, std::string sTitle, int nLeftPaddingWidth = 0) 
 	{
 		int nInput = 0;
 		std::vector<std::string> vsOptionIndicatorColours{};
@@ -69,9 +71,15 @@ protected:
 		std::cout << "\n";
 		std::cout << wordWrap(sPrompt) << "\n\n";
 
+		// Log that session is starting
+		LogFileMain.AddLogLine("In OptionSelectEngine::SimpleOptionSelect(): OptionSelect Session starting with " + std::to_string(nSizeOfOptions) + " options and prompt {\"" + sPrompt + "\"}.", 4, nObjectID);
+
 		// Render options
 		for (int i = 0; i < nSizeOfOptions; i++) 
 		{
+			// Output number of spaces based on padding
+			std::cout << std::string(nLeftPaddingWidth, ' ');
+
 			// Set brackets to option indicator colour
 			colour(vsOptionIndicatorColours[i], ConfigObjMain.sColourGlobalBack);
 			std::cout << '[';
@@ -93,6 +101,9 @@ protected:
 			nInput = NumInputi("Please input your desired option number (input 0 to exit): > ");
 
 			if (nInput == 0) {
+				// Log that session is ending
+				LogFileMain.AddLogLine("In OptionSelectEngine::SimpleOptionSelect(): OptionSelect Session manually exited with nInput option number " + std::to_string(nInput) + ".", 4, nObjectID);
+
 				return -1;
 			}
 			else if (nInput < 1 || nInput > nSizeOfOptions) {
@@ -102,6 +113,9 @@ protected:
 			}
 			else break;
 		}
+
+		// Log that session is ending
+		LogFileMain.AddLogLine("In OptionSelectEngine::SimpleOptionSelect(): OptionSelect Session ended with nInput option number " + std::to_string(nInput) + " (" + sOptions[nInput - 1] + ").", 4, nObjectID);
 
 		return nInput;
 	}
@@ -145,14 +159,16 @@ public:
 
 	// OptionSelect - A selection UI that allows for easy arrow-key OR W/S-key navigation.
 	// 
+	// nLeftPaddingWidth - Specify padding width for the options, in characters. Default is 0 (no padding).
+	// 
 	// Pressing ESC (exit) leads to returning code -1, error returns -2, and the index of the option when ENTER is pressed is returned otherwise.
 	//
-	int OptionSelect(std::string sPrompt, std::string sTitle) {
+	int OptionSelect(std::string sPrompt, std::string sTitle, int nLeftPaddingWidth = 0) {
 		int nNumberOfOptions = 0;
 		int nIndex = 1;
 		char nKey = 0;
 		int nWindowHeight = 0;
-		int nIndexHeight = 0;
+		int nIndexHeight = 0; // Index option height
 		int nEndingCursorHeight = 0;
 		std::string sHighlightBuffer = "";
 		CONSOLE_SCREEN_BUFFER_INFO csbiOptionSelect;
@@ -161,7 +177,7 @@ public:
 
 		// Use the simple optionselect engine mode.
 		if (ConfigObjMain.bUseNewOptionSelect == false) {
-			return SimpleOptionSelect(sPrompt, sTitle);
+			return SimpleOptionSelect(sPrompt, sTitle, nLeftPaddingWidth);
 		}
 
 		// Count the number of options
@@ -291,16 +307,18 @@ public:
 				// 3. for loop
 				for (int i = 0; i < nNumberOfOptions; i++) {
 					// Set cursor position
-					SetCursorPosition(0, (nStartingRow + i + 1));
+					SetCursorPosition(nLeftPaddingWidth, (nStartingRow + i + 1));
 
 					// Mitigation for a terminal colour bug on older-style Windows terminals (specifically Conhost.exe)
 					if (i <= 0) {
 						GetConsoleScreenBufferInfo(hOptionSelect, &csbiOptionSelect);
-						std::cout << std::setw(csbiOptionSelect.srWindow.Right - csbiOptionSelect.srWindow.Left) << std::cout.fill(' ') << '\r';
+						std::cout << std::setw(csbiOptionSelect.srWindow.Right - csbiOptionSelect.srWindow.Left - nLeftPaddingWidth) << std::cout.fill(' ');
+						SetCursorPosition(nLeftPaddingWidth, (nStartingRow + i + 1));
 					}
 					else {
 						// 4. Measure size of sOptions[i] and output equal number of spaces, then go to the beginning of the line
-						std::cout << std::setw(sOptions[i].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' ') << '\r'; // + 6 because ">> " and " <<" combined are 6 chars
+						std::cout << std::setw(sOptions[i].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' '); // + 6 because ">> " and " <<" combined are 6 chars
+						SetCursorPosition(nLeftPaddingWidth, (nStartingRow + i + 1));
 					}
 
 					// 5. Output option
@@ -312,16 +330,16 @@ public:
 						// Put index height into nIndexHeight for ESC keypress and nIndex-only redraw
 						GetConsoleScreenBufferInfo(hOptionSelect, &csbiOptionSelect);
 						nIndexHeight = csbiOptionSelect.dwCursorPosition.Y;
+
+						// Reset to default colour
+						colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 					}
 					else {
 						DisplayOptionsIndicator(sOptionIndicatorColours[i]);
 						std::cout << sOptions[i];
 					}
-
-					// Reset to default colour
-					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-					std::cout << "\n";
 				}
+				std::cout << "\n";
 
 				if (ConfigObjMain.bDisplayDirections) {
 					// Add newlines for DirectionsDisplay
@@ -335,36 +353,40 @@ public:
 			else // Only draw the new index option after first draw - CPU optimisation, reduces flickering
 			{
 				// 1. Go to index highlight height
-				SetCursorPosition(0, nIndexHeight);
+				SetCursorPosition(nLeftPaddingWidth, nIndexHeight);
 
 				// 2. Output spaces depending on previous nIndex option
 				if (nIndexIncrease == 1) {
-					std::cout << std::setw(sOptions[nIndex - 2].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' ') << '\r';
+					std::cout << std::setw(sOptions[nIndex - 2].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' ');
+					SetCursorPosition(nLeftPaddingWidth, nIndexHeight);
 
 					DisplayOptionsIndicator(sOptionIndicatorColours[nIndex - 2]);
 					std::cout << sOptions[nIndex - 2];
 				}
 				else if (nIndexIncrease == 0) {
-					std::cout << std::setw(sOptions[nIndex].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' ') << '\r';
+					std::cout << std::setw(sOptions[nIndex].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' ');
+					SetCursorPosition(nLeftPaddingWidth, nIndexHeight);
 
 					DisplayOptionsIndicator(sOptionIndicatorColours[nIndex]);
 					std::cout << sOptions[nIndex];
 				}
 				else if (nIndexIncrease == 2) {
-					std::cout << std::setw(sOptions[nNumberOfOptions - 1].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' ') << '\r';
+					std::cout << std::setw(sOptions[nNumberOfOptions - 1].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' ');
+					SetCursorPosition(nLeftPaddingWidth, nIndexHeight);
 
 					DisplayOptionsIndicator(sOptionIndicatorColours[nNumberOfOptions - 1]);
 					std::cout << sOptions[nNumberOfOptions - 1];
 				}
 				else if (nIndexIncrease == 3) {
-					std::cout << std::setw(sOptions[0].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' ') << '\r';
+					std::cout << std::setw(sOptions[0].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' ');
+					SetCursorPosition(nLeftPaddingWidth, nIndexHeight);
 					
 					DisplayOptionsIndicator(sOptionIndicatorColours[0]);
 					std::cout << sOptions[0];
 				}
 					
 				// 3. Go to nIndex + nStartingRow
-				SetCursorPosition(0, nIndex + nStartingRow);
+				SetCursorPosition(nLeftPaddingWidth, nIndex + nStartingRow);
 
 				// 4. Output new sHighlightBuffer and sOptionsIndicator
 				DisplayOptionsIndicator(sOptionIndicatorColours[nIndex - 1]);
@@ -377,7 +399,7 @@ public:
 				nIndexHeight = csbiOptionSelect.dwCursorPosition.Y;
 
 				// 6. Put cursor on the ending cursor height to make it work like normal whole-screen redraw
-				SetCursorPosition(0, nEndingCursorHeight);
+				SetCursorPosition(nLeftPaddingWidth, nEndingCursorHeight);
 			}
 
 
@@ -392,7 +414,7 @@ public:
 				if (nKey == 27) {
 					// Darken the index highlight to indicate that this OptionSelect session isn't being used anymore
 					GetConsoleScreenBufferInfo(hOptionSelect, &csbiOptionSelect);
-					SetCursorPosition(0, nIndexHeight);
+					SetCursorPosition(nLeftPaddingWidth, nIndexHeight);
 					DisplayOptionsIndicator(sOptionIndicatorColours[nIndex - 1]);
 					colour(LWHT, GRAY);
 					std::cout << sHighlightBuffer;
@@ -438,7 +460,7 @@ public:
 
 					// Darken the index highlight to indicate that this OptionSelect session isn't being used anymore
 					GetConsoleScreenBufferInfo(hOptionSelect, &csbiOptionSelect);
-					SetCursorPosition(0, nIndexHeight);
+					SetCursorPosition(nLeftPaddingWidth, nIndexHeight);
 					DisplayOptionsIndicator(sOptionIndicatorColours[nIndex - 1]);
 					colour(LWHT, GRAY);
 					std::cout << sHighlightBuffer;
@@ -462,7 +484,7 @@ public:
 
 		// Darken the index highlight to indicate that this OptionSelect session isn't being used anymore
 		GetConsoleScreenBufferInfo(hOptionSelect, &csbiOptionSelect);
-		SetCursorPosition(0, nIndexHeight);
+		SetCursorPosition(nLeftPaddingWidth, nIndexHeight);
 		DisplayOptionsIndicator(sOptionIndicatorColours[nIndex - 1]);
 		colour(LWHT, GRAY);
 		std::cout << sHighlightBuffer;
