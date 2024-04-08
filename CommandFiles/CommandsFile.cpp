@@ -2,13 +2,33 @@
 // CommandsFile.cpp - All command code is here.
 //
 
-
+#include "../Core/ZeeTerminalCore.h"
+#include "..\Engine\ScreenNavigateEngine\ScreenNavigateEngine.h"
+#include "..\Engine\SystemInfo\SystemInfo.h"
+#include "..\Engine\TableEngine\TableEngine.h"
+#include "..\Engine\MemoryTestEngine\MemoryTestEngine.h"
+#include "..\Engine\MultimediaEngine\MultimediaEngine.h"
+#include "..\Engine\NotesSystem\NotesSystem.h"
+#include "..\Engine\OptionSelectEngine\OptionSelectEngine.h"
+#include "..\Engine\FileOpenGUIEngine\FileOpenGUIEngine.h"
+#include "..\Engine\FileParse-System\FileParse-System.h"
 #include "CommandFileAssets.cpp"
-#include "CalculationAlgorithm.cpp"
 #include "Settings.cpp"
 #include "CPUStress.cpp"
 #include "CommandHelpMessages.cpp"
+#include "CalculationAlgorithm/CalculationAlgorithm.h"
 
+#include <vector>
+#include <string>
+#include <iostream>
+#include <Windows.h>
+#include <conio.h>
+#include <filesystem>
+#include <powrprof.h>
+
+#include "../GameFiles/CarDodge/CarDodge.cpp"
+
+#pragma comment(lib, "powrprof.lib") // To access power profile libs
 
 // External variable definitions
 extern std::string				sCommandInputRAW;
@@ -618,12 +638,12 @@ void RGBColourPresets() {
 
 				// Check validity of colours
 				if (RGBPreset[nOption - 1].CheckIfAnsiPreset() == false) {
-					if (ValidateColourStringsWin32() == false) {
+					if (colconv::ValidateColourStringsWin32() == false) {
 						bValidColours = false;
 					}
 				}
 				else if (RGBPreset[nOption - 1].CheckIfAnsiPreset() == true) {
-					if (ValidateColourStringsANSI() == false) {
+					if (colconv::ValidateColourStringsANSI() == false) {
 						bValidColours = false;
 					}
 				}
@@ -3330,49 +3350,49 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				return;
 			}
 			else if (sStringOptionCommandArgs[i] == "missionimpossible") {
-				RandomColourOutput("Playing Mission Impossible Theme...");
+				RandomColourOutput("Playing Mission Impossible Theme...", ConfigObjMain.sColourGlobalBack);
 				std::cout << '\n';
 				MissionImpossibleTheme();
 				bArgumentExecuted = true;
 			}
 			else if (sStringOptionCommandArgs[i] == "happybirthday") {
-				RandomColourOutput("Playing Happy Birthday Song...");
+				RandomColourOutput("Playing Happy Birthday Song...", ConfigObjMain.sColourGlobalBack);
 				std::cout << '\n';
 				HappyBirthdaySong();
 				bArgumentExecuted = true;
 			}
 			else if (sStringOptionCommandArgs[i] == "supermario") {
-				RandomColourOutput("Playing Super Mario Theme...");
+				RandomColourOutput("Playing Super Mario Theme...", ConfigObjMain.sColourGlobalBack);
 				std::cout << '\n';
 				SuperMarioTheme();
 				bArgumentExecuted = true;
 			}
 			else if (sStringOptionCommandArgs[i] == "dundundun") {
-				RandomColourOutput("Playing DunDunDun Sound...");
+				RandomColourOutput("Playing DunDunDun Sound...", ConfigObjMain.sColourGlobalBack);
 				std::cout << '\n';
 				DunDunDunSound();
 				bArgumentExecuted = true;
 			}
 			else if (sStringOptionCommandArgs[i] == "imperialmarch") {
-				RandomColourOutput("Playing Star Wars Imperial March Song...");
+				RandomColourOutput("Playing Star Wars Imperial March Song...", ConfigObjMain.sColourGlobalBack);
 				std::cout << '\n';
 				StarWarsImperialMarch();
 				bArgumentExecuted = true;
 			}
 			else if (sStringOptionCommandArgs[i] == "tetris") {
-				RandomColourOutput("Playing Tetris Theme Song...");
+				RandomColourOutput("Playing Tetris Theme Song...", ConfigObjMain.sColourGlobalBack);
 				std::cout << '\n';
 				TetrisTheme();
 				bArgumentExecuted = true;
 			}
 			else if (sStringOptionCommandArgs[i] == "dramatic") {
-				RandomColourOutput("Playing A Dramatic Song...");
+				RandomColourOutput("Playing A Dramatic Song...", ConfigObjMain.sColourGlobalBack);
 				std::cout << '\n';
 				DramaticSong();
 				bArgumentExecuted = true;
 			}
 			else if (sStringOptionCommandArgs[i] == "rickroll") {
-				RandomColourOutput("Playing RickRoll Song...");
+				RandomColourOutput("Playing RickRoll Song...", ConfigObjMain.sColourGlobalBack);
 				std::cout << '\n';
 				RickRollSong();
 				bArgumentExecuted = true;
@@ -3403,42 +3423,42 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 		
 		switch (nChoice) {
 		case 1:
-			RandomColourOutput("Playing Mission Impossible Theme...");
+			RandomColourOutput("Playing Mission Impossible Theme...", ConfigObjMain.sColourGlobalBack);
 			std::cout << '\n';
 			MissionImpossibleTheme();
 			break;
 		case 2:
-			RandomColourOutput("Playing Happy Birthday Song...");
+			RandomColourOutput("Playing Happy Birthday Song...", ConfigObjMain.sColourGlobalBack);
 			std::cout << '\n';
 			HappyBirthdaySong();
 			break;
 		case 3:
-			RandomColourOutput("Playing Super Mario Theme...");
+			RandomColourOutput("Playing Super Mario Theme...", ConfigObjMain.sColourGlobalBack);
 			std::cout << '\n';
 			SuperMarioTheme();
 			break;
 		case 4:
-			RandomColourOutput("Playing DunDunDun Sound...");
+			RandomColourOutput("Playing DunDunDun Sound...", ConfigObjMain.sColourGlobalBack);
 			std::cout << '\n';
 			DunDunDunSound();
 			break;
 		case 5:
-			RandomColourOutput("Playing Star Wars Imperial March Song...");
+			RandomColourOutput("Playing Star Wars Imperial March Song...", ConfigObjMain.sColourGlobalBack);
 			std::cout << '\n';
 			StarWarsImperialMarch();
 			break;
 		case 6:
-			RandomColourOutput("Playing Tetris Theme Song...");
+			RandomColourOutput("Playing Tetris Theme Song...", ConfigObjMain.sColourGlobalBack);
 			std::cout << '\n';
 			TetrisTheme();
 			break;
 		case 7:
-			RandomColourOutput("Playing A Dramatic Song...");
+			RandomColourOutput("Playing A Dramatic Song...", ConfigObjMain.sColourGlobalBack);
 			std::cout << '\n';
 			DramaticSong();
 			break;
 		case 8:
-			RandomColourOutput("Playing RickRoll Song...");
+			RandomColourOutput("Playing RickRoll Song...", ConfigObjMain.sColourGlobalBack);
 			std::cout << '\n';
 			RickRollSong();
 			break;
@@ -4295,8 +4315,8 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 		std::cout << "Setting random colours...\n";
 
 		// Calculate random numbers
-		ConfigObjMain.sColourGlobal = NumberToColour(RandNum(16, 1));
-		ConfigObjMain.sColourGlobalBack = NumberToColour(RandNum(16, 1));
+		ConfigObjMain.sColourGlobal = colconv::NumberToColour(RandNum(16, 1));
+		ConfigObjMain.sColourGlobalBack = colconv::NumberToColour(RandNum(16, 1));
 		
 		// Write new values to config file
 		ConfigObjMain.WriteConfigFile();
@@ -4767,7 +4787,7 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 		bool bExitOnCompletion = false;
 
 		// Do not run command if fileparse mode is already on and running
-		if (bRunningFromScriptOrArgCommand) {
+		if (fparse::bRunningFromScriptOrArgCommand) {
 			UserErrorDisplay("ERROR - FileParse is already running, and another script cannot be run while this one is running.\nPlease try again when not running from a script.\n");
 			return;
 		}
@@ -4795,7 +4815,7 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 			CentreColouredText(" ___FILEPARSE___ ", 1);
 			std::cout << '\n';
 
-			colour(NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
+			colour(colconv::NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
 			slowcharfn(true, "Welcome to FileParse!");
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
@@ -4825,7 +4845,7 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 		}
 
 		// Initialise FileParse system
-		if (!InitialiseFileParse(sFilePath, bExitOnCompletion)) {
+		if (!fparse::InitialiseFileParse(sFilePath, bExitOnCompletion)) {
 			UserErrorDisplay("ERROR - An error occured while initialising the FileParse System. Possibly a nonexistent file path?\n");
 			return;
 		}
@@ -4835,7 +4855,7 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		}
 
-		bLastCommandWasFileParse = true; // because this command IS the FileParse command.
+		fparse::bLastCommandWasFileParse = true; // because this command IS the FileParse command.
 		return;
 	}
 
@@ -5027,14 +5047,14 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 			slowcharfn(false, sQuote);
 		}
 		else if (bRandColourOutput && !bSlowcharOutput) {
-			RandomColourOutput(sQuote);
+			RandomColourOutput(sQuote, ConfigObjMain.sColourGlobalBack);
 		}
 		else {
 			std::cout << wordWrap(sQuote);
 		}
 
 		std::cout << "\n";
-		colour(NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
+		colour(colconv::NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
 		std::cout << "- Albert Einstein\n";
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
@@ -5070,14 +5090,14 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 			slowcharfn(false, sQuote);
 		}
 		else if (bRandColourOutput && !bSlowcharOutput) {
-			RandomColourOutput(sQuote);
+			RandomColourOutput(sQuote, ConfigObjMain.sColourGlobalBack);
 		}
 		else {
 			std::cout << wordWrap(sQuote);
 		}
 
 		std::cout << "\n";
-		colour(NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
+		colour(colconv::NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
 		std::cout << "- Thomas Edison\n";
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
@@ -5113,14 +5133,14 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 			slowcharfn(false, sQuote);
 		}
 		else if (bRandColourOutput && !bSlowcharOutput) {
-			RandomColourOutput(sQuote);
+			RandomColourOutput(sQuote, ConfigObjMain.sColourGlobalBack);
 		}
 		else {
 			std::cout << wordWrap(sQuote);
 		}
 
 		std::cout << "\n";
-		colour(NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
+		colour(colconv::NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
 		std::cout << "- Nikola Tesla\n";
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
@@ -5141,7 +5161,7 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				return;
 			}
 			else if (cCommandArgs[i] == 'c') {
-				sRandomColour = NumberToColour(RandNum(16, 1));
+				sRandomColour = colconv::NumberToColour(RandNum(16, 1));
 			}
 			else if (cCommandArgs[i] == 'o') {
 				nChoice = 1;
@@ -5225,7 +5245,7 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				return;
 			}
 			else if (cCommandArgs[i] == 'c') {
-				sRandomColour = NumberToColour(RandNum(16, 1));
+				sRandomColour = colconv::NumberToColour(RandNum(16, 1));
 			}
 			else if (cCommandArgs[i] == 'o') {
 				nChoice = 1;
@@ -5309,7 +5329,7 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				return;
 			}
 			else if (cCommandArgs[i] == 'c') {
-				sRandomColour = NumberToColour(RandNum(16, 1));
+				sRandomColour = colconv::NumberToColour(RandNum(16, 1));
 			}
 			else if (cCommandArgs[i] == 'o') {
 				nChoice = 1;

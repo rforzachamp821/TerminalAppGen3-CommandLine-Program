@@ -49,7 +49,7 @@ void HighlightColourSettings(short int nResult = 0, int nChoice = 0) {
 			oseColourFore.nSizeOfOptions = 16;
 			oseColourFore.sOptions = sOptionsColour;
 
-			nChoice = oseColourFore.OptionSelect("Please choose your desired highlight foreground colour below:\n(Currently set to: " + ColourToDisplayColour(ConfigObjMain.sColourHighlight) + ")", " ___FOREGROUND COLOUR___ ");
+			nChoice = oseColourFore.OptionSelect("Please choose your desired highlight foreground colour below:\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sColourHighlight) + ")", " ___FOREGROUND COLOUR___ ");
 			if (nChoice == -1) {
 				Exiting();
 				return;
@@ -71,7 +71,7 @@ void HighlightColourSettings(short int nResult = 0, int nChoice = 0) {
 			oseColourBack.nSizeOfOptions = 16;
 			oseColourBack.sOptions = sOptionsColour;
 
-			nChoice = oseColourBack.OptionSelect("Please choose your desired highlight background colour below:\n(Currently set to: " + ColourToDisplayColour(ConfigObjMain.sColourHighlightBack) + ")", " ___BACKGROUND COLOUR___ ");
+			nChoice = oseColourBack.OptionSelect("Please choose your desired highlight background colour below:\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sColourHighlightBack) + ")", " ___BACKGROUND COLOUR___ ");
 			if (nChoice == -1) {
 				Exiting();
 				return;
@@ -124,7 +124,7 @@ void TitleColourSettings(short int nResult = 0, int nChoice = 0) {
 			oseColourFore.nSizeOfOptions = 16;
 			oseColourFore.sOptions = sOptionsColour;
 
-			nChoice = oseColourFore.OptionSelect("Please choose your desired title foreground colour below:\n(Currently set to: " + ColourToDisplayColour(ConfigObjMain.sColourTitle) + ")", " ___FOREGROUND COLOUR___ ");
+			nChoice = oseColourFore.OptionSelect("Please choose your desired title foreground colour below:\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sColourTitle) + ")", " ___FOREGROUND COLOUR___ ");
 			if (nChoice == -1) {
 				Exiting();
 				return;
@@ -146,7 +146,7 @@ void TitleColourSettings(short int nResult = 0, int nChoice = 0) {
 			oseColourBack.nSizeOfOptions = 16;
 			oseColourBack.sOptions = sOptionsColour;
 
-			nChoice = oseColourBack.OptionSelect("Please choose your desired title background colour below:\n(Currently set to: " + ColourToDisplayColour(ConfigObjMain.sColourTitleBack) + ")", " ___BACKGROUND COLOUR___ ");
+			nChoice = oseColourBack.OptionSelect("Please choose your desired title background colour below:\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sColourTitleBack) + ")", " ___BACKGROUND COLOUR___ ");
 			if (nChoice == -1) {
 				Exiting();
 				return;
@@ -199,7 +199,7 @@ void SubheadingColourSettings(short int nResult = 0, int nChoice = 0) {
 			oseColourFore.nSizeOfOptions = 16;
 			oseColourFore.sOptions = sOptionsColour;
 
-			nChoice = oseColourFore.OptionSelect("Please choose your desired subheading foreground colour below:\n(Currently set to: " + ColourToDisplayColour(ConfigObjMain.sColourSubheading) + ")", " ___FOREGROUND COLOUR___ ");
+			nChoice = oseColourFore.OptionSelect("Please choose your desired subheading foreground colour below:\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sColourSubheading) + ")", " ___FOREGROUND COLOUR___ ");
 			if (nChoice == -1) {
 				Exiting();
 				return;
@@ -221,7 +221,7 @@ void SubheadingColourSettings(short int nResult = 0, int nChoice = 0) {
 			oseColourBack.nSizeOfOptions = 16;
 			oseColourBack.sOptions = sOptionsColour;
 
-			nChoice = oseColourBack.OptionSelect("Please choose your desired subheading background colour below:\n(Currently set to: " + ColourToDisplayColour(ConfigObjMain.sColourSubheadingBack) + ")", " ___BACKGROUND COLOUR___ ");
+			nChoice = oseColourBack.OptionSelect("Please choose your desired subheading background colour below:\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sColourSubheadingBack) + ")", " ___BACKGROUND COLOUR___ ");
 			if (nChoice == -1) {
 				Exiting();
 				return;
@@ -264,7 +264,7 @@ void VerboseMessagesSettings(short int nChoice = 0) {
 		oseVerbose.sOptions = sOptions;
 		std::cout << std::endl;
 
-		nChoice = oseVerbose.OptionSelect("Please select your desired option for the Verbose Messages setting:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bDisplayVerboseMessages) + ")", " ___VERBOSE MESSAGES SETTINGS___ ");
+		nChoice = oseVerbose.OptionSelect("Please select your desired option for the Verbose Messages setting:\n(Currently set to: " + BoolToString(ConfigObjMain.bDisplayVerboseMessages) + ")", " ___VERBOSE MESSAGES SETTINGS___ ");
 	}
 	
 
@@ -319,7 +319,7 @@ void DirectionMessagesSettings(short int nChoice = 0) {
 		oseDirections.sOptions = sOptions;
 		std::cout << std::endl;
 
-		nChoice = oseDirections.OptionSelect("Please select your desired option for the Direction Messages setting:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bDisplayDirections) + ")", " ___DIRECTION MESSAGES SETTINGS___ ");
+		nChoice = oseDirections.OptionSelect("Please select your desired option for the Direction Messages setting:\n(Currently set to: " + BoolToString(ConfigObjMain.bDisplayDirections) + ")", " ___DIRECTION MESSAGES SETTINGS___ ");
 	}
 	
 
@@ -374,7 +374,7 @@ void AnsiSettings(short int nChoice = 0) {
 		oseAnsi.sOptions = sOptions;
 		std::cout << std::endl;
 
-		nChoice = oseAnsi.OptionSelect("Please select your desired option for the ANSI setting:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bAnsiVTSequences) + ")", " ___ANSI SETTINGS___ ");
+		nChoice = oseAnsi.OptionSelect("Please select your desired option for the ANSI setting:\n(Currently set to: " + BoolToString(ConfigObjMain.bAnsiVTSequences) + ")", " ___ANSI SETTINGS___ ");
 	}
 	
 
@@ -465,7 +465,7 @@ void WordWrapSettings(short int nChoice = 0) {
 		};
 		oseWordWrap.sOptions = sOptions;
 
-		nChoice = oseWordWrap.OptionSelect("Please select your desired option for Word Wrapping:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bWordWrapToggle) + ")", " ___WORD WRAP SETTINGS___ ");
+		nChoice = oseWordWrap.OptionSelect("Please select your desired option for Word Wrapping:\n(Currently set to: " + BoolToString(ConfigObjMain.bWordWrapToggle) + ")", " ___WORD WRAP SETTINGS___ ");
 		std::cout << std::endl;
 	}
 
@@ -548,7 +548,7 @@ void CursorSettings(short int nChoice = 0, short int nChoiceBlink = 0, short int
 			};
 			oseBlink.sOptions = sOptions;
 
-			nChoiceBlink = oseBlink.OptionSelect("Please select your desired option for the Cursor Blinking Setting:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bCursorBlink) + ")", " ___CURSOR BLINKING SETTINGS___ ");
+			nChoiceBlink = oseBlink.OptionSelect("Please select your desired option for the Cursor Blinking Setting:\n(Currently set to: " + BoolToString(ConfigObjMain.bCursorBlink) + ")", " ___CURSOR BLINKING SETTINGS___ ");
 		}
 
 		if (nChoiceBlink == 1) {
@@ -789,7 +789,7 @@ void LogFileSystemSettings(short int nChoice = 0, short int nChoiceLogging = 0, 
 			};
 			oseLogFileSettings.sOptions = sOptions;
 
-			nChoiceLogging = oseLogFileSettings.OptionSelect("This option overrides all logging settings and acts as a master switch.\nPlease select your option for enabling/disabling ZeeTerminal logging:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bEnableLogging) + ")", "___ENABLE/DISABLE ZEETERMINAL LOGGING___");
+			nChoiceLogging = oseLogFileSettings.OptionSelect("This option overrides all logging settings and acts as a master switch.\nPlease select your option for enabling/disabling ZeeTerminal logging:\n(Currently set to: " + BoolToString(ConfigObjMain.bEnableLogging) + ")", "___ENABLE/DISABLE ZEETERMINAL LOGGING___");
 		}
 
 		// Enable
@@ -842,7 +842,7 @@ void LogFileSystemSettings(short int nChoice = 0, short int nChoiceLogging = 0, 
 			};
 			oseLogFileSettings.sOptions = sOptions;
 
-			nChoiceVerboseLogging = oseLogFileSettings.OptionSelect("Please select your option for toggling Verbose Message logging:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bVerboseMessageLogging) + ")", "___TOGGLE VERBOSE MESSAGE LOGGING___");
+			nChoiceVerboseLogging = oseLogFileSettings.OptionSelect("Please select your option for toggling Verbose Message logging:\n(Currently set to: " + BoolToString(ConfigObjMain.bVerboseMessageLogging) + ")", "___TOGGLE VERBOSE MESSAGE LOGGING___");
 		}
 
 		// Enable
@@ -896,7 +896,7 @@ void LogFileSystemSettings(short int nChoice = 0, short int nChoiceLogging = 0, 
 			};
 			oseLogFileSettings.sOptions = sOptions;
 
-			nChoiceUserErrorLogging = oseLogFileSettings.OptionSelect("Please select your option for toggling User-space Error Message logging:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bUserSpaceErrorLogging) + ")", "___TOGGLE USER-SPACE ERROR MESSAGE LOGGING___");
+			nChoiceUserErrorLogging = oseLogFileSettings.OptionSelect("Please select your option for toggling User-space Error Message logging:\n(Currently set to: " + BoolToString(ConfigObjMain.bUserSpaceErrorLogging) + ")", "___TOGGLE USER-SPACE ERROR MESSAGE LOGGING___");
 		}
 
 		// Enable
@@ -950,7 +950,7 @@ void LogFileSystemSettings(short int nChoice = 0, short int nChoiceLogging = 0, 
 			};
 			oseLogFileSettings.sOptions = sOptions;
 
-			nChoiceCommandLogging = oseLogFileSettings.OptionSelect("Please select your option for toggling Command Input Info logging:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bCommandInputInfoLogging) + ")", "___TOGGLE COMMAND INPUT INFO LOGGING___");
+			nChoiceCommandLogging = oseLogFileSettings.OptionSelect("Please select your option for toggling Command Input Info logging:\n(Currently set to: " + BoolToString(ConfigObjMain.bCommandInputInfoLogging) + ")", "___TOGGLE COMMAND INPUT INFO LOGGING___");
 		}
 
 		// Enable
@@ -1004,7 +1004,7 @@ void LogFileSystemSettings(short int nChoice = 0, short int nChoiceLogging = 0, 
 			};
 			oseLogFileSettings.sOptions = sOptions;
 
-			nChoiceUserInputLogging = oseLogFileSettings.OptionSelect("Please select your option for toggling User Input Info logging:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bUserInputInfoLogging) + ")", "___TOGGLE USER INPUT INFO LOGGING___");
+			nChoiceUserInputLogging = oseLogFileSettings.OptionSelect("Please select your option for toggling User Input Info logging:\n(Currently set to: " + BoolToString(ConfigObjMain.bUserInputInfoLogging) + ")", "___TOGGLE USER INPUT INFO LOGGING___");
 		}
 
 		// Enable
@@ -1122,7 +1122,7 @@ void OtherSettings(short int nChoice = 0, long long int nChoiceSlowChSpeed = 0, 
 			};
 			oseRandCol.sOptions = sOptions;
 
-			nChoiceRandColStartup = oseRandCol.OptionSelect("Please select your choice for Random Colours on Startup:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bRandomColoursOnStartup) + ")", " ___RANDOM COLOUR ON STARTUP SETTINGS___ ");
+			nChoiceRandColStartup = oseRandCol.OptionSelect("Please select your choice for Random Colours on Startup:\n(Currently set to: " + BoolToString(ConfigObjMain.bRandomColoursOnStartup) + ")", " ___RANDOM COLOUR ON STARTUP SETTINGS___ ");
 		}
 
 		if (nChoiceRandColStartup == 1) {
@@ -1172,7 +1172,7 @@ void OtherSettings(short int nChoice = 0, long long int nChoiceSlowChSpeed = 0, 
 			};
 			oseRandCol.sOptions = sOptions;
 
-			nTermCustomThemeSupport = oseRandCol.OptionSelect("Note: This works by making the black background colour the stock terminal emulator colour (that ZeeTerminal is running on).\nPlease select your choice for Terminal Custom Theme Support:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bTermCustomThemeSupport) + ")", " ___TERMINAL CUSTOM THEME SETTINGS___ ");
+			nTermCustomThemeSupport = oseRandCol.OptionSelect("Note: This works by making the black background colour the stock terminal emulator colour (that ZeeTerminal is running on).\nPlease select your choice for Terminal Custom Theme Support:\n(Currently set to: " + BoolToString(ConfigObjMain.bTermCustomThemeSupport) + ")", " ___TERMINAL CUSTOM THEME SETTINGS___ ");
 		}
 
 		if (nTermCustomThemeSupport == 1) {
@@ -1232,7 +1232,7 @@ void OtherSettings(short int nChoice = 0, long long int nChoiceSlowChSpeed = 0, 
 			};
 			oseReadableContrast.sOptions = sOptions;
 
-			nReadableContrast = oseReadableContrast.OptionSelect("Please select desired option for Auto-Readable Colour Contrast:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bAutoReadableContrast) + ")", " __AUTO-READABLE CONTRAST SETTINGS__");
+			nReadableContrast = oseReadableContrast.OptionSelect("Please select desired option for Auto-Readable Colour Contrast:\n(Currently set to: " + BoolToString(ConfigObjMain.bAutoReadableContrast) + ")", " __AUTO-READABLE CONTRAST SETTINGS__");
 
 		}
 
@@ -1372,7 +1372,7 @@ void OtherSettings(short int nChoice = 0, long long int nChoiceSlowChSpeed = 0, 
 			};
 			oseNewOptionSelect.sOptions = sOptions;
 
-			nChoiceNewOptionSelect = oseNewOptionSelect.OptionSelect("Please select if you want to use or not use the new OptionSelect Session Style:\n(Currently set to: " + SettingsBoolToString(ConfigObjMain.bUseNewOptionSelect) + ")", " __OPTIONSELECT SESSION STYLE SETTINGS__");
+			nChoiceNewOptionSelect = oseNewOptionSelect.OptionSelect("Please select if you want to use or not use the new OptionSelect Session Style:\n(Currently set to: " + BoolToString(ConfigObjMain.bUseNewOptionSelect) + ")", " __OPTIONSELECT SESSION STYLE SETTINGS__");
 		}
 
 		if (nChoiceNewOptionSelect == 1) {
