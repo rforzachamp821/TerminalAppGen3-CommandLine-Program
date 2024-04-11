@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{3e2f9738-7ba0-4b67-91a6-b18578f0886e}</ProjectGuid>
-    <RootNamespace>TerminalAppGen3</RootNamespace>
+    <RootNamespace>ZeeTerminal</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>ZeeTerminal</ProjectName>
   </PropertyGroup>
