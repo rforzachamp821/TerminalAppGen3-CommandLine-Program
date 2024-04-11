@@ -66,7 +66,7 @@ private:
 	uint64_t nHighScoreKey2 = 8452904164671;
 
 	// High score file name
-	static constexpr char sHighScoreFileName[] = "HighScore.dat";
+	static constexpr char sHighScoreFileName[] = "GameHighScores.dat";
 
 protected:
 
@@ -190,16 +190,16 @@ protected:
 
 	// MoveUserCarLeft
 	void MoveUserCarLeft() {
-		// Check if user car is already at the left border
-		if (UserCar.bottomLeft.X <= nLeftBorderWidth) {
+		// Check if user car is already at the left border, with respect to car turning speed
+		if (UserCar.bottomLeft.X - (nGameplayScreenWidth % ConfigObjMain.nCarDodgeCarTurningSpeed) <= nLeftBorderWidth) {
 			return;
 		}
 
 		EraseCar(UserCar);
 
-		// Move car left by 2
-		UserCar.bottomLeft.X -= 2;
-		UserCar.bottomRight.X -= 2;
+		// Move car left by ConfigObjMain.nCarDodgeCarTurningSpeed
+		UserCar.bottomLeft.X -= ConfigObjMain.nCarDodgeCarTurningSpeed;
+		UserCar.bottomRight.X -= ConfigObjMain.nCarDodgeCarTurningSpeed;
 
 		RenderCar(UserCar);
 		
@@ -208,16 +208,16 @@ protected:
 
 	// MoveUserCarRight
 	void MoveUserCarRight() {
-		// Check if user car is already at the right border
-		if (UserCar.bottomRight.X >= nScreenWidth - nRightBorderWidth) {
+		// Check if user car is already at the right border, with respect to car turning speed
+		if (UserCar.bottomRight.X + (nGameplayScreenWidth % ConfigObjMain.nCarDodgeCarTurningSpeed) >= nScreenWidth - nRightBorderWidth) {
 			return;
 		}
 
 		EraseCar(UserCar);
 
-		// Move car right by 2
-		UserCar.bottomLeft.X += 2;
-		UserCar.bottomRight.X += 2;
+		// Move car right by ConfigObjMain.nCarDodgeCarTurningSpeed
+		UserCar.bottomLeft.X += ConfigObjMain.nCarDodgeCarTurningSpeed;
+		UserCar.bottomRight.X += ConfigObjMain.nCarDodgeCarTurningSpeed;
 
 		RenderCar(UserCar);
 

@@ -12,6 +12,11 @@
 class OptionSelectEngine
 {
 private:
+	// MoveCursorToXCoord - Moves the cursor position to the same Y-axis co-ordinate that it is currently in, but to also an argument-specified X co-ordinate.
+	// Parameters: xArg - The X co-ordinate parameter.
+	// Return values: TRUE or 1 for success, FALSE or 0 for fail.
+	bool MoveCursorToXCoord(short int xArg);
+
 	// Object ID
 	int nObjectID;
 protected:

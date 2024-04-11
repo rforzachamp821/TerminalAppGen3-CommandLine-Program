@@ -825,7 +825,7 @@ void LogFileSystemSettings(short int nChoice = 0, short int nChoiceLogging = 0, 
 
 		// Error
 		else {
-			VerbosityDisplay("In OtherSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In LogFileSystemSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 
 			return;
@@ -879,7 +879,7 @@ void LogFileSystemSettings(short int nChoice = 0, short int nChoiceLogging = 0, 
 
 		// Error
 		else {
-			VerbosityDisplay("In OtherSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In LogFileSystemSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 
 			return;
@@ -933,7 +933,7 @@ void LogFileSystemSettings(short int nChoice = 0, short int nChoiceLogging = 0, 
 
 		// Error
 		else {
-			VerbosityDisplay("In OtherSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In LogFileSystemSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 
 			return;
@@ -987,7 +987,7 @@ void LogFileSystemSettings(short int nChoice = 0, short int nChoiceLogging = 0, 
 
 		// Error
 		else {
-			VerbosityDisplay("In OtherSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In LogFileSystemSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 
 			return;
@@ -1041,7 +1041,7 @@ void LogFileSystemSettings(short int nChoice = 0, short int nChoiceLogging = 0, 
 
 		// Error
 		else {
-			VerbosityDisplay("In OtherSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In LogFileSystemSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 
 			return;
@@ -1054,7 +1054,143 @@ void LogFileSystemSettings(short int nChoice = 0, short int nChoiceLogging = 0, 
 	}
 	else
 	{
-		VerbosityDisplay("In OtherSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+		VerbosityDisplay("In LogFileSystemSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+		UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
+
+		return;
+	}
+}
+
+void CarDodgeGameSettings(short int nChoiceMain = 0, int nChoiceCarTurnSpeed = 0, int nChoiceStartupCar = 0, int nChoiceForeground = 0, int nChoiceBackground = 0) {
+	OptionSelectEngine oseCarDodgeSettings;
+
+	if (nChoiceMain == 0) {
+		oseCarDodgeSettings.nSizeOfOptions = 4;
+		std::string sOptions[] = {
+			"Car Turning Speed",
+			"Game Startup Car",
+			"Game Foreground Colour",
+			"Game Background Colour"
+		};
+		oseCarDodgeSettings.sOptions = sOptions;
+		nChoiceMain = oseCarDodgeSettings.OptionSelect("Please select which setting you want to change relating to the Car Dodge game:", " ___CAR DODGE GAME SETTINGS___ ");
+	}
+
+	if (nChoiceMain == 1) {
+		while (true) {
+			if (nChoiceCarTurnSpeed == 0) {
+				CentreColouredText(" ___CAR TURN SPEED SETINGS___ ", 1);
+				std::cout << "\n";
+				colourSubheading(); // extra info colour is the same as subheading colour
+				std::cout << wordWrap("This speed is a measure of characters moved left/right per keypress, so higher numbers are faster.") << NOULINE_STR;
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				std::cout << "\nDefault Speed: 2\nCurrent Speed: " << ConfigObjMain.nCarDodgeCarTurningSpeed << wordWrap("\n\nInput 0 to exit. Turning speed cannot be lower than 1 or higher than 10.") << '\n';
+
+				nChoiceCarTurnSpeed = NumInputi("Please input how fast you want the car to turn: > ");
+			}
+
+			if (nChoiceCarTurnSpeed == 0) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << "Modifying setting terminated.\n";
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				return;
+			}
+			else if (nChoiceCarTurnSpeed < 1 || nChoiceCarTurnSpeed > 10) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << "Sorry, but you can't have a speed number lower than 1 or higher than 10. Please try again.\n";
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				return;
+			}
+			else break;
+		}
+
+		ConfigObjMain.nCarDodgeCarTurningSpeed = nChoiceCarTurnSpeed;
+		ConfigObjMain.WriteConfigFile();
+
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("CarDodge Car Turning Speed has successfully been set to " + std::to_string(ConfigObjMain.nCarDodgeCarTurningSpeed) + " in character speed.\n");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		return;
+
+	}
+	else if (nChoiceMain == 2) {
+		std::string sOptions[] = {
+			"KartCar (Default)",
+			"TheHoverRocket",
+			"TheSweeper",
+			"TheSlicer",
+			"GTSpeed",
+			"XtraAero",
+		};
+		if (nChoiceStartupCar == 0) {
+			oseCarDodgeSettings.nSizeOfOptions = 6;
+
+			oseCarDodgeSettings.sOptions = sOptions;
+
+			nChoiceStartupCar = oseCarDodgeSettings.OptionSelect("Please select which car you want CarDodge to auto-select when starting up:\n"
+				"(Currently set to: Option " + std::to_string(ConfigObjMain.nCarDodgeGameStartupCar) + ")", " ___GAME STARTUP CAR SETTINGS___ ");
+		}
+
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+
+		if (nChoiceStartupCar == 1) {
+			std::cout << "CarDodge Game Startup Car successfully set to \"Default User Car (KartCar)\".\n";
+		}
+		else if (nChoiceStartupCar > 1 && nChoiceStartupCar <= 6) {
+			std::cout << "CarDodge Game Startup Car successfully set to \"" << sOptions[nChoiceStartupCar - 1] << "\".\n";
+		}
+		else if (nChoiceStartupCar == -1) {
+			Exiting();
+			return;
+		}
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		ConfigObjMain.nCarDodgeGameStartupCar = nChoiceStartupCar;
+		ConfigObjMain.WriteConfigFile();
+
+		return;
+	}
+	else if (nChoiceMain == 3) {
+		if (nChoiceForeground == 0) {
+			oseCarDodgeSettings.nSizeOfOptions = 16;
+			oseCarDodgeSettings.sOptions = sOptionsColour;
+
+			nChoiceForeground = oseCarDodgeSettings.OptionSelect("Please select what foreground colour you want CarDodge to use (note that this only affects the car colours on-screen):"
+				"\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sCarDodgeGameplayColourFore) + ")", " ___GAME FOREGROUND COLOUR SETTINGS___ ");
+		}
+		
+		ColourForegroundSwitch(&nChoiceForeground, &ConfigObjMain.sCarDodgeGameplayColourBack, &ConfigObjMain.sCarDodgeGameplayColourFore);
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << CentreText("CarDodge game foreground colour successfully set!") << std::endl;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		return;
+	}
+	else if (nChoiceMain == 4) {
+		if (nChoiceBackground == 0) {
+			oseCarDodgeSettings.nSizeOfOptions = 16;
+			oseCarDodgeSettings.sOptions = sOptionsColour;
+
+			nChoiceBackground = oseCarDodgeSettings.OptionSelect("Please select what background colour you want CarDodge to use (note that this does NOT affect game borders, only the gameplay background):"
+				"\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sCarDodgeGameplayColourBack) + ")", " ___GAME BACKGROUND COLOUR SETTINGS___ ");
+		}
+
+		ColourBackgroundSwitch(&nChoiceBackground, &ConfigObjMain.sCarDodgeGameplayColourBack, &ConfigObjMain.sCarDodgeGameplayColourFore);
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << CentreText("CarDodge game background colour successfully set!") << std::endl;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		return;
+	}
+	else if (nChoiceMain == -1) {
+		Exiting();
+		return;
+	}
+	else {
+		VerbosityDisplay("In CarDodgeGameSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 		UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 
 		return;

@@ -174,6 +174,10 @@ void SettingsHelp() {
 		<< wordWrap("\n --commandlogging <toggle>\tEnable command input info logging. Set either true/t or false/f in place of <toggle>.")
 		<< wordWrap("\n --usrinputlogging <toggle>\tEnable user input info logging. Set either true/t or false/f in place of <toggle>.")
 		<< wordWrap("\n --newoptionselect <toggle>\tUse the new OptionSelect Engine style. Set either true/t or false/f in place of <toggle>.")
+		<< wordWrap("\n --cdcarturnspeed <speed>\tSet the car turning speed in the CarDodge game. Cannot be >10 and <1. Put the speed in place of <speed>.")
+		<< wordWrap("\n --cdstartupcar <car>\t\tToggle the type of car auto-selected on startup in the CarDodge game. Put the car style in place of <style>.")
+		<< wordWrap("\n --cdforeground <num>\tSet the foreground colour in the CarDodge game. Put the colour number in place of <num>.")
+		<< wordWrap("\n --cdbackground <num>\tSet the background colour in the CarDodge game. Put the colour number in place of <num>.")
 		<< wordWrap("\n\nExample: settings --titlefore 1")
 		<< wordWrap("\n\nNote: You can get colour numbers by executing the \"ColourNumbers\" command.") << "\n\n";
 
@@ -1009,6 +1013,27 @@ void BunnyHelp() {
 	std::cout << wordWrap("\n -h\t\t\tDisplays this help message.\n -o\t\t\tOutputs a simple bunny, with no extra text.\n --saytext <text>\tMake the bunny 'say' specified text. Put the text in place of <text>."
 		"\n --quote\t\tMake the bunny say a random quote from Nikola Tesla, Albert Einstein or Thomas Edison.\n -c\t\t\tOutput the bunny in a randomised colour.\n\n"
 		"Example: bunny --saytext \"Hello, I am a bunny\"\n\nNOTE: Please make sure that when using spaces in the <text> argument with --saytext, use quotes (\"\").\n\n");
+
+	return;
+}
+
+// GameHelp
+void GameHelp() {
+	CentreColouredText(" ___GAME___ ", 1);
+	std::cout << "\n";
+	CentreColouredText("This command allows you to access the games within ZeeTerminal.", 2);
+	std::cout << "\n\n";
+
+	colourSubheading();
+	std::cout << "What this command does:" << NOULINE_STR;
+	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+	std::cout << wordWrap("\n- This command allows you to access the games within ZeeTerminal.\n- These games may have settings that you can adjust. These can be found in the Settings command.\n\n");
+
+	colourSubheading();
+	std::cout << "Possible arguments for this command:" << NOULINE_STR;
+	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+	std::cout << wordWrap("\n -h\t\tDisplays this help message.\n --cardodge\tStarts the CarDodge game, a game where you dodge enemy cars to gain points.\n\n"
+		"Example: game --cardodge\n\n");
 
 	return;
 }

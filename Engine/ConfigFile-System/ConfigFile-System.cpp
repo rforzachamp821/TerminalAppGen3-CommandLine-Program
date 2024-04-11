@@ -63,7 +63,13 @@ std::string ConfigFileSystem::UpdateConfigContents()
 		+ "sColourPresetForeground3=" + RGBPreset[2].sColourPresetForeground + "\n"
 		+ "sColourPresetBackground3=" + RGBPreset[2].sColourPresetBackground + "\n"
 		+ "sPresetName3=" + RGBPreset[2].sPresetName + "\n"
-		+ "bSetByUser3=" + std::to_string(RGBPreset[2].bSetByUser);
+		+ "bSetByUser3=" + std::to_string(RGBPreset[2].bSetByUser) + "\n\n"
+
+		+ "# CarDodge Game Settings\n#\n"
+		+ "nCarDodgeCarTurningSpeed=" + std::to_string(nCarDodgeCarTurningSpeed) + "\n"
+		+ "nCarDodgeGameStartupCar=" + std::to_string(nCarDodgeGameStartupCar) + "\n"
+		+ "sCarDodgeGameplayColourFore=" + sCarDodgeGameplayColourFore + "\n"
+		+ "sCarDodgeGameplayColourBack=" + sCarDodgeGameplayColourBack + "\n\n";
 
 	// Return config value to skip programming steps in some parts of config file system
 	return sConfigFileContents;
@@ -101,12 +107,12 @@ ConfigFileSystem::~ConfigFileSystem() {
 bool ConfigFileSystem::CreateConfigFile()
 {
 	// 1. Attempt to create config file in user-defined location
-	std::ofstream CreateConfigOut(sConfigFileUserLocation);
+	std::ofstream CreateConfigOut(sConfigFileUserLocation, std::ios::binary);
 
 	// 2. Check if open successful; if not, use default location; if not, return false
 	if (CreateConfigOut.fail() == true) {
 		VerbosityDisplay("In ConfigFileSystem::CreateConfigFile(): Warning - User file location cannot be opened. Attempting to create config file in default location.\n", nObjectID);
-		CreateConfigOut.open(sConfigFileDefaultLocation);
+		CreateConfigOut.open(sConfigFileDefaultLocation, std::ios::binary);
 		if (CreateConfigOut.fail() == true) {
 			VerbosityDisplay("In ConfigFileSystem::CreateConfigFile(): ERROR - Default location could not be opened. Configuration file creation failed.", nObjectID);
 			return false;
@@ -114,7 +120,7 @@ bool ConfigFileSystem::CreateConfigFile()
 		else {
 			// Point to new file
 			sConfigFileUserLocation = sConfigFileDefaultLocation;
-			CreateConfigOut.open(sConfigFileUserLocation);
+			CreateConfigOut.open(sConfigFileUserLocation, std::ios::binary);
 		}
 	}
 
@@ -136,13 +142,13 @@ bool ConfigFileSystem::WriteConfigFile() {
 	std::string sConfigFinalLocation = "";
 
 	// 2. Create test file stream
-	std::ifstream TestStreamIn(sConfigFileUserLocation);
+	std::ifstream TestStreamIn(sConfigFileUserLocation, std::ios::binary);
 
 	// 3. Test for file existence in user-set location and ZeeTerminal folder
 	if (TestStreamIn.fail() == true) {
 		VerbosityDisplay("In ConfigFileSystem::WriteConfigFile(): Warning- User-defined file seems to be nonexistent. Attempting to write to default location.\n", nObjectID);
 		TestStreamIn.clear();
-		TestStreamIn.open(sConfigFileDefaultLocation);
+		TestStreamIn.open(sConfigFileDefaultLocation, std::ios::binary);
 
 		if (TestStreamIn.fail() == true) {
 			VerbosityDisplay("In ConfigFileSystem::WriteConfigFile(): Warning - Default location file not found. Attempting to create new configuration file.\n", nObjectID);
@@ -161,7 +167,7 @@ bool ConfigFileSystem::WriteConfigFile() {
 	TestStreamIn.close();
 
 	// 5. Open main file stream; post message that write operation has began.
-	std::ofstream MainStreamOut(sConfigFinalLocation);
+	std::ofstream MainStreamOut(sConfigFinalLocation, std::ios::binary);
 
 	// Unexpected failure - just exit
 	if (MainStreamOut.fail()) {
@@ -174,6 +180,7 @@ bool ConfigFileSystem::WriteConfigFile() {
 	VerbosityDisplay("In ConfigFileSystem::WriteConfigFile(): Note - A write operation to configuration file has began.", nObjectID);
 
 	// Set all RGB preset values to defaults now if not set by user, so that they get written correctly to be used without UB
+	// Ensures colours are formatted correctly
 	for (uint8_t i = 0; i < sizeof(RGBPreset) / sizeof(RGBColourPresetSystem); i++) {
 		RGBPreset[i].ResetIfNotSetByUser();
 	}
@@ -202,13 +209,13 @@ bool ConfigFileSystem::ReadConfigFile()
 	std::string sConfigFinalLocation = "";
 
 	// 2. Create test file stream 
-	std::ifstream TestStreamIn(sConfigFileUserLocation);
+	std::ifstream TestStreamIn(sConfigFileUserLocation, std::ios::binary);
 
 	// 3. Test for file existence in user-set location and ZeeTerminal folder
 	if (TestStreamIn.fail() == true) {
 		VerbosityDisplay("In ConfigFileSystem::ReadConfigFile(): Warning- User-defined file seems to be nonexistent. Attempting to read from default location.\n", nObjectID);
 		TestStreamIn.clear();
-		TestStreamIn.open(sConfigFileDefaultLocation);
+		TestStreamIn.open(sConfigFileDefaultLocation, std::ios::binary);
 
 		if (TestStreamIn.fail() == true) {
 			VerbosityDisplay("In ConfigFileSystem::ReadConfigFile(): Warning - Default location file not found. Attempting to create new configuration file.\n", nObjectID);
@@ -227,7 +234,7 @@ bool ConfigFileSystem::ReadConfigFile()
 	TestStreamIn.close();
 
 	// 5. Create new main file stream
-	std::ifstream MainStreamIn(sConfigFinalLocation);
+	std::ifstream MainStreamIn(sConfigFinalLocation, std::ios::binary);
 
 	// Unexpected failure - just exit
 	if (MainStreamIn.fail()) {
@@ -276,7 +283,7 @@ bool ConfigFileSystem::ReadConfigFile()
 		}
 
 		// 10. Parse final contents and put into value string
-		std::getline(LineStream, sValueBuffer, '\n');
+		std::getline(LineStream, sValueBuffer, '\r');
 
 		// Check if anything is in the value string
 		if (sValueBuffer == "") {
@@ -359,6 +366,30 @@ bool ConfigFileSystem::ReadConfigFile()
 			if (isNumberi(sValueBuffer)) bUserInputInfoLogging = std::stoi(sValueBuffer);
 		}
 
+		// CarDodge Game Settings
+		else if (sOptionBuffer == "nCarDodgeCarTurningSpeed") {
+			if (isNumberi(sValueBuffer)) {
+				if (std::stoi(sValueBuffer) < 1 || std::stoi(sValueBuffer) > 10) {
+					VerbosityDisplay("In ConfigFileSystem::ReadConfigFile(): Warning - nCarDodgeCarTurningSpeed value incorrect. Must be between 1 and 10 inclusive. Value left unchanged.\n", nObjectID);
+				}
+				else nCarDodgeCarTurningSpeed = std::stoi(sValueBuffer);
+			}
+		}
+		else if (sOptionBuffer == "nCarDodgeGameStartupCar") {
+			if (isNumberi(sValueBuffer)) {
+				if (std::stoi(sValueBuffer) < 1 || std::stoi(sValueBuffer) > 6) {
+					VerbosityDisplay("In ConfigFileSystem::ReadConfigFile(): Warning - nCarDodgeGameStartupCar value incorrect. Must be between 1 and 6 inclusive. Value left unchanged.\n", nObjectID);
+				}
+				else nCarDodgeGameStartupCar = std::stoi(sValueBuffer);
+			}
+		}
+		else if (sOptionBuffer == "sCarDodgeGameplayColourFore") {
+			sCarDodgeGameplayColourFore = sValueBuffer;
+		}
+		else if (sOptionBuffer == "sCarDodgeGameplayColourBack") {
+			sCarDodgeGameplayColourBack = sValueBuffer;
+		}
+
 		// Integer Variables
 		else if (sOptionBuffer == "nSlowCharSpeed") {
 			if (isNumberll(sValueBuffer)) nSlowCharSpeed = std::stoll(sValueBuffer);
@@ -366,7 +397,7 @@ bool ConfigFileSystem::ReadConfigFile()
 		else if (sOptionBuffer == "nCursorShape") {
 			if (isNumberll(sValueBuffer)) {
 				long long int nTester = std::stoll(sValueBuffer);
-				if (nTester != 1 && nTester != 2 && nTester != 3 && nTester != 4 && nTester != 5 && nTester != 6) {
+				if (nTester < 1 || nTester > 6) {
 					VerbosityDisplay("In ConfigFileSystem::ReadConfigFile(): Warning - nCursorShape value incorrect. Must be 1,2,3,4,5 or 6. Value left unchanged.\n", nObjectID);
 				}
 				else nCursorShape = nTester;

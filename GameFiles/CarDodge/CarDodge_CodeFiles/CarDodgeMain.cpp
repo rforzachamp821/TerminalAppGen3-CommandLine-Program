@@ -12,6 +12,8 @@ private:
 	uint64_t nSessionLevel = 1;
 	std::chrono::milliseconds nSessionEnemyCarInterval = GetSessionLevelEnemyCarInterval();
 	bool bPanelAlreadyUpdated = false;
+	std::string sUserColourGlobal = "";
+	std::string sUserColourGlobalBack = "";
 
 	// UpdatePanelInfo - Updates panel info (points, time, etc)
 	void UpdatePanelInfo() {
@@ -86,7 +88,6 @@ private:
 		SetCursorPosition(nLeftBorderWidth, 5);
 		colour(WHT, RED);
 		std::cout << ULINE_STR << CentreTextCarDodge("You crashed!") << std::string((nGameplayScreenWidth - 12) / 2, ' ') << NOULINE_STR;
-		colour(ConfigObjMain.sColourGlobal, RED);
 
 		//                           //
 		// Display other stats \/ \/ //
@@ -96,26 +97,26 @@ private:
 		std::cout << CentreTextCarDodge("Elapsed Time: ", 22 + std::to_string(nSessionTime.count()).length());
 		colour(BLU, RED);
 		std::cout << std::to_string(nSessionTime.count()) << " seconds";
-		colour(ConfigObjMain.sColourGlobal, RED);
+		colour(WHT, RED);
 
 		SetCursorPosition(nLeftBorderWidth, 8);
 		std::cout << CentreTextCarDodge("Final Score: ", 13 + std::to_string(nSessionPoints).length() + std::string(nSessionPoints > GetCurrentHighScore() ? " (-- NEW HIGH SCORE --)" : "").length());
 		colour(BLU, RED);
 		std::cout << std::to_string(nSessionPoints);
 		RandomColourOutput(std::string(nSessionPoints > GetCurrentHighScore() ? " (-- NEW HIGH SCORE --)" : ""), RED);
-		colour(ConfigObjMain.sColourGlobal, RED);
+		colour(WHT, RED);
 
 		SetCursorPosition(nLeftBorderWidth, 9);
 		std::cout << CentreTextCarDodge("Final Level: ", 13 + std::to_string(nSessionLevel).length() + std::string(nSessionLevel == 12 ? " (OMEGA Level)" : "").length());
 		colour(BLU, RED);
 		std::cout << std::to_string(nSessionLevel) + std::string(nSessionLevel == 12 ? " (OMEGA Level)" : "");
-		colour(ConfigObjMain.sColourGlobal, RED);
+		colour(WHT, RED);
 
 		SetCursorPosition(nLeftBorderWidth, 10);
 		std::cout << CentreTextCarDodge("Final Interval Period: ", 25 + std::to_string(nSessionEnemyCarInterval.count()).length());
 		colour(BLU, RED);
 		std::cout << std::to_string(nSessionEnemyCarInterval.count()) + "ms";
-		colour(ConfigObjMain.sColourGlobal, RED);
+		colour(WHT, RED);
 
 		// Restart on ENTER, exit on ESC, don't do anything on any other input
 		SetCursorPosition(nLeftBorderWidth, 14);
@@ -340,17 +341,13 @@ public:
 		bool bRestartGame = false; // Flag for restarting game (usually on game loss)
 
 		// Ensure that all cursor and colour settings are saved before game initialisation
-		bool bShowCursorPrevious = ConfigObjMain.bShowCursor;
-		std::string sColourGlobalPrevFore = ConfigObjMain.sColourGlobal;
-		std::string sColourGlobalPrevBack = ConfigObjMain.sColourGlobalBack;
-
-		// Set cursor attributes and hide cursor to prevent flickering
-		ConfigObjMain.bShowCursor = false;
-		SetCursorAttributes();
+		const bool bShowCursorPrevious = DisableCursorVisibility();	// Set cursor attributes and hide cursor to prevent flickering
+		const std::string sColourGlobalPrevFore = ConfigObjMain.sColourGlobal;
+		const std::string sColourGlobalPrevBack = ConfigObjMain.sColourGlobalBack;
 
 		// Set global colours to game colours
-		ConfigObjMain.sColourGlobal = LWHT;
-		ConfigObjMain.sColourGlobalBack = BLK;
+		ConfigObjMain.sColourGlobal = ConfigObjMain.sCarDodgeGameplayColourFore;
+		ConfigObjMain.sColourGlobalBack = ConfigObjMain.sCarDodgeGameplayColourBack;
 
 		// Game restart loop
 		do 
@@ -643,7 +640,9 @@ public:
 			// SetHighScore sets the high score automatically - we don't need logic as to if the current score is higher than the high score, as that's already in there
 			SetHighScore(nSessionPoints);
 			// Update the high score in the High Score file
+			ConfigObjMain.bShowCursor = bShowCursorPrevious;
 			UpdateHighScoreInFile();
+			DisableCursorVisibility();
 
 			// Reset the game before leaving or before restart, in case object is not discarded
 			ResetGame();

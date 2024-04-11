@@ -157,6 +157,9 @@
     <ClCompile Include="Engine\SystemInfo\SystemInfo.cpp" />
     <ClCompile Include="Engine\TableEngine\TableEngine.cpp" />
     <ClCompile Include="Engine\TerminalDefaultAttributes\TerminalDefaultAttributes.cpp" />
+    <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.cpp" />
+    <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.cpp" />
+    <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarInfo\CarInfo.cpp" />
     <ClCompile Include="ZeeTerminal.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +180,9 @@
     <ClInclude Include="Engine\SystemInfo\SystemInfo.h" />
     <ClInclude Include="Engine\TableEngine\TableEngine.h" />
     <ClInclude Include="Engine\TerminalDefaultAttributes\TerminalDefaultAttributes.h" />
+    <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.h" />
+    <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.h" />
+    <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarInfo\CarInfo.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

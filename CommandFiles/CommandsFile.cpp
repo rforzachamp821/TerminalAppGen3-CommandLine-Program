@@ -2,7 +2,7 @@
 // CommandsFile.cpp - All command code is here.
 //
 
-#include "../Core/ZeeTerminalCore.h"
+#include "..\Core\ZeeTerminalCore.h"
 #include "..\Engine\ScreenNavigateEngine\ScreenNavigateEngine.h"
 #include "..\Engine\SystemInfo\SystemInfo.h"
 #include "..\Engine\TableEngine\TableEngine.h"
@@ -786,7 +786,7 @@ void help(bool bFromTutorial) {
 	sneHelp.nSizeOfScreens = 4;
 	std::string sScreens[] =
 	{
-		"___LIST OF COMMANDS___\n\nTo see more about a command, type in \"<command> -h\". This will work for all commands, except: echo and title.\n\n[1] Help\n[2] Exit\n[3] Tutorial\n[4] Echo\n[5] CLS\n[6] DevTools\n[7] CPUStress\n[8] Colour\n[9] Settings\n[10] Title\n[11] Date\n[12] ColourNumbers\n[13] MediaPlayer\n[14] AudioPlayer\n[15] TTS\n[16] Stopwatch\n[17] Read\n[18] Timer\n[19] Beep\n[20] MessageBox\n[21] Copy\n[22] CopyFile\n[23] TextInfo\n[24] ConfigAction\n[25] BeepSounds\n[26] RickRoll\n[27] ShellExecute\n[28] Hacker\n[29] Calculator\n[30] Logoff\n[31] Shutdown\n[32] Reboot (or Restart)\n[33] Hibernate\n[34] ResetExpl\n[35] MemTest\n[36] RandCol\n[37] Pause\n[38] CommandNum\n[39] SlowChar\n[40] ReverseText\n[41] Notes\n[42] FileParse\n[43] Disp\n[44] SysInfo\n[45] Einstein\n[46] Edison\n[47] Tesla\n[48] Cow\n[49] Cat\n[50] Bunny\n\nMore will be added soon!\n",
+		"___LIST OF COMMANDS___\n\nTo see more about a command, type in \"<command> -h\". This will work for all commands, except: echo and title.\n\n[1] Help\n[2] Exit\n[3] Tutorial\n[4] Echo\n[5] CLS\n[6] DevTools\n[7] CPUStress\n[8] Colour\n[9] Settings\n[10] Title\n[11] Date\n[12] ColourNumbers\n[13] MediaPlayer\n[14] AudioPlayer\n[15] TTS\n[16] Stopwatch\n[17] Read\n[18] Timer\n[19] Beep\n[20] MessageBox\n[21] Copy\n[22] CopyFile\n[23] TextInfo\n[24] ConfigAction\n[25] BeepSounds\n[26] RickRoll\n[27] ShellExecute\n[28] Hacker\n[29] Calculator\n[30] Logoff\n[31] Shutdown\n[32] Reboot (or Restart)\n[33] Hibernate\n[34] ResetExpl\n[35] MemTest\n[36] RandCol\n[37] Pause\n[38] CommandNum\n[39] SlowChar\n[40] ReverseText\n[41] Notes\n[42] FileParse\n[43] Disp\n[44] SysInfo\n[45] Einstein\n[46] Edison\n[47] Tesla\n[48] Cow\n[49] Cat\n[50] Bunny\n[51] Game\n\nMore will be added soon!\n",
 
 		"___FREQUENTLY ASKED QUESTIONS___\n\n"
 		"1) I can't see the terminal text. How can I zoom in?\n  1a) You can zoom in, of course. Press and hold the Ctrl button and scroll with the mouse to your desired text size.\n"
@@ -798,6 +798,7 @@ void help(bool bFromTutorial) {
 		"This is an early alpha build of ZeeTerminal, with an entirely new engine and components.\nThis program is made in C++, with a few very small parts of C." +
 		"\n\nThis program uses the DirectShow API in the MediaPlayer command, which is licensed by Microsoft Corporation. (c) Microsoft Corporation.\n\n" +
 		"This program uses the BASS API in the AudioPlayer command, which is licensed by Un4Seen Developments. (c) Un4Seen Developments.\n\n" +
+		"This program uses a slightly modified version of the CarDodge game v0.5.1, accessible in the Game command. CarDodge is licensed under Ryan Zorkot with the MIT License. For more information, visit the repository: https://github.com/rforzachamp821/CarDodge\n\n"
 		"\nZeeTerminal is licensed under the MIT License. The license and credits can be viewed on Page 4.\n\n"
 		"  _____        _____                   _             _ \n"
 		" |__  /___  __|_   _|__ _ __ _ __ ___ (_)_ __   __ _| |\n"
@@ -1691,7 +1692,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				else {
 					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
-					return;
 				}
 
 				return;
@@ -1703,7 +1703,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 				
 				return;
@@ -1715,7 +1714,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 				return;
 			}
@@ -1726,7 +1724,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 				return;
 			}
@@ -1737,7 +1734,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 				return;
 			}
@@ -1748,7 +1744,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 
 				return;
@@ -1763,7 +1758,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				else {
 					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-					return;
 				}
 
 				return;
@@ -1778,7 +1772,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 
 				return;
@@ -1793,7 +1786,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 
 				return;
@@ -1808,7 +1800,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 
 				return;
@@ -1823,7 +1814,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 
 				return;
@@ -1838,7 +1828,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 
 				return;
@@ -1856,7 +1845,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("ERROR: In Commands() - Could not detect correct 'block', 'underline' or 'bar' value in argument string.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's either 'block', 'underline', or 'bar'. Type \"settings -h\" for more info.\n");
-						return;
 					}
 
 				return;
@@ -1868,7 +1856,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 
 				return;
@@ -1883,7 +1870,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 
 				return;
@@ -1898,7 +1884,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 
 				return;
@@ -1913,7 +1898,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 					else {
 						VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 						UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-						return;
 					}
 				
 				return;
@@ -1925,7 +1909,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				else {
 					VerbosityDisplay("ERROR: In Commands() - Could not detect any argument string after option.\n");
 					UserErrorDisplay("An error occured. It seems like no option was found. Check your syntax, make sure an option is present and try again. Type \"settings -h\" for more info.\n");
-					return;
 				}
 
 				return;
@@ -1940,7 +1923,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				else {
 					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-					return;
 				}
 
 				return;
@@ -1955,7 +1937,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				else {
 					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-					return;
 				}
 
 				return;
@@ -1970,7 +1951,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				else {
 					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-					return;
 				}
 
 				return;
@@ -1985,7 +1965,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				else {
 					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-					return;
 				}
 
 				return;
@@ -2000,7 +1979,6 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				else {
 					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-					return;
 				}
 
 				return;
@@ -2015,7 +1993,65 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				else {
 					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
-					return;
+				}
+
+				return;
+			}
+			else if (sStringOptionCommandArgs[0] == "cdcarturnspeed") {
+				if (isNumberi(sStringDataCommandArgs[0])) {
+					CarDodgeGameSettings(1, std::stoi(sStringDataCommandArgs[0]), 0, 0, 0);
+				}
+				else {
+					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
+				}
+
+				return;
+			}
+			else if (sStringOptionCommandArgs[0] == "cdstartupcar") {
+				if (sStringDataCommandArgs[0] == "kartcar") {
+					CarDodgeGameSettings(2, 0, 1, 0, 0);
+				}
+				else if (sStringDataCommandArgs[0] == "thehoverrocket") {
+					CarDodgeGameSettings(2, 0, 2, 0, 0);
+				}
+				else if (sStringDataCommandArgs[0] == "thesweeper") {
+					CarDodgeGameSettings(2, 0, 3, 0, 0);
+				}
+				else if (sStringDataCommandArgs[0] == "theslicer") {
+					CarDodgeGameSettings(2, 0, 4, 0, 0);
+				}
+				else if (sStringDataCommandArgs[0] == "gtspeed") {
+					CarDodgeGameSettings(2, 0, 5, 0, 0);
+				}
+				else if (sStringDataCommandArgs[0] == "xtraaero") {
+					CarDodgeGameSettings(2, 0, 6, 0, 0);
+				}
+				else {
+					VerbosityDisplay("ERROR: In Commands() - Could not detect correct 'kartcar', 'thehoverrocket', 'thesweeper', 'theslicer', 'gtspeed' or 'xtraaero' value in argument string.\n");
+					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's either: 'kartcar', 'thehoverrocket', 'thesweeper', 'theslicer', 'gtspeed' or 'xtraaero'. Type \"settings -h\" for more info.\n");
+				}
+
+				return;
+			}
+			else if (sStringOptionCommandArgs[0] == "cdforeground") {
+				if (isNumberi(sStringDataCommandArgs[0])) {
+					CarDodgeGameSettings(3, 0, 0, std::stoi(sStringDataCommandArgs[0]), 0);
+				}
+				else {
+					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
+				}
+
+				return;
+			}
+			else if (sStringOptionCommandArgs[0] == "cdbackground") {
+				if (isNumberi(sStringDataCommandArgs[0])) {
+					CarDodgeGameSettings(4, 0, 0, 0, std::stoi(sStringDataCommandArgs[0]));
+				}
+				else {
+					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
 				return;
@@ -2023,7 +2059,7 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 		}
 
 		OptionSelectEngine oseSettings;
-		oseSettings.nSizeOfOptions = 10;
+		oseSettings.nSizeOfOptions = 11;
 		std::string sOptions[] = {
 			"Highlight Colour Settings",
 			"Title Colour Settings",
@@ -2034,6 +2070,7 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 			"Disable/Enable Word Wrapping",
 			"Cursor Settings",
 			"LogFile System Settings",
+			"CarDodge Game Settings",
 			"Other Settings"
 		};
 		oseSettings.sOptions = sOptions;
@@ -2075,6 +2112,9 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 				LogFileSystemSettings();
 				break;
 			case 10:
+				CarDodgeGameSettings();
+				break;
+			case 11:
 				OtherSettings();
 				break;
 
@@ -5399,9 +5439,47 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 
 		return;
 	}
+	 
+	else if (sCommand == "game" || sCommand == "51") {
+		// Arguments Interface
+		for (int i = 0; i < nArgArraySize; i++) {
+			if (cCommandArgs[i] == 'h') {
+				GameHelp();
+				return;
+			}
+			
+			if (sStringOptionCommandArgs[i] == "cardodge") {
+				CarDodgeMainMenu();
+				return;
+			}
+		}
 
-	else if (sCommand == "test") {
+		// Standard user interface
+		OptionSelectEngine oseGame;
+		oseGame.nSizeOfOptions = 1;
+		std::string sOptions[] = {
+			"Car Dodge (v0.5.1)"  
+		};
+		oseGame.sOptions = sOptions;
 		
+		while (true) {
+			// Get input
+			int nInput = oseGame.OptionSelect("Please select which game you would like to play:", " ___GAME___ ");
+
+			if (nInput == 1) {
+				CarDodgeMainMenu();
+			}
+			else if (nInput == -1) {
+				Exiting();
+				break;
+			}
+			else {
+				VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+				UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
+			}
+		}
+
+		return;
 	}
 
 	// Unknown command - fail
