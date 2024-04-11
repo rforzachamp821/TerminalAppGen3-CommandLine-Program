@@ -50,6 +50,12 @@ public:
 	bool bCommandInputInfoLogging = true;
 	bool bUserInputInfoLogging = false;
 
+	// CarDodge Game Settings
+	int nCarDodgeCarTurningSpeed = 2; // chars the car will move by - cannot be more than 10, lower than 1
+	int nCarDodgeGameStartupCar = 1; // Value can be from 1 to 6 (number on the menu)
+	std::string sCarDodgeGameplayColourFore = LWHT; // Only affects car colours
+	std::string sCarDodgeGameplayColourBack = BLK; // Only affects game background colour, borders aren't affected
+
 	long long int nSlowCharSpeed = 32;
 	long long int nCursorShape = 5; // TYPES are: block blinking (1), block steady (2), underline blinking (3), underline steady (4), bar blinking (5), bar steady (6)
 

@@ -8,10 +8,11 @@
 #include <fstream>
 #include <random>
 bool VerifyIfGameIsRunnable(bool, bool);
-#include "CarDodge_CodeFiles\CarInfo.cpp"
-#include "CarDodge_CodeFiles\CarDodgeCore.cpp"
-#include "CarDodge_CodeFiles\CarDodgeMain.cpp"
+#include "CarDodge_CodeFiles\CarInfo\CarInfo.h"
+#include "CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.h"
+#include "CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.h"
 
+// Debug/release RyRyCryptor libs
 #ifdef _DEBUG
 	#pragma comment(lib, "GameFiles/CarDodge/RyRyCryptor/Debug/RyRyCryptor.lib")
 #else
@@ -41,8 +42,27 @@ void InitialiseCarDodge()
 		EnemyCars[i].CarStyle = Style.EnemyCar;
 	}
 
-	// Initialise default car
-	UserCar.CarStyle = Style.UserCarDefault;
+	// Initialise user car style to what configuration object indicates
+	switch (ConfigObjMain.nCarDodgeGameStartupCar) {
+	case 1:
+		UserCar.CarStyle = Style.UserCarDefault;
+		break;
+	case 2:
+		UserCar.CarStyle = Style.HoverRocket;
+		break;
+	case 3:
+		UserCar.CarStyle = Style.TheSweeper;
+		break;
+	case 4:
+		UserCar.CarStyle = Style.TheSlicer;
+		break;
+	case 5:
+		UserCar.CarStyle = Style.GTSpeed;
+		break;
+	case 6:
+		UserCar.CarStyle = Style.XtraAero;
+		break;
+	}
 
 	// Menu screen colours
 	colour(sMenuColourFore, sMenuColourBack);
@@ -169,12 +189,16 @@ inline void RenderMainMenuCars() {
 	SetCursorPosition(0, 4);
 }
 
-void CarDodgeMainMenu(int argc, char** argv) 
+void CarDodgeMainMenu() 
 {
 	std::cout << "Getting ready...\n";
 	
 	// Initialise game
 	InitialiseCarDodge();
+
+	// Ensure that previous user colours are saved so they don't get erased
+	const std::string sUserColourGlobal = ConfigObjMain.sColourGlobal;
+	const std::string sUserColourGlobalBack = ConfigObjMain.sColourGlobalBack;
 
 	// Set menu colours as defaults - the actual game engine will change those automatically
 	ConfigObjMain.sColourGlobal = sMenuColourFore;
@@ -266,5 +290,11 @@ void CarDodgeMainMenu(int argc, char** argv)
 		cls();
 	}
 	
+	// Reset global colours back to user-set
+	ConfigObjMain.sColourGlobal = sUserColourGlobal;
+	ConfigObjMain.sColourGlobalBack = sUserColourGlobalBack;
+	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+	cls();
+
 	return;
 }

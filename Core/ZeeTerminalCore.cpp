@@ -252,6 +252,7 @@ namespace zt {
 	//            sColourOutlineBack - The background colour for the outline.
 	//            sColourTextFore - The foreground colour for the text.
 	//            sColourTextBack - The background colour for the text.
+	//            bCentreBox - If specified, centre the box on the terminal screen. This is based on the terminal's horizontal width. Defaults to FALSE.
 	// Return Values: None
 	//
 	void OutputBoxWithText(std::string sText, std::string sColourOutlineFore, std::string sColourOutlineBack, std::string sColourTextFore, std::string sColourTextBack, bool bCentreBox)
@@ -373,6 +374,15 @@ namespace zt {
 			nBoxWidth = csbiDirections.srWindow.Right - csbiDirections.srWindow.Left + 1;
 		}
 
+		// Calculate left padding width based on box width (for centring text)
+		int nLeftPaddingWidth = 0;
+		if (bCentreBox) {
+			nLeftPaddingWidth = ((csbiDirections.srWindow.Right - csbiDirections.srWindow.Left + 1) - nBoxWidth) / 2;
+		}
+
+		// Output padding
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << std::string(nLeftPaddingWidth, ' ');
 
 		// Firstly, output box top
 		colour(sColourOutlineFore, sColourOutlineBack);
@@ -387,6 +397,10 @@ namespace zt {
 			}
 
 			// Output padding
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			std::cout << std::string(nLeftPaddingWidth, ' ');
+
+			// Output box border character
 			colour(sColourOutlineFore, sColourOutlineBack);
 			std::cout << "* ";
 			colour(sColourTextFore, sColourTextBack);
@@ -398,6 +412,10 @@ namespace zt {
 			colour(sColourOutlineFore, sColourOutlineBack);
 			std::cout << " *\n";
 		}
+
+		// Output padding
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << std::string(nLeftPaddingWidth, ' ');
 
 		// Finally, output box bottom
 		colour(sColourOutlineFore, sColourOutlineBack);
@@ -639,7 +657,7 @@ namespace zt {
 	}
 
 	// Function to set console cursor position
-	inline void SetCursorPosition(int x, int y) {
+	void SetCursorPosition(int x, int y) {
 		COORD CursorPos{};
 		CursorPos.X = x;
 		CursorPos.Y = y;
@@ -1135,6 +1153,7 @@ namespace zt {
 	}
 
 	// Function that outputs text with random colours 
+	// Specify a background colour with sBackgroundColour to set the text background before writing to display
 	void RandomColourOutput(std::string sText, std::string sBackgroundColour) {
 
 		// Add word wrapping
@@ -1147,10 +1166,10 @@ namespace zt {
 			// Colour indicator going past 16 will give an error
 			if (i > 16) i = 1;
 
-			if (colconv::NumberToColour(i) == ConfigObjMain.sColourGlobalBack && !ConfigObjMain.bAutoReadableContrast) {
-				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			if (colconv::NumberToColour(i) == sBackgroundColour && !ConfigObjMain.bAutoReadableContrast) {
+				colour(ConfigObjMain.sColourGlobal, sBackgroundColour);
 			}
-			else colour(colconv::NumberToColour(i), ConfigObjMain.sColourGlobalBack);
+			else colour(colconv::NumberToColour(i), sBackgroundColour);
 
 			// Output with colour
 			std::cout << sText[j];
@@ -1257,8 +1276,9 @@ namespace zt {
 			return;
 		}
 
-		// Firstly, output string of spaces
-		std::cout << std::string((nWidth - sText.length()) / 2, ' ');
+		// Firstly, set cursor to correct centre position
+		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiCentreCT);
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { (short)((nWidth - sText.length()) / 2), csbiCentreCT.dwCursorPosition.Y });
 		// Then output the string itself like slowcharfn()
 		for (int i = 0; i <= sText.length(); i++) {
 			sleep(ConfigObjMain.nSlowCharSpeed);

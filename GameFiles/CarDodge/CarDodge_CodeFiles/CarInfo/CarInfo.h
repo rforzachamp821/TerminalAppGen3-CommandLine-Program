@@ -1,5 +1,6 @@
+#pragma once
 //
-// CarInfo.cpp - Houses the CarInfo structure.
+// CarInfo.h - Houses the interfaces for the CarInfo and CarStyles structures.
 //
 
 #include <array>
@@ -7,7 +8,7 @@
 
 // CarInfo - Structure that defines the attributes a car should have.
 struct CarInfo {
-	
+
 	// The following define the bottom left and right of the car position.
 	COORD bottomLeft = { 0,0 };
 	COORD bottomRight = { 0,0 };
@@ -23,8 +24,7 @@ struct CarInfo {
 // Parameters: ObjToReset - The object to reset (ideally should be an address to an existing object).
 // Return value: None
 //
-void ResetCarInfoObject(CarInfo* ObjToReset) {
-
+inline void ResetCarInfoObject(CarInfo* ObjToReset) {
 	// Reset all values in ObjToReset
 	ObjToReset->bottomLeft = { 0,0 };
 	ObjToReset->bottomRight = { 0,0 };

@@ -69,6 +69,15 @@
     <ClCompile Include="CommandFiles\CalculationAlgorithm\CalculationAlgorithm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarInfo\CarInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -123,6 +132,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommandFiles\CalculationAlgorithm\CalculationAlgorithm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarInfo\CarInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

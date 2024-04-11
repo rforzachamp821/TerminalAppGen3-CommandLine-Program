@@ -58,6 +58,7 @@ dlldata.c
 # All ZeeTerminal files that are automatically generated
 ZT_Config.ini
 NotesFile.txt
+GameHighScores.dat
 
 # Benchmark Results
 BenchmarkDotNet.Artifacts/

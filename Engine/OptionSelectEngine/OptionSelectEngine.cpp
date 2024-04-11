@@ -6,6 +6,20 @@
 #include <conio.h>
 
 
+// MoveCursorToXCoord
+bool OptionSelectEngine::MoveCursorToXCoord(short int xArg) {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_SCREEN_BUFFER_INFO csbiConsole;
+	if (!GetConsoleScreenBufferInfo(hConsole, &csbiConsole)) {
+		return false;
+	}
+
+	if (hConsole == INVALID_HANDLE_VALUE) return false;
+	if (!SetConsoleCursorPosition(hConsole, { xArg, csbiConsole.dwCursorPosition.Y })) return false;
+
+	return true;
+}
+
 // SimpleOptionSelect
 int OptionSelectEngine::SimpleOptionSelect(std::string sPrompt, std::string sTitle, bool bCentreOptions, bool bCentrePrompt)
 {
@@ -55,7 +69,8 @@ int OptionSelectEngine::SimpleOptionSelect(std::string sPrompt, std::string sTit
 	// Display prompt message for selection options with underline
 	if (sPrompt != "") {
 		std::cout << "\n";
-		std::cout << (bCentrePrompt ? std::string(nPromptLeftPaddingWidth, ' ') : "") << wordWrap(sPrompt) << "\n\n";
+		MoveCursorToXCoord(nPromptLeftPaddingWidth);
+		std::cout << wordWrap(sPrompt) << "\n\n";
 	}
 
 	// Log that session is starting
@@ -65,7 +80,7 @@ int OptionSelectEngine::SimpleOptionSelect(std::string sPrompt, std::string sTit
 	for (int i = 0; i < nSizeOfOptions; i++)
 	{
 		// Output number of spaces based on padding
-		std::cout << std::string(nOptionsLeftPaddingWidth, ' ');
+		MoveCursorToXCoord(nOptionsLeftPaddingWidth);
 
 		// Set brackets to option indicator colour
 		colour(vsOptionIndicatorColours[i], ConfigObjMain.sColourGlobalBack);
@@ -85,7 +100,9 @@ int OptionSelectEngine::SimpleOptionSelect(std::string sPrompt, std::string sTit
 	std::cout << '\n';
 	while (true) {
 		// Input centred when options are centred - avoids overcomplication
-		nInput = NumInputi(bCentreOptions ? CentreText("Please input your desired option number (input 0 to exit): > ") : "Please input your desired option number (input 0 to exit): > ");
+		std::string sInputPrompt = "Please input a desired option number (input 0 to exit): > ";
+		MoveCursorToXCoord(((csbiOptionSelect.srWindow.Right - csbiOptionSelect.srWindow.Left) - sInputPrompt.length()) / 2);
+		nInput = NumInputi(sInputPrompt);
 
 		if (nInput == 0) {
 			// Log that session is ending
@@ -134,7 +151,7 @@ int OptionSelectEngine::OptionSelect(std::string sPrompt, std::string sTitle, bo
 	int nWindowHeight = 0;
 	int nIndexHeight = 0; // Index option height
 	int nEndingCursorHeight = 0;
-	char nKey = 0;
+	unsigned char nKey = 0;
 	std::string sHighlightBuffer = "";
 
 	// Console window info declaration
@@ -308,23 +325,27 @@ int OptionSelectEngine::OptionSelect(std::string sPrompt, std::string sTitle, bo
 		// Only redraw options on first load - CPU optimisation, reduces flickering
 		if (bReiterated == false)
 		{
+			SetCursorPosition(nOptionsLeftPaddingWidth, (nStartingRow));
 			// 3. for loop
 			for (int i = 0; i < nNumberOfOptions; i++) {
 				// Set cursor position
-				SetCursorPosition(nOptionsLeftPaddingWidth, (nStartingRow + i + 1));
+
 
 				// Mitigation for a terminal colour bug on older-style Windows terminals (specifically Conhost.exe)
-				if (i <= 0) {
-					GetConsoleScreenBufferInfo(hOptionSelect, &csbiOptionSelect);
+				//if (i <= 0) {
+					/*
+										GetConsoleScreenBufferInfo(hOptionSelect, &csbiOptionSelect);
 					std::cout << std::setw(csbiOptionSelect.srWindow.Right - csbiOptionSelect.srWindow.Left - nOptionsLeftPaddingWidth) << std::cout.fill(' ');
 					SetCursorPosition(nOptionsLeftPaddingWidth, (nStartingRow + i + 1));
-				}
-				else {
-					// 4. Measure size of sOptions[i] and output equal number of spaces, then go to the beginning of the line
-					std::cout << std::setw(sOptions[i].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' '); // + 6 because ">> " and " <<" combined are 6 chars
-					SetCursorPosition(nOptionsLeftPaddingWidth, (nStartingRow + i + 1));
-				}
+					*/
 
+				//}
+				//else {
+					// 4. Measure size of sOptions[i] and output equal number of spaces, then go to the beginning of the line
+					//std::cout << std::setw(sOptions[i].length() + 6 + sOptionIndicator.length()) << std::cout.fill(' '); // + 6 because ">> " and " <<" combined are 6 chars
+				std::cout << '\n';
+				MoveCursorToXCoord(nOptionsLeftPaddingWidth);
+				//}
 				// 5. Output option
 				if (i == (nIndex - 1)) {
 					DisplayOptionsIndicator(sOptionIndicatorColours[i]);
