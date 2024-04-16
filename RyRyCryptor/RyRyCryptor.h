@@ -4,6 +4,15 @@
 // RyRyCryptor.h - Contains the interface for the RyRyCryptor class.
 //
 
+// Ensure that encrypt and decrypt file functions aren't macroed
+#ifdef DecryptFile
+#undef DecryptFile
+#endif // DecryptFile
+#ifdef EncryptFile
+#undef EncryptFile
+#endif // EncryptFile
+
+
 // As this may change, typedef the key format
 typedef uint64_t RYRYKEY;
 
@@ -107,3 +116,15 @@ public:
 	bool DecryptFile(const std::string sFilePath, const RYRYKEY nKey1, const RYRYKEY nKey2);
 
 };
+
+#ifdef UNICODE
+#define EncryptFile  EncryptFileW
+#else
+#define EncryptFile  EncryptFileA
+#endif // !UNICODE
+
+#ifdef UNICODE
+#define DecryptFile  DecryptFileW
+#else
+#define DecryptFile  DecryptFileA
+#endif // !UNICODE

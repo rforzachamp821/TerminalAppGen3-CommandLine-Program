@@ -2,7 +2,7 @@
 #include <array>
 #include <chrono>
 #include <thread>
-#include "RyRyCryptor/RyRyCryptor.h"
+#include "../../RyRyCryptor/RyRyCryptor.h"
 #include <Windows.h>
 #include <iomanip>
 #include <fstream>
@@ -11,13 +11,6 @@ bool VerifyIfGameIsRunnable(bool, bool);
 #include "CarDodge_CodeFiles\CarInfo\CarInfo.h"
 #include "CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.h"
 #include "CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.h"
-
-// Debug/release RyRyCryptor libs
-#ifdef _DEBUG
-	#pragma comment(lib, "GameFiles/CarDodge/RyRyCryptor/Debug/RyRyCryptor.lib")
-#else
-	#pragma comment(lib, "GameFiles/CarDodge/RyRyCryptor/Release/RyRyCryptor.lib")
-#endif // _DEBUG
 
 extern CarInfo EnemyCars[128];
 extern CarInfo UserCar;

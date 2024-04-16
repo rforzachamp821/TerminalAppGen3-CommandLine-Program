@@ -184,6 +184,7 @@
     <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.h" />
     <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarInfo\CarInfo.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="RyRyCryptor\RyRyCryptor.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ZeeTerminal.rc" />
