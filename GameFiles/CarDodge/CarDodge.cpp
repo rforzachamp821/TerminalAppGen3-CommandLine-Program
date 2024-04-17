@@ -132,11 +132,8 @@ inline void RenderMainMenuCars() {
 	ciMainMenuEnemyCar.CarStyle = Style.EnemyCar;
 
 	// Set up left side of main menu
-	ciMainMenuUserCar.bottomLeft = { short(nDirectionsTextLeftColumn - 7), 14 };
-	ciMainMenuUserCar.bottomRight = { short(ciMainMenuUserCar.bottomLeft.X + 4), ciMainMenuUserCar.bottomLeft.Y };
-
-	ciMainMenuEnemyCar.bottomLeft = { short(nDirectionsTextLeftColumn - 10), 9 };
-	ciMainMenuEnemyCar.bottomRight = { short(ciMainMenuEnemyCar.bottomLeft.X + 4), ciMainMenuEnemyCar.bottomLeft.Y };
+	ciMainMenuUserCar.bottomLeft = { short(nDirectionsTextLeftColumn - 10), 14 };
+	ciMainMenuEnemyCar.bottomLeft = { short(nDirectionsTextLeftColumn - 13), 9 };
 
 	// Render left side of main menu
 	colour(LYLW, sMenuColourBack);
@@ -144,12 +141,10 @@ inline void RenderMainMenuCars() {
 	RenderCar(ciMainMenuUserCar);
 
 	// Set up right side of main menu
-	ciMainMenuUserCar.bottomLeft = { short(nDirectionsTextRightColumn + 3), 14 };
-	ciMainMenuUserCar.bottomRight = { short(ciMainMenuUserCar.bottomLeft.X + 4), ciMainMenuUserCar.bottomLeft.Y };
+	ciMainMenuUserCar.bottomLeft = { short(nDirectionsTextRightColumn + 6), 14 };
 	ciMainMenuUserCar.CarStyle = Style.XtraAero;
 
-	ciMainMenuEnemyCar.bottomLeft = { short(nDirectionsTextRightColumn + 8), 11 };
-	ciMainMenuEnemyCar.bottomRight = { short(ciMainMenuEnemyCar.bottomLeft.X + 4), ciMainMenuEnemyCar.bottomLeft.Y };
+	ciMainMenuEnemyCar.bottomLeft = { short(nDirectionsTextRightColumn + 11), 11 };
 
 	// Render left side of main menu
 	RenderCar(ciMainMenuEnemyCar);
@@ -157,22 +152,22 @@ inline void RenderMainMenuCars() {
 
 	// Render annotations for the cars on both sides of the main menu
 	colour(LGRN, sMenuColourBack);
-	SetCursorPosition(nDirectionsTextRightColumn + 9, 13);
+	SetCursorPosition(nDirectionsTextRightColumn + 12, 13);
 	std::cout << "||";
-	SetCursorPosition(nDirectionsTextRightColumn + 9, 14);
+	SetCursorPosition(nDirectionsTextRightColumn + 12, 14);
 	std::cout << "VV";
 
-	SetCursorPosition(nDirectionsTextRightColumn + 4, 8);
+	SetCursorPosition(nDirectionsTextRightColumn + 7, 8);
 	std::cout << "^^";
-	SetCursorPosition(nDirectionsTextRightColumn + 4, 9);
+	SetCursorPosition(nDirectionsTextRightColumn + 7, 9);
 	std::cout << "||";
 
 	colour(LMAG, sMenuColourBack);
-	SetCursorPosition(nDirectionsTextLeftColumn, 9);
+	SetCursorPosition(nDirectionsTextLeftColumn - 3, 9);
 	std::cout << "\\/";
-	SetCursorPosition(nDirectionsTextLeftColumn, 11);
+	SetCursorPosition(nDirectionsTextLeftColumn - 3, 11);
 	std::cout << "/\\";
-	SetCursorPosition(nDirectionsTextLeftColumn - 6, 10);
+	SetCursorPosition(nDirectionsTextLeftColumn - 9, 10);
 	std::cout << "<-- CRASH";
 
 	// Set colours back to normal
@@ -205,11 +200,13 @@ void CarDodgeMainMenu()
 		// Ensure that terminal is suitable for playing the game
 		if (!VerifyIfGameIsRunnable(true, true)) {
 			std::cout << "Take your time to resize the main menu window. The CarDodge main menu will reappear when the window is resized.\nPress any key to exit the game.\n";
+			bool bExitGame = false;
 			while (true) {
 				// Check if user inputted anything
 				if (_kbhit()) {
 					_getch();
-					return;
+					bExitGame = true;
+					break;
 				}
 
 				// Check window size repeatedly
@@ -220,6 +217,9 @@ void CarDodgeMainMenu()
 
 				sleep(1);
 			}
+
+			// Game needs to be exited as user pressed a key - break out of main while loop
+			if (bExitGame) break;
 
 			// Clear screen to start terminal afresh from any error messages
 			cls();

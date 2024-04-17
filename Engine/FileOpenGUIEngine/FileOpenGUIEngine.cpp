@@ -57,7 +57,7 @@ bool FileOpenGUIEngine::FileOpenDialogue(std::string sTitle, bool bSelectFolder)
 	IFileOpenDialog* pFileOpen = NULL;
 	IShellItem* pItem = NULL;
 
-	LPWSTR pwszFilePath = (LPWSTR)L"";
+	LPWSTR pwszFilePath = 0;
 
 	// Initialise COM libraries
 	hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
@@ -144,7 +144,9 @@ bool FileOpenGUIEngine::FileOpenDialogue(std::string sTitle, bool bSelectFolder)
 
 done:
 
-	CoTaskMemFree(pwszFilePath);
+	if (pwszFilePath) {
+		CoTaskMemFree(pwszFilePath);
+	}
 
 	if (pItem)
 	{

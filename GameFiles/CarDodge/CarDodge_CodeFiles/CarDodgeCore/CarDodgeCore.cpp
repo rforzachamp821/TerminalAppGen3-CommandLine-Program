@@ -121,7 +121,7 @@ void CarDodgeCore::RenderBorders(std::string sSetBorderColourFore, std::string s
 	// 2. Draw right side border
 	for (short int i = 0; i <= nSessionConsoleHeight; i++) {
 		// Repeat creation of sides with std::string buffer
-		SetCursorPosition(nScreenWidth - nRightBorderWidth, i); // 25 is width of information pane
+		SetCursorPosition(nScreenWidth - nRightBorderWidth, i);
 		std::cout << '\xb2' << std::string(nRightBorderWidth - 1, ' ');
 		if (i < nSessionConsoleHeight) std::cout << '\n';
 
@@ -135,7 +135,7 @@ void CarDodgeCore::RenderBorders(std::string sSetBorderColourFore, std::string s
 // MoveUserCarLeft
 void CarDodgeCore::MoveUserCarLeft() {
 	// Check if user car is already at the left border, with respect to car turning speed
-	if (UserCar.bottomLeft.X - (nGameplayScreenWidth % ConfigObjMain.nCarDodgeCarTurningSpeed) <= nLeftBorderWidth) {
+	if (UserCar.bottomLeft.X - ConfigObjMain.nCarDodgeCarTurningSpeed < nLeftBorderWidth) {
 		return;
 	}
 
@@ -153,7 +153,7 @@ void CarDodgeCore::MoveUserCarLeft() {
 // MoveUserCarRight
 void CarDodgeCore::MoveUserCarRight() {
 	// Check if user car is already at the right border, with respect to car turning speed
-	if (UserCar.bottomRight.X + (nGameplayScreenWidth % ConfigObjMain.nCarDodgeCarTurningSpeed) >= nScreenWidth - nRightBorderWidth) {
+	if (UserCar.bottomRight.X + ConfigObjMain.nCarDodgeCarTurningSpeed >= nScreenWidth - nRightBorderWidth) {
 		return;
 	}
 
@@ -183,7 +183,7 @@ void CarDodgeCore::RenderNewEnemyCar() {
 	// Set co-ords of this enemy car (the enemy car Y co-ordinate can be used as an identifier)
 	EnemyCars[nEnemyCarIndex].bInUse = true;
 	EnemyCars[nEnemyCarIndex].bottomLeft = { nRandomXCoord, 3 };
-	nRandomXCoord += 4;
+	nRandomXCoord += 3;
 	EnemyCars[nEnemyCarIndex].bottomRight = { nRandomXCoord, 3 };
 
 	// Render the new car now
@@ -191,6 +191,8 @@ void CarDodgeCore::RenderNewEnemyCar() {
 
 	// Finally, increment the number of currently rendered enemy cars
 	nNumOfCurrentRenderedEnemyCars++;
+
+	return;
 }
 
 // MoveAllEnemyCars
@@ -244,7 +246,7 @@ bool CarDodgeCore::CheckForCarCollision() {
 		// Check if car is in the necessary Y-coordinates to be in a crash
 		if (EnemyCars[nEnemyCarIterator].bottomLeft.Y >= nSessionConsoleHeight - 3) {
 			// Check if car is in the necessary X-coordinates to be in a crash
-			if (EnemyCars[nEnemyCarIterator].bottomLeft.X < UserCar.bottomRight.X && EnemyCars[nEnemyCarIterator].bottomRight.X > UserCar.bottomLeft.X) {
+			if (EnemyCars[nEnemyCarIterator].bottomLeft.X <= UserCar.bottomRight.X && EnemyCars[nEnemyCarIterator].bottomRight.X >= UserCar.bottomLeft.X) {
 				return true;
 			}
 		}

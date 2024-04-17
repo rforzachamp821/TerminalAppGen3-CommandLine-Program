@@ -376,7 +376,7 @@ void CarDodgeMain::CarDodgeMainGame()
 
 		// Render user car, set user car start position
 		UserCar.bottomLeft = { 43, nSessionConsoleHeight };
-		UserCar.bottomRight = { 47, nSessionConsoleHeight };
+		UserCar.bottomRight = { 46, nSessionConsoleHeight };
 		RenderCar(UserCar);
 
 		// Set up enemy car intervals, session levels

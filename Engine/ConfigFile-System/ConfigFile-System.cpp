@@ -107,12 +107,12 @@ ConfigFileSystem::~ConfigFileSystem() {
 bool ConfigFileSystem::CreateConfigFile()
 {
 	// 1. Attempt to create config file in user-defined location
-	std::ofstream CreateConfigOut(sConfigFileUserLocation, std::ios::binary);
+	std::ofstream CreateConfigOut(sConfigFileUserLocation);
 
 	// 2. Check if open successful; if not, use default location; if not, return false
 	if (CreateConfigOut.fail() == true) {
 		VerbosityDisplay("In ConfigFileSystem::CreateConfigFile(): Warning - User file location cannot be opened. Attempting to create config file in default location.\n", nObjectID);
-		CreateConfigOut.open(sConfigFileDefaultLocation, std::ios::binary);
+		CreateConfigOut.open(sConfigFileDefaultLocation);
 		if (CreateConfigOut.fail() == true) {
 			VerbosityDisplay("In ConfigFileSystem::CreateConfigFile(): ERROR - Default location could not be opened. Configuration file creation failed.", nObjectID);
 			return false;
@@ -120,7 +120,7 @@ bool ConfigFileSystem::CreateConfigFile()
 		else {
 			// Point to new file
 			sConfigFileUserLocation = sConfigFileDefaultLocation;
-			CreateConfigOut.open(sConfigFileUserLocation, std::ios::binary);
+			CreateConfigOut.open(sConfigFileUserLocation);
 		}
 	}
 
@@ -142,13 +142,13 @@ bool ConfigFileSystem::WriteConfigFile() {
 	std::string sConfigFinalLocation = "";
 
 	// 2. Create test file stream
-	std::ifstream TestStreamIn(sConfigFileUserLocation, std::ios::binary);
+	std::ifstream TestStreamIn(sConfigFileUserLocation);
 
 	// 3. Test for file existence in user-set location and ZeeTerminal folder
 	if (TestStreamIn.fail() == true) {
 		VerbosityDisplay("In ConfigFileSystem::WriteConfigFile(): Warning- User-defined file seems to be nonexistent. Attempting to write to default location.\n", nObjectID);
 		TestStreamIn.clear();
-		TestStreamIn.open(sConfigFileDefaultLocation, std::ios::binary);
+		TestStreamIn.open(sConfigFileDefaultLocation);
 
 		if (TestStreamIn.fail() == true) {
 			VerbosityDisplay("In ConfigFileSystem::WriteConfigFile(): Warning - Default location file not found. Attempting to create new configuration file.\n", nObjectID);
@@ -167,7 +167,7 @@ bool ConfigFileSystem::WriteConfigFile() {
 	TestStreamIn.close();
 
 	// 5. Open main file stream; post message that write operation has began.
-	std::ofstream MainStreamOut(sConfigFinalLocation, std::ios::binary);
+	std::ofstream MainStreamOut(sConfigFinalLocation);
 
 	// Unexpected failure - just exit
 	if (MainStreamOut.fail()) {
@@ -209,13 +209,13 @@ bool ConfigFileSystem::ReadConfigFile()
 	std::string sConfigFinalLocation = "";
 
 	// 2. Create test file stream 
-	std::ifstream TestStreamIn(sConfigFileUserLocation, std::ios::binary);
+	std::ifstream TestStreamIn(sConfigFileUserLocation);
 
 	// 3. Test for file existence in user-set location and ZeeTerminal folder
 	if (TestStreamIn.fail() == true) {
 		VerbosityDisplay("In ConfigFileSystem::ReadConfigFile(): Warning- User-defined file seems to be nonexistent. Attempting to read from default location.\n", nObjectID);
 		TestStreamIn.clear();
-		TestStreamIn.open(sConfigFileDefaultLocation, std::ios::binary);
+		TestStreamIn.open(sConfigFileDefaultLocation);
 
 		if (TestStreamIn.fail() == true) {
 			VerbosityDisplay("In ConfigFileSystem::ReadConfigFile(): Warning - Default location file not found. Attempting to create new configuration file.\n", nObjectID);
@@ -234,7 +234,7 @@ bool ConfigFileSystem::ReadConfigFile()
 	TestStreamIn.close();
 
 	// 5. Create new main file stream
-	std::ifstream MainStreamIn(sConfigFinalLocation, std::ios::binary);
+	std::ifstream MainStreamIn(sConfigFinalLocation);
 
 	// Unexpected failure - just exit
 	if (MainStreamIn.fail()) {
@@ -283,7 +283,7 @@ bool ConfigFileSystem::ReadConfigFile()
 		}
 
 		// 10. Parse final contents and put into value string
-		std::getline(LineStream, sValueBuffer, '\r');
+		std::getline(LineStream, sValueBuffer, '\n');
 
 		// Check if anything is in the value string
 		if (sValueBuffer == "") {

@@ -101,7 +101,11 @@ int OptionSelectEngine::SimpleOptionSelect(std::string sPrompt, std::string sTit
 	while (true) {
 		// Input centred when options are centred - avoids overcomplication
 		std::string sInputPrompt = "Please input a desired option number (input 0 to exit): > ";
-		MoveCursorToXCoord(((csbiOptionSelect.srWindow.Right - csbiOptionSelect.srWindow.Left) - sInputPrompt.length()) / 2);
+
+		// Move prompt to centre if centring prompt is enabled
+		if (bCentrePrompt) {
+			MoveCursorToXCoord(((csbiOptionSelect.srWindow.Right - csbiOptionSelect.srWindow.Left) - sInputPrompt.length()) / 2);
+		}
 		nInput = NumInputi(sInputPrompt);
 
 		if (nInput == 0) {

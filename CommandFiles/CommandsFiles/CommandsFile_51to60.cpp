@@ -155,7 +155,9 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 
 		// Encryption and decryption both require only keys and file/folderpath
 		if (sFileName == "") {
-			std::cout << wordWrap("Type in \"*open\" for Windows File Dialogue, or \"*openfolder\" for Windows Folder Dialogue.\n");
+			colour(LCYN, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("Type in \"*open\" for Windows File Dialogue, or \"*openfolder\" for Windows Folder Dialogue.\n\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			sFileName = StrInput("Please input path to desired file/folder (0 to exit): > ");
 			if (sFileName == "0") {
 				Exiting();
@@ -170,6 +172,10 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			FileCryptorOpen.FileOpenDialogue("Open a File For Encryption", false);
 			sFileName = FileCryptorOpen.GetRetrievedPathName();
+			if (sFileName == "") {
+				Exiting();
+				return true;
+			}
 		}
 		else if (sFileName == "*openfolder") {
 			FileOpenGUIEngine FileCryptorOpen;
@@ -178,6 +184,10 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			FileCryptorOpen.FileOpenDialogue("Open a Folder For Encryption", true);
 			sFileName = FileCryptorOpen.GetRetrievedPathName();
+			if (sFileName == "") {
+				Exiting();
+				return true;
+			}
 		}
 
 		if (bUseWindowsEncryption == false && rKey1 == 0) {
@@ -199,7 +209,11 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 				if (!EncryptFileA(sFileName.c_str())) {
 					VerbosityDisplay("In Commands(): ERROR - EncryptFileA() function failed, with error code " + std::to_string(GetLastError()) + ".\n");
 					UserErrorDisplay("ERROR - An error occured when encrypting data. Failed with error code " + std::to_string(GetLastError()) + ".\n");
-					return true;
+				}
+				else {
+					colour(LGRN, ConfigObjMain.sColourGlobalBack);
+					std::cout << CentreText("File/folder encryption successful!") << "\n";
+					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 				}
 			}
 			else {
@@ -221,8 +235,12 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 
 				}
 				else {
-					FileCryptorObj.EncryptFile(sFileName, rKey1, rKey2);
+					if (!FileCryptorObj.EncryptFile(sFileName, rKey1, rKey2)) {
+						UserErrorDisplay("When encrypting " + sFileName + ": ERROR - " + FileCryptorObj.GetErrorLevelInfo() + "\n");
+						nNumberOfFailedFiles++;
+					}
 				}
+			
 				std::chrono::steady_clock::time_point TimePointEnd = std::chrono::steady_clock::now();
 				std::chrono::duration<long double> ElapsedSeconds = TimePointEnd - TimePointStart;
 
@@ -231,17 +249,21 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 					std::cout << "File/folder encryption complete!\n" << nNumberOfFailedFiles << " files have not been encrypted due to an error. Errors have been displayed above.\nElapsed Time: " << ElapsedSeconds.count() << " seconds.\n\n";
 				}
 				else {
-					std::cout << "File/folder encryption successfully completed!\nElapsed Time: " << ElapsedSeconds.count();
+					std::cout << "File/folder encryption successfully completed!\nElapsed Time: " << ElapsedSeconds.count() << " seconds.\n\n";
 				}
 				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			}
 		}
 		else if (nOption == 2) {
 			if (bUseWindowsEncryption) {
-				if (DecryptFileA(sFileName.c_str(), NULL)) {
+				if (!DecryptFileA(sFileName.c_str(), NULL)) {
 					VerbosityDisplay("In Commands(): ERROR - DecryptFileA() function failed, with error code " + std::to_string(GetLastError()) + ".\n");
 					UserErrorDisplay("ERROR - An error occured when decrypting data. Failed with error code " + std::to_string(GetLastError()) + ".\n");
-					return true;
+				}
+				else {
+					colour(LGRN, ConfigObjMain.sColourGlobalBack);
+					std::cout << CentreText("File/folder decryption successful!") << "\n";
+					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 				}
 			}
 			else {
@@ -263,7 +285,10 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 
 				}
 				else {
-					FileCryptorObj.DecryptFile(sFileName, rKey1, rKey2);
+					if (!FileCryptorObj.DecryptFile(sFileName, rKey1, rKey2)) {
+						UserErrorDisplay("When decrypting " + sFileName + ": ERROR - " + FileCryptorObj.GetErrorLevelInfo() + "\n");
+						nNumberOfFailedFiles++;
+					}
 				}
 				std::chrono::steady_clock::time_point TimePointEnd = std::chrono::steady_clock::now();
 				std::chrono::duration<long double> ElapsedSeconds = TimePointEnd - TimePointStart;
@@ -273,7 +298,7 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 					std::cout << "File/folder decryption complete!\n" << nNumberOfFailedFiles << " files have not been decrypted due to an error. Errors have been displayed above.\nElapsed Time: " << ElapsedSeconds.count() << " seconds.\n\n";
 				}
 				else {
-					std::cout << "File/folder decryption successfully completed!\nElapsed Time: " << ElapsedSeconds.count();
+					std::cout << "File/folder decryption successfully completed!\nElapsed Time: " << ElapsedSeconds.count() << " seconds.\n\n";
 				}
 				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			}
@@ -302,13 +327,17 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 			// Output title, prompt input
 			CentreColouredText(" ___DELETE___ ", 1);
 
-			std::cout << wordWrap("\n\nThis command allows you to delete files or folders permanently.\nType in \"*open\" for Windows File Dialogue, or \"*openfolder\" for Windows Folder Dialogue.\n\n");
+			std::cout << wordWrap("\n\nThis command allows you to delete files or folders permanently.\n");
+			colour(LCYN, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("Type in \"*open\" for Windows File Dialogue, or \"*openfolder\" for Windows Folder Dialogue.\n\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			sFileName = StrInput("Please input the path to the file/folder you want to delete (0 to exit): > ");
 			if (sFileName == "0") {
 				Exiting();
 				return true;
 			}
 		}
+
 
 		if (sFileName == "*open") {
 			FileOpenGUIEngine DeleteOpen;
@@ -317,6 +346,10 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			DeleteOpen.FileOpenDialogue("Open a File For Encryption", false);
 			sFileName = DeleteOpen.GetRetrievedPathName();
+			if (sFileName == "") {
+				Exiting();
+				return true;
+			}
 		}
 		else if (sFileName == "*openfolder") {
 			FileOpenGUIEngine DeleteOpen;
@@ -325,24 +358,34 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			DeleteOpen.FileOpenDialogue("Open a Folder For Encryption", true);
 			sFileName = DeleteOpen.GetRetrievedPathName();
+			if (sFileName == "") {
+				Exiting();
+				return true;
+			}
 		}
 
 		// Delete file/folder
-		std::error_code ecDelete{};
 		try {
-			std::filesystem::remove_all(sFileName, ecDelete);
+			std::error_code ecDelete{};
+			uintmax_t nReturnCode = std::filesystem::remove_all(sFileName, ecDelete);
+
+			// 0 means no files have been deleted
+			if (nReturnCode == 0) {
+				VerbosityDisplay("In Commands(): ERROR - Failed to delete file/folder. Error code: 2. Error info: File/folder not found.\n");
+				UserErrorDisplay("ERROR - An error occured when deleting file/folder. Error info: File/folder not found.\n");
+				return true;
+			}
+			// -1 means error
+			else if (nReturnCode == -1) {
+				VerbosityDisplay("In Commands(): ERROR - Failed to delete file/folder. Error code: " + std::to_string(ecDelete.value()) + ". Error info: " + ecDelete.message() + ".\n");
+				UserErrorDisplay("ERROR - An error occured when deleting file/folder. Error code: " + std::to_string(ecDelete.value()) + ".\n");
+				return true;
+			}
 		}
 
-		catch (std::bad_alloc) {
+		catch (std::bad_alloc&) {
 			VerbosityDisplay("In Commands(): ERROR - Memory allocation failed for std::filesystem::remove_all().\n");
 			UserErrorDisplay("ERROR - Failed to allocate memory. Please try again later.\n");
-			return true;
-		}
-
-		// Get error messages
-		if (ecDelete) {
-			VerbosityDisplay("In Commands(): ERROR - Failed to delete file/folder. Error code: " + std::to_string(ecDelete.value()) + ". Error info: " + ecDelete.message() + ".\n");
-			UserErrorDisplay("ERROR - An error occured when deleting file/folder. Info: " + ecDelete.message() + ".\n");
 			return true;
 		}
 
