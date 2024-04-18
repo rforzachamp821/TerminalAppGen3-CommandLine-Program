@@ -1,9 +1,919 @@
 ﻿//
 // CommandFileAssets.cpp - Contains assets for the commands in CommandsFile.cpp.
 //
+#include "../Core/ZeeTerminalCore.h"
+#include "../Engine/MultimediaEngine/MultimediaEngine.h"
+#include "CommandsFiles\Commands.h"
+#include <conio.h>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
 
-extern ConfigFileSystem ConfigObjMain;
+// A function to give an interface to modify and load RGB colour presets.
+void RGBColourPresets() {
+	OptionSelectEngine oseRGBPresets;
 
+	// Read config file immediately
+	ConfigObjMain.ReadConfigFile();
+
+	// Display options
+	while (true) {
+		oseRGBPresets.nSizeOfOptions = 3;
+		std::string sOptions[] = {
+			"Load Preset",
+			"Save Preset",
+			"Reset all Custom Presets"
+		};
+		oseRGBPresets.sOptions = sOptions;
+
+		int nOption = oseRGBPresets.OptionSelect("Please select what you want to do with Custom RGB Presets:", " ___CUSTOM RGB PRESETS___ ");
+
+		// Load presets
+		if (nOption == 1)
+		{
+			std::string sOptions[] = {
+				"Preset Slot 1 (" + RGBPreset[0].sPresetName + ")",
+				"Preset Slot 2 (" + RGBPreset[1].sPresetName + ")",
+				"Preset Slot 3 (" + RGBPreset[2].sPresetName + ")"
+			};
+			oseRGBPresets.sOptions = sOptions;
+
+			// Display load options
+			nOption = oseRGBPresets.OptionSelect("Please select which option you want to load:", " ___LOAD CUSTOM PRESET___ ");
+			if (nOption == -1) {
+				Exiting();
+				continue;
+			}
+
+			// Display error messages if the RGB preset does not match the current colour-type environment
+			if (RGBPreset[nOption - 1].CheckIfAnsiPreset() != bAnsiVTSequences)
+			{
+				if (RGBPreset[nOption - 1].CheckIfAnsiPreset() == true) {
+					colour(YLW, ConfigObjMain.sColourGlobalBack);
+					std::cout << wordWrap("Warning: You cannot set ANSI RGB colour presets to an environment using WIN32 colours. Setting preset terminated.\n");
+					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				}
+				else if (RGBPreset[nOption - 1].CheckIfAnsiPreset() == false) {
+					colour(YLW, ConfigObjMain.sColourGlobalBack);
+					std::cout << wordWrap("Warning: You cannot set WIN32 colour presets to an environment using ANSI RGB colours. Setting preset terminated.\n");
+					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				}
+
+				continue;
+			}
+
+			bool bValidColours = true; // Variable that shows if colours are valid or not
+
+			// Set colours and check if bSetByUser is true
+			if (RGBPreset[nOption - 1].bSetByUser == true) {
+				// Load colours and variables from objects based on nOption - 1 (OptionSelect returns based on 1, not 0)
+				ConfigObjMain.sColourGlobal = RGBPreset[nOption - 1].sColourPresetForeground;
+				ConfigObjMain.sColourGlobalBack = RGBPreset[nOption - 1].sColourPresetBackground;
+
+				// Check validity of colours
+				if (RGBPreset[nOption - 1].CheckIfAnsiPreset() == false) {
+					if (colconv::ValidateColourStringsWin32() == false) {
+						bValidColours = false;
+					}
+				}
+				else if (RGBPreset[nOption - 1].CheckIfAnsiPreset() == true) {
+					if (colconv::ValidateColourStringsANSI() == false) {
+						bValidColours = false;
+					}
+				}
+
+			}
+
+			// Set colours
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			// Clear screen to set new colours to whole screen
+			cls();
+
+			// Warn user that default colours will be set if the preset hasn't been initialised by user
+			if (RGBPreset[nOption - 1].bSetByUser == false) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << wordWrap("Warning: This preset is an empty, undefined preset, so nothing will be changed. Please save values to this preset and try again.") << std::endl;
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				continue;
+			}
+			else if (bValidColours == false)
+			{
+				// Should be safe to change colours as colours have been validated/reset
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				if (bAnsiVTSequences) {
+					std::cout << wordWrap("Warning: This preset contains invalid ANSI string values, so one or all of the colours will be set to default to prevent errors.") << std::endl;
+				}
+				else {
+					std::cout << wordWrap("Warning: This preset contains invalid WIN32 values, so one or all of the colours will be set to default to prevent errors.") << std::endl;
+				}
+
+			}
+
+			// Write to config file immediately (for current global colours)
+			ConfigObjMain.WriteConfigFile();
+
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("RGB Preset successfully loaded!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
+
+		// Save presets
+		else if (nOption == 2)
+		{
+			std::string sOptions[] = {
+				"Preset Slot 1 (" + RGBPreset[0].sPresetName + ')',
+				"Preset Slot 2 (" + RGBPreset[1].sPresetName + ')',
+				"Preset Slot 3 (" + RGBPreset[2].sPresetName + ')'
+			};
+			oseRGBPresets.sOptions = sOptions;
+
+			// Display save options
+			nOption = oseRGBPresets.OptionSelect("Please select which option you would like to save the current colour settings to:", " ___SAVE TO RGB PRESET___ ");
+			if (nOption == -1) {
+				Exiting();
+				continue;
+			}
+
+			std::string sPresetName = StrInput("Please input a name for Preset " + std::to_string(nOption) + ": > ");
+
+			// Display overwrite message if preset was set by user already
+			if (RGBPreset[nOption - 1].bSetByUser == true) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << wordWrap("This RGB preset (" + RGBPreset[nOption - 1].sPresetName + ") is already user-defined and has user-set values.") << std::endl;
+
+				if (!YesNoInput(wordWrap("Are you sure you want to overwrite these values? [y/n] > "))) {
+					colour(LGRN, ConfigObjMain.sColourGlobalBack);
+					std::cout << "Aborted.\n";
+					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+					continue;
+				}
+			}
+
+			// Initialise colours and variables in objects based on runtime terminal colours and nOption
+			RGBPreset[nOption - 1].sPresetName = sPresetName;
+			RGBPreset[nOption - 1].sColourPresetForeground = ConfigObjMain.sColourGlobal;
+			RGBPreset[nOption - 1].sColourPresetBackground = ConfigObjMain.sColourGlobalBack;
+			// Show that object has been edited and initialised by user's consent
+			RGBPreset[nOption - 1].bSetByUser = true;
+
+			// Write to config file immediately
+			ConfigObjMain.WriteConfigFile();
+
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("RGB Preset successfully saved!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		}
+
+		// Reset presets
+		else if (nOption == 3)
+		{
+			colour(YLW, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("WARNING: ALL PRESETS MADE BY USER WILL BE DESTROYED AND INITIALISED TO DEFAULT VAULES.") << std::endl;
+			if (YesNoInput("Would you like to proceed? [y/n] > ")) {
+				// Set all RGBPreset objects to default values
+				for (int i = 0; i <= 2; i++) {
+					RGBPreset[i].ResetPreset();
+					VerbosityDisplay("RGBPreset " + std::to_string((i + 1)) + " has been set to default values.");
+				}
+
+				// Write to config file immediately
+				ConfigObjMain.WriteConfigFile();
+
+				colour(LGRN, ConfigObjMain.sColourGlobalBack);
+				std::cout << "All presets have successfully been set to default values.\n";
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			}
+			else {
+				colour(LGRN, ConfigObjMain.sColourGlobalBack);
+				std::cout << "Preset deletion aborted.\n";
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			}
+		}
+
+		// Exit
+		else if (nOption == -1)
+		{
+			Exiting();
+			return;
+		}
+
+		// Unknown error
+		else {
+			VerbosityDisplay("In RGBColourPresets() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
+
+			return;
+		}
+	}
+
+	return;
+}
+
+// A function that displays all help info for the terminal.
+// Also has tutorial directions text support.
+//
+void help(bool bFromTutorial) {
+	ScreenNavigateEngine sneHelp;
+
+	sneHelp.nSizeOfScreens = 4;
+	std::string sScreens[] =
+	{
+		"___LIST OF COMMANDS___\n\nTo see more about a command, type in \"<command> -h\". This will work for all commands, except: echo and title.\n\n[1] Help\n[2] Exit\n[3] Tutorial\n[4] Echo\n[5] CLS\n[6] DevTools\n[7] CPUStress\n[8] Colour\n[9] Settings\n[10] Title\n[11] Date\n[12] ColourNumbers\n[13] MediaPlayer\n[14] AudioPlayer\n[15] TTS\n[16] Stopwatch\n[17] Read\n[18] Timer\n[19] Beep\n[20] MessageBox\n[21] Copy\n[22] CopyFile\n[23] TextInfo\n[24] ConfigAction\n[25] BeepSounds\n[26] RickRoll\n[27] ShellExecute\n[28] Hacker\n[29] Calculator\n[30] Logoff\n[31] Shutdown\n[32] Reboot (or Restart)\n[33] Hibernate\n[34] ResetExpl\n[35] MemTest\n[36] RandCol\n[37] Pause\n[38] CommandNum\n[39] SlowChar\n[40] ReverseText\n[41] Notes\n[42] FileParse\n[43] Disp\n[44] SysInfo\n[45] Einstein\n[46] Edison\n[47] Tesla\n[48] Cow\n[49] Cat\n[50] Bunny\n[51] Game\n[52] FileCryptor\n[53] Delete\n\nMore will be added soon!\n",
+
+		"___FREQUENTLY ASKED QUESTIONS___\n\n"
+		"1) I can't see the terminal text. How can I zoom in?\n  1a) You can zoom in, of course. Press and hold the Ctrl button and scroll with the mouse to your desired text size.\n"
+		"\n\n2) The error messages shown aren't detailed enough. How do I get better-quality error messages?\n  2a) To get better quality error messages, just enable the Verbosity Messages setting in the Settings command.\n"
+		"\n\n3) I'm using the Windows 7 terminal. How do I scroll up and down in the terminal without using the mouse?\n  3a) To scroll up and down without the mouse, press Alt + Space and then the keys 'E' and 'L', and then scroll with the up/down arrow keys. Use the PageUp/PageDown keys to scroll full pages in the terminal.\n"
+		"\n\n4) What is the difference between the 'old' and 'new' OptionSelect Session styles?\n  4a) The 'old' style is an inspiration from the TerminalAppGen2, the previous iteration of this program. It is very robust, simple and works by associating a number with each option, which you type in and press ENTER to select.\nThe 'new' style isn't exactly new, and has been in ZeeTerminal since v0.1.0. However, it is newer than the 'old' style, hence it's referred to as 'new'. It relies on using the arrow/WS keys to move a highlight up and down, to select an option.\n",
+
+		"___ABOUT THIS PROGRAM___\n\nThis is the ZeeTerminal Commandline Program, Build " + std::string(ZT_VERSION) + ".\n" +
+		"This is an early alpha build of ZeeTerminal, with an entirely new engine and components.\nThis program is made in C++, with a few very small parts of C." +
+		"\n\nThis program uses the DirectShow API in the MediaPlayer command, which is licensed by Microsoft Corporation. (c) Microsoft Corporation.\n\n" +
+		"This program uses the BASS API in the AudioPlayer command, which is licensed by Un4Seen Developments. (c) Un4Seen Developments.\n\n" +
+		"This program uses a slightly modified version of the CarDodge game v0.5.1, accessible in the Game command. CarDodge is licensed under Ryan Zorkot with the MIT License. For more information, visit the repository: https://github.com/rforzachamp821/CarDodge\n\n"
+		"\nZeeTerminal is licensed under the MIT License. The license and credits can be viewed on Page 4.\n\n"
+		"  _____        _____                   _             _ \n"
+		" |__  /___  __|_   _|__ _ __ _ __ ___ (_)_ __   __ _| |\n"
+		"   / // _ \\/ _ \\| |/ _ \\ '__| '_ \\` _ \\| | '_ \\ / _\\` |\n"
+		"  / /|  __/  __/| |  __/ |  | | | | | | | | | | (_| | |\n"
+		" /____\\___|\\___||_|\\___|_|  |_| |_| |_|_|_| |_|\\__,_|_|\n"
+		"                                                       ",
+
+		"___LICENSE AND CREDITS___\n\n"
+		"Massive thank-you to my dad, Hazem Zorkot, for assisting with this project, including with the logo design, name, high-level component ideas, and lots of heads-up messages along the way.\n\n"
+		"ZeeTerminal is licensed under the MIT License. Below is the license info:\n\nCopyright (c) 2024 Ryan Zorkot\n\n"
+		"Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal"
+		" in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell"
+		" copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n"
+		"The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\n"
+		"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, "
+		"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER "
+		"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n"
+	};
+
+	sneHelp.sScreens = sScreens;
+
+	if (bFromTutorial) {
+		// Set custom direction text when coming from tutorial
+		sneHelp.SetDirectionsText("Press the 'A' key or left arrow key to move left.\nPress the 'D' key or right arrow key to move right.\nPress ESC to exit the Help command and continue with the tutorial.");
+	}
+
+	// Call sneHelp.ScreenNavigate for screen strings set.
+	sneHelp.ScreenNavigate(" ___HELP___ ");
+
+	return;
+}
+
+// Tutorial function
+void Tutorial() {
+	std::string sInput;
+	cls();
+
+	CentreColouredText(" ___TUTORIAL___ ", 1);
+	std::cout << '\n';
+	CentreColouredText(" Understand how this terminal operates with this tutorial. ", 2);
+	std::cout << "\n\n";
+
+	sleep(750);
+	slowcolourfn(LBLU, ConfigObjMain.sColourGlobalBack, "Using this terminal is very straightforward, and all terminals are similar in some way.");
+	sleep(500);
+	slowcolourfn(GRN, ConfigObjMain.sColourGlobalBack, "\nFirstly, let's begin with the normal terminal screen. This is what it would look like before typing a command:\n\n");
+	sleep(150);
+	std::cout << "Command: > \n\n";
+	sleep(1000);
+	slowcolourfn(YLW, ConfigObjMain.sColourGlobalBack, "The 'Help' command tells us what commands are in this terminal.\n");
+	sleep(150);
+
+	// Input 'help' to continue
+	while (true) {
+		slowcolourfn(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack, "Type in \"Help\" to execute this command: > ");
+		sInput = StrInput("");
+
+		// Change all input characters to lowercase and remove spaces
+		for (int i = 0; i < sInput.length(); i++) {
+			if (sInput[i] == ' ') {
+				std::cout << sInput.erase(i, 1) << '\n';
+				if (i == 0) i = -1; // as counting from start of string shouldn't start on the spaces, and -1 to counteract i++
+				else i--;
+
+				continue;
+			}
+			else sInput[i] = std::tolower(sInput[i]);
+		}
+
+		if (sInput == "help") {
+			bool bPreviousHelpMsg = ConfigObjMain.bDisplayDirections;
+			ConfigObjMain.bDisplayDirections = true; // only temporary; gets put back to normal next 2 lines
+			help(true);
+			ConfigObjMain.bDisplayDirections = bPreviousHelpMsg;
+			break;
+		}
+		else {
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "Please try again.\n";
+		}
+	}
+	slowcharfn(false, "\nThat previous command also taught you how to use the ScreenNavigate engine.\nYou can move left and right between 'screens' using the the ");
+	slowcolourfn(LCYN, ConfigObjMain.sColourGlobalBack, "A, D and left/right arrow keys");
+	slowcharfn(true, ", to look through any information provided.\n");
+
+	// OptionSelect Engine Tutorial
+	sleep(1000);
+	slowcolourfn(GRN, ConfigObjMain.sColourGlobalBack, "\nNow is the next step, the OptionSelect engine.\nThis will teach you how to select options in this terminal.\n");
+	sleep(500);
+	slowcharfn(true, "\nYou will be given a set of options each time this engine is used.");
+	sleep(500);
+	slowcolourfn(LCYN, ConfigObjMain.sColourGlobalBack, "To select an option, you will have to use the ");
+	slowcolourfn(GRN, ConfigObjMain.sColourGlobalBack, "W key/up-arrow key");
+	slowcolourfn(LCYN, ConfigObjMain.sColourGlobalBack, " to move the index up, or the ");
+	slowcolourfn(GRN, ConfigObjMain.sColourGlobalBack, "S key/down-arrow key");
+	slowcolourfn(LCYN, ConfigObjMain.sColourGlobalBack, " to move the index down.\n");
+	sleep(700);
+	OptionSelectEngine oseTutorial;
+	oseTutorial.nSizeOfOptions = 3;
+	std::string sOptions[] = {
+		"Option 1",
+		"Option 2",
+		"Option 3"
+	};
+	oseTutorial.sOptions = sOptions;
+	oseTutorial.SetDirectionsText("Press the 'W' key or up arrow key to move up.\nPress the 'S' key or down arrow key to move down.\nPress ENTER to continue with selection, or ESC to exit the whole tutorial completely.");
+
+	bool bPreviousHelpMsg = ConfigObjMain.bDisplayDirections;
+	ConfigObjMain.bDisplayDirections = true; // only temporary; gets put back to normal afterwards
+
+	// Start option 1
+	int nOption1 = 0;
+	while (nOption1 != 1) {
+		nOption1 = oseTutorial.OptionSelect("Please select Option 1 from the set of options:", "___OPTIONSELECT TUTORIAL___");
+		switch (nOption1) {
+		case 1:
+			slowcolourfn(LGRN, ConfigObjMain.sColourGlobalBack, "\nThat is correct!\n\n");
+			break;
+		case 2:
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "\nIncorrect. Look carefully for Option 1, and try again.\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			sleep(500);
+			break;
+		case 3:
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "\nIncorrect. Look carefully for Option 1, and try again.\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			sleep(500);
+			break;
+		case -1:
+			// Put help messages setting back to original value
+			ConfigObjMain.bDisplayDirections = bPreviousHelpMsg;
+			Exiting();
+
+			return;
+		default:
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "An unknown error occured. Please try again.\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			break;
+		}
+	}
+
+	sleep(780);
+	// Start option 2
+	int nOption2 = 0;
+	while (nOption2 != 2) {
+		nOption2 = oseTutorial.OptionSelect("Please select Option 2 from the set of options:", "___OPTIONSELECT TUTORIAL___");
+		switch (nOption2) {
+		case 1:
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "\nIncorrect. Look carefully for Option 2, and try again.\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			sleep(500);
+			break;
+		case 2:
+			slowcolourfn(LGRN, ConfigObjMain.sColourGlobalBack, "\nThat is correct!!\n\n");
+			break;
+		case 3:
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "\nIncorrect. Look carefully for Option 2, and try again.\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			sleep(500);
+			break;
+
+		case -1:
+			// Put help messages setting back to original value
+			ConfigObjMain.bDisplayDirections = bPreviousHelpMsg;
+			Exiting();
+
+			return;
+		default:
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "An unknown error occured. Please try again.\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			break;
+		}
+	}
+
+	// Start option 3
+	sleep(780);
+	int nOption3 = 0;
+	while (nOption3 != 3) {
+		nOption3 = oseTutorial.OptionSelect("Please select Option 3 from the set of options:", "___OPTIONSELECT TUTORIAL___");
+		switch (nOption3) {
+		case 1:
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "\nIncorrect. Look carefully for Option 3, and try again.\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			sleep(500);
+			break;
+		case 2:
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "\nIncorrect. Look carefully for Option 3, and try again.\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			sleep(500);
+			break;
+		case 3:
+			slowcolourfn(LGRN, ConfigObjMain.sColourGlobalBack, "\nThat is correct!!!\n\n");
+			break;
+		case -1:
+			// Put help messages setting back to original value
+			ConfigObjMain.bDisplayDirections = bPreviousHelpMsg;
+			Exiting();
+
+			return;
+		default:
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "An unknown error occured. Please try again.\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			break;
+		}
+	}
+	// Put help messages setting back to original value
+	ConfigObjMain.bDisplayDirections = bPreviousHelpMsg;
+
+	// Yes/No prompt tutorial
+	sleep(750);
+	slowcolourfn(GRN, ConfigObjMain.sColourGlobalBack, "\nNow for the final tutorial: the Yes/No prompt.\n\n");
+	sleep(500);
+	slowcharfn(true, "Yes/No prompts are incredibly important, as they manage the most important terminal functions.");
+	sleep(500);
+	slowcolourfn(LCYN, ConfigObjMain.sColourGlobalBack, "\nThey require you to input the letter 'y' (for yes) or the letter 'n' (for no).\n");
+	sleep(500);
+	slowcolourfn(YLW, ConfigObjMain.sColourGlobalBack, "\nHere is a yes/no prompt. Answer 'y' for this:\n\n");
+
+	// The yes prompt
+	bool bInput = false;
+	while (bInput != true) {
+		bInput = YesNoInput("Is this program called ZeeTerminal? [y/n] > ");
+		if (bInput == true) {
+			slowcolourfn(LGRN, ConfigObjMain.sColourGlobalBack, "Well done!\n\n");
+			break;
+		}
+		else {
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "Incorrect input. Try again by inputting 'y' (for yes).\n\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
+	}
+
+	// The no prompt
+	slowcolourfn(YLW, ConfigObjMain.sColourGlobalBack, "Here is another yes/no prompt. Answer 'n' for this:\n\n");
+	while (bInput != false) {
+		bInput = YesNoInput("Are you asleep right now? [y/n] > ");
+		if (bInput == false) {
+			slowcolourfn(LGRN, ConfigObjMain.sColourGlobalBack, "Well done!\n");
+			sleep(500);
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << "\nCongratulations, you have finished the tutorial!\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			break;
+		}
+		else {
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << "Incorrect input. Try again by inputting 'n' (for no).\n\n";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
+	}
+
+	return;
+}
+
+// DevTools - A function for accessing developer tools.
+// These can include test interfaces and functionality testers.
+void DevTools(short int nToolNum) {
+
+	// Colour Tester
+	if (nToolNum == 1) {
+		CentreColouredText(" ___COLOUR TESTER___ ", 1);
+		std::cout << "\n\n";
+
+		// Firstly, output all default colours
+		// Foreground
+		colourSubheading();
+		std::cout << "Default Foreground Colours" << NOULINE_STR << "\n\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		for (int i = 30; i <= 37; i++) {
+			std::cout << "\x1b[" << i << "mThis is foreground ANSI escape sequence colour <" << i << ">. 1234567890\n";
+		}
+		for (int i = 90; i <= 97; i++) {
+			std::cout << "\x1b[" << i << "mThis is foreground ANSI escape sequence colour <" << i << ">. 1234567890 (Light)\n";
+		}
+		// Reset foreground for the next background test
+		std::cout << "\x1b[39m\nPress any key to view the background colours...\n";
+		_getch();
+
+		// Background
+		colourSubheading();
+		std::cout << "\nDefault Background Colours" << NOULINE_STR << "\n\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		for (int i = 40; i <= 47; i++) {
+			std::cout << "\x1b[" << i << "mThis is background ANSI escape code colour <" << i << ">. 1234567890\n";
+		}
+		for (int i = 100; i <= 107; i++) {
+			std::cout << "\x1b[" << i << "mThis is background ANSI escape code colour <" << i << ">. 1234567890 (Light)\n";
+		}
+		// Reset background
+		std::cout << "\x1b[49m\n";
+
+		std::cout << "Press any key to exit...\n";
+		_getch();
+
+		return;
+	}
+
+	// Beep Sound Test
+	else if (nToolNum == 2) {
+		CentreColouredText(" ___BEEP SOUND TEST___ ", 1);
+
+		std::cout << '\n';
+		colourSubheading();
+		slowcharCentredFn(false, "This is a tester for the 'Beep' function in Windows.");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << NOULINE_STR << std::endl;
+		std::cout << wordWrap("ZeeTerminal will output a pitch of sound that increases by 100hz every second, until 22000hz.") << "\n\n";
+		colour(MAG, LYLW);
+		std::cout << wordWrap("You can press any key to exit in the middle of the test.");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\nPress any key to begin the test, or ESC to exit...\n");
+		char cKey = _getch();
+		if (cKey == 27) {
+			Exiting();
+			return;
+		}
+
+		for (int i = 100; i < 22000; i += 100) {
+			// clear line
+			std::cout << "\r                      \r";
+			// output
+			std::cout << "Outputting " << i << " hz...";
+			Beep(i, 1000);
+			// stop if kbhit is true / keyboard key is pressed
+			if (_kbhit()) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << "\nBeep Sound Test stopped.\n";
+				ClearKeyboardBuffer();
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				return;
+			}
+		}
+
+		std::cout << '\n' << CentreText("Beep Sound Test completed successfully.");
+		return;
+	}
+
+	// ColourNumbers
+	else if (nToolNum == 3) {
+		// Execute the ColourNumbers command from the Command function
+		char cTemp[3] = { ' ', ' ', ' ' };
+		commands::Commands1To10("colournumbers", cTemp, "");
+
+		return;
+	}
+
+	// OptionSelectEngine Tester
+	else if (nToolNum == 4) {
+		CentreColouredText(" ___OPTIONSELECT ENGINE TESTER___ ", 1);
+		std::cout << '\n';
+		colourSubheading();
+		slowcharCentredFn(false, "This allows you to test the OptionSelect Engine that is in this program.");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << NOULINE_STR << wordWrap("\n\nThe OptionSelect Engine is an engine that manages the option input UI, and therefore requires a set array of options to work.\n\n");
+
+		// Use a vector as it has a dynamic array structure
+		std::vector<std::string> sOptions;
+
+		// Input all options up to nNumOfOptions
+		for (int i = 0;; i++) {
+			sOptions.push_back(StrInput("Please input your desired string for Option " + std::to_string(i + 1) + " (0 to finish input, -1 to exit entirely): > "));
+			if (sOptions[i] == "-1") {
+				Exiting();
+				return;
+			}
+			else if (sOptions[i] == "0") {
+				sOptions.pop_back(); // Remove "0"
+
+				// To prevent crash with 0 options
+				if (i < 1) {
+					UserErrorDisplay("ERROR - Input cannot be finished until one valid string is provided (other than 0). Please continue with input.");
+					i--;
+					continue;
+				}
+
+				break;
+			}
+		}
+
+		colour(GRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << "\nNow for everything else...\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		// Get title, prompt
+		std::string sTitle = StrInput("Please input your desired title for the window (0 to exit): > ");
+		if (sTitle == "0") {
+			Exiting();
+			return;
+		}
+		std::string sPrompt = StrInput("Please input your desired prompt for the window (0 to exit): > ");
+		if (sPrompt == "0") {
+			Exiting();
+			return;
+		}
+
+		colour(YLW, ConfigObjMain.sColourGlobalBack);
+		std::cout << "\nStarting custom OptionSelect session...\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		// Create an OptionSelectEngine object and assign accumulated data to members
+		OptionSelectEngine oseTester;
+		oseTester.nSizeOfOptions = sOptions.size();
+		std::string* sOptionsArr = sOptions.data();
+		oseTester.sOptions = sOptionsArr;
+
+		// Call the display function
+		oseTester.OptionSelect(sPrompt, sTitle);
+
+		// Completed message
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << '\n' << CentreText("OptionSelectEngine Tester Completed Successfully!") << std::endl;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		return;
+	}
+
+	// ScreenNavigateEngine Tester
+	else if (nToolNum == 5) {
+		CentreColouredText(" ___SCREENNAVIGATE ENGINE TESTER___ ", 1);
+		std::cout << '\n';
+		colourSubheading();
+		slowcharCentredFn(false, "This allows you to test the ScreenNavigate Engine that is in this program.");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << NOULINE_STR << wordWrap("\n\nThe ScreenNavigate Engine is an engine that manages the screen viewing UI, and therefore requires a set array of screen data to work.\n\n");
+
+		// Use a vector as it has a dynamic array structure
+		std::vector<std::string> sScreens;
+
+		// Input all screens up to nNumOfScreens
+		for (long long int i = 0;; i++) {
+			sScreens.push_back(StrInput("Please input your desired string for Screen " + std::to_string(i + 1) + " (0 to finish, -1 to exit entirely) : > "));
+			if (sScreens[i] == "-1") {
+				Exiting();
+				return;
+			}
+			else if (sScreens[i] == "0") {
+				sScreens.pop_back(); // Remove "0"
+
+				// To prevent crash with 0 options
+				if (i < 1) {
+					UserErrorDisplay("ERROR - Input cannot be finished until one valid string is provided (other than 0). Please continue with input.");
+					i--;
+					continue;
+				}
+
+				break;
+			}
+		}
+
+		// Get title, prompt
+		colour(GRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << "\nNow for everything else...\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::string sTitle = StrInput("Please input your desired title for the window (0 to exit): > ");
+		if (sTitle == "0") {
+			Exiting();
+			return;
+		}
+
+		colour(YLW, ConfigObjMain.sColourGlobalBack);
+		std::cout << "\nStarting custom ScreenNavigate session...\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		// Create a ScreenNavigateEngine object and assign accumulated data to members
+		ScreenNavigateEngine sneTester;
+		sneTester.nSizeOfScreens = sScreens.size();
+		std::string* sScreensArr = sScreens.data();
+		sneTester.sScreens = sScreensArr;
+
+		// Call the display function
+		sneTester.ScreenNavigate(sTitle);
+
+		// Completed message
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << '\n' << CentreText("ScreenNavigateEngine Tester Completed Successfully!") << std::endl;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+	}
+
+	// TableEngine Tester
+	else if (nToolNum == 6) {
+		CentreColouredText(" ___TABLE-ENGINE TESTER___ ", 1);
+		std::cout << std::endl;
+		colourSubheading();
+		slowcharCentredFn(false, "This allows you to test the Table Engine that is in this program.");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		std::cout << NOULINE_STR << wordWrap("\n\nThis engine's main purpose is for making tables.") << "\n";
+		// Get rows and columns from user for next for loop
+		uint64_t nNumOfRows = PositiveNumInputull("\nPlease input how many rows you would like to create (0 to exit): > ");
+		if (nNumOfRows <= 0) {
+			Exiting();
+			return;
+		}
+		uint64_t nNumOfColumns = PositiveNumInputull("\nPlease input now many columns you would like to create (0 to exit): > ");
+		if (nNumOfColumns <= 0) {
+			Exiting();
+			return;
+		}
+
+		// Input rows
+		TableEngine teTester;
+		for (uint64_t i = 0; i < nNumOfRows; i++) {
+			std::vector<std::string> nRow;
+			// Take all members of 1 row from user
+			for (uint64_t j = 0; j < nNumOfColumns; j++) {
+				nRow.push_back(StrInput("Please input table member " + std::to_string(j + 1) + "/" + std::to_string(nNumOfColumns) + " for row " + std::to_string(i + 1) + "/" + std::to_string(nNumOfRows) + " (input 0 to exit): > "));
+				if (nRow[j] == "0") {
+					Exiting();
+					return;
+				}
+			}
+
+			if (i <= (nNumOfRows - 1)) {
+				colour(LGRN, ConfigObjMain.sColourGlobalBack);
+				std::cout << "\nMoving to next row..." << std::endl;
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			}
+			else {
+				colour(LGRN, ConfigObjMain.sColourGlobalBack);
+				std::cout << '\n' << CentreText("Generating table...") << "\n\n";
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			}
+			// Send in another row using TableEngine::addRow()
+			teTester.addRow(nRow);
+		}
+
+		colour(YLW, ConfigObjMain.sColourGlobalBack);
+		std::cout << "\nStarting custom OptionSelect session...\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		// Finally, output table using TableEngine::OutputTable()
+		teTester.OutputTable();
+
+		std::cout << "\n\nPress ENTER to exit...\n";
+		std::cin.ignore(std::numeric_limits<int>::max(), '\n');
+
+		return;
+	}
+
+	// High-Res Nanosecond Stopwatch
+	else if (nToolNum == 7) {
+		CentreColouredText(" ___NANOSECOND STOPWATCH___ ", 1);
+		std::cout << '\n';
+		colourSubheading();
+		slowcharCentredFn(false, "This is a CPU-intensive, nanosecond-accurate stopwatch that uses CPU ticks for the time.");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << NOULINE_STR;
+
+		// Prompt to start
+		std::cout << "\n\n";
+		colour(MAG, LYLW);
+		std::cout << wordWrap("You can press any key in the middle of the stopwatch run to stop it.");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n\nPress any key to start the stopwatch, or ESC to exit...");
+		char cKey = _getch();
+		if (cKey == 27) {
+			Exiting();
+			return;
+		}
+
+		std::cout << "\n\n";
+
+		// Main Nanosecond Stopwatch Part
+		// Create timestamp variables
+		auto start = std::chrono::high_resolution_clock::now();
+		auto end = std::chrono::high_resolution_clock::now();
+
+		// _kbhit() to exit on keypress
+		while (!_kbhit()) {
+			end = std::chrono::high_resolution_clock::now();
+			std::cout << "Time: ";
+			colour(LCYN, ConfigObjMain.sColourGlobalBack);
+			std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			std::cout << " ns\r";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
+
+		// Output final stopwatch time after keyboard press
+		ClearKeyboardBuffer();
+		colour(GRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << "\n\nTimer stopped.";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << "\nFinal stopwatch time: ";
+		colour(LCYN, ConfigObjMain.sColourGlobalBack);
+		std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << " nanoseconds.\n";
+
+		return;
+	}
+
+	// ANSI VT Testing Environment
+	else if (nToolNum == 8) {
+		std::string sANSI;
+		CentreColouredText(" ___ANSI VT TESTING ENVIRONMENT___ ", 1);
+		std::cout << std::endl;
+		colourSubheading();
+		slowcharCentredFn(false, "This is a sandbox-style testing enviroment for ANSI (VT) escape codes.");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		std::cout << NOULINE_STR << wordWrap("\n\nYou can test any ANSI escape code here. Everything will be reset after exiting the sandbox (by typing in 0 or \"zero\").");
+		colour(LBLU, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\nYou can get a list of ANSI VT escape codes here: https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences") << "\n\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		while (true) {
+			sANSI = StrInput("Please input your ANSI escape code, excluding \\x1b (ESC) and the '[' after it (0 or \"zero\" to exit): > ");
+			if (sANSI == "0" || sANSI == "zero") {
+				Exiting();
+				std::cout << "\x1b[" << RESETALL << "m" << RESETEVERYTHING_STR << "\033c";
+				// Set console cursor attributes
+				SetCursorAttributes();
+				// Set colour
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				cls();
+				return;
+			}
+			std::cout << "\x1b[" << sANSI << std::endl;
+		}
+	}
+
+	// MMSYSTEM API Sound Test
+	else if (nToolNum == 9) {
+		CentreColouredText(" ___MMSYSTEM API SOUND TEST___ ", 1);
+		std::cout << std::endl;
+		colourSubheading();
+		slowcharCentredFn(false, "This is a sound test similar to the Beep Sound Test, but by interacting directly with drivers.");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << NOULINE_STR << wordWrap("\n\nZeeTerminal will output a pitch of sound that starts at 20hz and increases by 100hz every second, until 22000hz.") << "\n\n";
+		colour(MAG, LYLW);
+		std::cout << wordWrap("You can press any key to exit in the middle of the test.");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\nPress any key to begin the test, or ESC to exit now...") << '\n';
+		char cKey = _getch();
+		if (cKey == 27) {
+			Exiting();
+			return;
+		}
+		else std::cout << '\n';
+
+		MultimediaEngine meMMSYSTEMAPI;
+
+		for (int i = 20; i <= 22000; i += 100)
+		{
+			std::cout << "Outputting ";
+			colour(LCYN, ConfigObjMain.sColourGlobalBack);
+			std::cout << i << "hz...\r";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+
+			// Leave when MultimediaEngine::BeepSound() returns FALSE (indicating pressed key)
+			if (!meMMSYSTEMAPI.BeepSound(i, 1000, true)) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << "\n\nMMSYSTEM API Sound Test stopped.\n";
+				ClearKeyboardBuffer();
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				return;
+			}
+		}
+
+		// Close stream and output success message
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << std::endl << CentreText("Beep Sound Test completed successfully.");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		return;
+	}
+
+	return;
+}
 
 // A switch-case function for the ColourBackground function.
 void ColourBackgroundSwitch(int* nChoice, std::string* sSettingVariableBack, std::string* sSettingVariable) {
@@ -85,7 +995,7 @@ void ColourBackgroundSwitch(int* nChoice, std::string* sSettingVariableBack, std
 }
 
 // A switch-case function for the ColourForeground function.
-void ColourForegroundSwitch(int* nChoice, std::string* sSettingVariableBack, std::string* sSettingVariable) 
+void ColourForegroundSwitch(int* nChoice, std::string* sSettingVariableBack, std::string* sSettingVariable)
 {
 	// Switch case for selecting colour
 	switch (*nChoice) {
@@ -164,182 +1074,297 @@ void ColourForegroundSwitch(int* nChoice, std::string* sSettingVariableBack, std
 	return;
 }
 
-// A switch-case function that returns a colour associated with its number.
-std::string NumberToColour(int nNumberChoice) {
+// A function that gives an interface to modify the global foreground colour of the terminal.
+void ColourForeground(int nChoice = 0) {
 
-	// Switch case based on number choice
-	switch (nNumberChoice) {
-	case 1:
-		return BLK;
-		break;
-	case 2:
-		return BLU;
-		break;
-	case 3:
-		return GRN;
-		break;
-	case 4:
-		return CYN;
-		break;
-	case 5:
-		return RED;
-		break;
-	case 6:
-		return MAG;
-		break;
-	case 7:
-		return YLW;
-		break;
-	case 8:
-		return WHT;
-		break;
-	case 9:
-		return GRAY;
-		break;
-	case 10:
-		return LBLU;
-		break;
-	case 11:
-		return LGRN;
-		break;
-	case 12:
-		return LCYN;
-		break;
-	case 13:
-		return LRED;
-		break;
-	case 14:
-		return LMAG;
-		break;
-	case 15:
-		return LYLW;
-		break;
-	case 16:
-		return LWHT;
-		break;
-	default:
-		VerbosityDisplay("ERROR - An error occured when returning the colour string associated with its number. This is probably a bug.\n");
-		break;
+	// Execute menu if wrong argument input or no argument
+	if (nChoice <= 0 || nChoice > 17) {
+		OptionSelectEngine oseColourFore;
+		oseColourFore.nSizeOfOptions = 17;
+		std::string sOptions[] = {
+			"[1] Black",
+			"[2] Blue",
+			"[3] Green",
+			"[4] Aqua",
+			"[5] Red",
+			"[6] Purple",
+			"[7] Yellow",
+			"[8] White",
+			"[9] Gray",
+			"[10] Light Blue",
+			"[11] Light Green",
+			"[12] Light Aqua",
+			"[13] Light Red",
+			"[14] Light Purple",
+			"[15] Light Yellow",
+			"[16] Bright White (DEFAULT)",
+			"Custom RGB Colour Code (Advanced)"
+		};
+		oseColourFore.sOptions = sOptions;
+
+		nChoice = oseColourFore.OptionSelect("Please choose your desired foreground colour below:", " ___FOREGROUND COLOUR___ ");
+	}
+	else if (nChoice == 17) {
+		colour(YLW, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("Sorry, but changing RGB foreground colours from arguments has been locked in development for a future update.") << "\nExiting...\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		return;
 	}
 
-	return "";
+
+
+	if (nChoice == 17) {
+		short int nRed = 0, nGreen = 0, nBlue = 0;
+		int nRGBForegroundColour[3] = { 255,255,255 };
+
+		if (bAnsiVTSequences == false) {
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cerr << wordWrap("Sorry, you cannot use RGB colours with a non-ANSI compatible terminal. Please try again later.\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+			return;
+		}
+
+		colour(YLW, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\nWarning: Although supported program-wide, RGB is still a new and possibly unstable colour method for ZeeTerminal. Be prepared for bugs and issues.")
+			<< std::endl;
+		colour(LCYN, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("Type in a negative number to exit.") << "\n\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+
+		// Red value
+		while (true) {
+			nRGBForegroundColour[0] = NumInputi("Please type in Red value: > ");
+			if (nRGBForegroundColour[0] > 255) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << "You cannot use numbers above 255.\nPlease try again.\n";
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				continue;
+			}
+			else if (nRGBForegroundColour[0] < 0) {
+				std::cout << std::endl;
+				Exiting();
+				return;
+			}
+			break;
+		}
+
+		// Green value
+		while (true) {
+			nRGBForegroundColour[1] = NumInputi("Please type in Green value: > ");
+			if (nRGBForegroundColour[1] > 255) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << "You cannot use numbers above 255.\nPlease try again.\n";
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				continue;
+			}
+			else if (nRGBForegroundColour[1] < 0) {
+				Exiting();
+				return;
+			}
+			break;
+		}
+
+		// Blue value
+		while (true) {
+			nRGBForegroundColour[2] = NumInputi("Please type in Blue value: > ");
+			if (nRGBForegroundColour[2] > 255) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << "You cannot use numbers above 255.\nPlease try again.\n";
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				continue;
+			}
+			else if (nRGBForegroundColour[2] < 0) {
+				Exiting();
+				return;
+			}
+			break;
+		}
+
+		// Output ESC with all the values accumulated
+		if (bAnsiVTSequences) {
+			// Load values into sColourGlobal
+			ConfigObjMain.sColourGlobal =
+				std::to_string(nRGBForegroundColour[0]) + ';' +
+				std::to_string(nRGBForegroundColour[1]) + ';' +
+				std::to_string(nRGBForegroundColour[2]);
+
+			// Write to configuration file immediately
+			ConfigObjMain.WriteConfigFile();
+
+			// Output finishing message
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Foreground colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
+
+		return;
+	}
+	else if (nChoice == -1) {
+		Exiting();
+		return;
+	}
+	else if (nChoice < 1 || nChoice > 17) {
+		VerbosityDisplay("In ColourForeground() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+		UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
+
+		return;
+	}
+
+	ColourForegroundSwitch(&nChoice, &ConfigObjMain.sColourGlobalBack, &ConfigObjMain.sColourGlobal);
+
+	colour(LGRN, ConfigObjMain.sColourGlobalBack);
+	std::cout << CentreText("Foreground colour successfully set!") << std::endl;
+	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+	return;
 }
 
-// A switch-case function that returns a number associated with one of the default colour strings.
-// 0 is returned on error.
-int ColourToNumber(std::string sColourChoice) 
-{
-	if (sColourChoice == BLK) {
-		return 1;
+// A function that gives an interface to modify the global background colour of the terminal.
+void ColourBackground(int nChoice = 0) {
+
+	// Execute menu if wrong argument input or no argument
+	if (nChoice <= 0 || nChoice > 17) {
+		OptionSelectEngine oseColourBack;
+		oseColourBack.nSizeOfOptions = 17;
+		std::string sOptions[] = {
+			"[1] Black (DEFAULT)",
+			"[2] Blue",
+			"[3] Green",
+			"[4] Aqua",
+			"[5] Red",
+			"[6] Purple",
+			"[7] Yellow",
+			"[8] White",
+			"[9] Gray",
+			"[10] Light Blue",
+			"[11] Light Green",
+			"[12] Light Aqua",
+			"[13] Light Red",
+			"[14] Light Purple",
+			"[15] Light Yellow",
+			"[16] Bright White",
+			"Custom RGB Colour Code (Advanced)"
+		};
+		oseColourBack.sOptions = sOptions;
+
+		// Display options
+		nChoice = oseColourBack.OptionSelect("Please choose your desired background colour below:", " ___COLOUR___ ");
 	}
-	else if (sColourChoice == BLU) {
-		return 2;
-	}
-	else if (sColourChoice == GRN) {
-		return 3;
-	}
-	else if (sColourChoice == CYN) {
-		return 4;
-	}
-	else if (sColourChoice == RED) {
-		return 5;
-	}
-	else if (sColourChoice == MAG) {
-		return 6;
-	}
-	else if (sColourChoice == YLW) {
-		return 7;
-	}
-	else if (sColourChoice == WHT) {
-		return 8;
-	}
-	else if (sColourChoice == GRAY) {
-		return 9;
-	}
-	else if (sColourChoice == LBLU) {
-		return 10;
-	}
-	else if (sColourChoice == LGRN) {
-		return 11;
-	}
-	else if (sColourChoice == LCYN) {
-		return 12;
-	}
-	else if (sColourChoice == LRED) {
-		return 13;
-	}
-	else if (sColourChoice == LMAG) {
-		return 14;
-	}
-	else if (sColourChoice == LYLW) {
-		return 15;
-	}
-	else if (sColourChoice == LWHT) {
-		return 16;
-	}
-	else {
-		VerbosityDisplay("ERROR - An error occured when returning the number associated with its colour string. This is probably a bug.\n");
-		return 0;
+	else if (nChoice == 17) {
+		colour(YLW, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("Sorry, but changing RGB background colours from arguments has been locked in development for a future update.") << "\nExiting...\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		return;
 	}
 
-	return 0;
-}
 
-// ColourToDisplayColour - Converts an RGB colour string into a string appropriate for the average user.
-std::string ColourToDisplayColour(std::string sRGBColourString) {
-	if (sRGBColourString == BLK) {
-		return "Black";
+	if (nChoice == 17) {
+		short int nRed = 0, nGreen = 0, nBlue = 0;
+		int nRGBBackgroundColour[3] = { 0,0,0 };
+
+		if (bAnsiVTSequences == false) {
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cerr << wordWrap("Sorry, you cannot use RGB colours with a non-ANSI compatible terminal. Please try again later.\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+			return;
+		}
+
+		colour(YLW, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\nWarning: Although supported program-wide, RGB is still a new and possibly unstable colour method for ZeeTerminal. Be prepared for bugs and issues.")
+			<< std::endl;
+		colour(LCYN, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("Type in a negative number to exit.") << "\n\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+
+		// Red value
+		while (true) {
+			nRGBBackgroundColour[0] = NumInputi("Please type in Red value: > ");
+			if (nRGBBackgroundColour[0] > 255) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << "You cannot use numbers above 255.\nPlease try again.\n";
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				continue;
+			}
+			else if (nRGBBackgroundColour[0] < 0) {
+				Exiting();
+				return;
+			}
+			break;
+		}
+
+		// Green value
+		while (true) {
+			nRGBBackgroundColour[1] = NumInputi("Please type in Green value: > ");
+			if (nRGBBackgroundColour[1] > 255) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << "You cannot use numbers above 255.\nPlease try again.\n";
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				continue;
+			}
+			else if (nRGBBackgroundColour[1] < 0) {
+				Exiting();
+				return;
+			}
+			break;
+		}
+
+		// Blue value
+		while (true) {
+			nRGBBackgroundColour[2] = NumInputi("Please type in Blue value: > ");
+			if (nRGBBackgroundColour[2] > 255) {
+				colour(YLW, ConfigObjMain.sColourGlobalBack);
+				std::cout << "You cannot use numbers above 255.\nPlease try again.\n";
+				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+				continue;
+			}
+			else if (nRGBBackgroundColour[2] < 0) {
+				Exiting();
+				return;
+			}
+			break;
+		}
+
+		// Output ESC with all the values accumulated
+		if (bAnsiVTSequences) {
+			// Load values into ConfigObjMain.sColourGlobalBack
+			ConfigObjMain.sColourGlobalBack =
+				std::to_string(nRGBBackgroundColour[0]) + ';' +
+				std::to_string(nRGBBackgroundColour[1]) + ';' +
+				std::to_string(nRGBBackgroundColour[2]);
+
+			// Write to configuration file immediately
+			ConfigObjMain.WriteConfigFile();
+
+			// Output finishing message
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Background colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
+
+		return;
 	}
-	else if (sRGBColourString == BLU) {
-		return "Blue";
+	else if (nChoice == -1) {
+		Exiting();
+		return;
 	}
-	else if (sRGBColourString == GRN) {
-		return "Green";
-	}
-	else if (sRGBColourString == CYN) {
-		return "Aqua";
-	}
-	else if (sRGBColourString == RED) {
-		return "Red";
-	}
-	else if (sRGBColourString == MAG) {
-		return "Purple";
-	}
-	else if (sRGBColourString == YLW) {
-		return "Yellow";
-	}
-	else if (sRGBColourString == WHT) {
-		return "White";
-	}
-	else if (sRGBColourString == GRAY) {
-		return "Gray";
-	}
-	else if (sRGBColourString == LBLU) {
-		return "Light Blue";
-	}
-	else if (sRGBColourString == LGRN) {
-		return "Light Green";
-	}
-	else if (sRGBColourString == LCYN) {
-		return "Light Aqua";
-	}
-	else if (sRGBColourString == LRED) {
-		return "Light Red";
-	}
-	else if (sRGBColourString == LMAG) {
-		return "Light Purple";
-	}
-	else if (sRGBColourString == LYLW) {
-		return "Light Yellow";
-	}
-	else if (sRGBColourString == LWHT) {
-		return "Bright White";
-	}
-	else {
-		return "";
+	else if (nChoice < 1 || nChoice > 17) {
+		VerbosityDisplay("In ColourBackground() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+		UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
+		return;
 	}
 
-	return "";
+	ColourBackgroundSwitch(&nChoice, &ConfigObjMain.sColourGlobalBack, &ConfigObjMain.sColourGlobal);
+
+	// Apply colours to whole screen
+	cls();
+
+	colour(LGRN, ConfigObjMain.sColourGlobalBack);
+	std::cout << CentreText("Background colour successfully set!") << std::endl;
+	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+	return;
 }
 
 // A switch-case function for the MessageBox command (icon).
@@ -409,261 +1434,6 @@ int MessageBoxButtonSwitch(std::string sButtonName) {
 	return 0;
 }
 
-// A switch-case function that returns the win32 equivalent of ANSI colours
-std::string Win32ToAnsiColours(std::string sWin32Colour) 
-{
-	if (sWin32Colour == BLK_WIN32) {
-		return BLK_ANSI;
-	}
-	else if (sWin32Colour == RED_WIN32) {
-		return RED_ANSI;
-	}
-	else if (sWin32Colour == GRN_WIN32) {
-		return GRN_ANSI;
-	}
-	else if (sWin32Colour == YLW_WIN32) {
-		return YLW_ANSI;
-	}
-	else if (sWin32Colour == BLU_WIN32) {
-		return BLU_ANSI;
-	}
-	else if (sWin32Colour == MAG_WIN32) {
-		return MAG_ANSI;
-	}
-	else if (sWin32Colour == CYN_WIN32) {
-		return CYN_ANSI;
-	}
-	else if (sWin32Colour == WHT_WIN32) {
-		return WHT_ANSI;
-	}
-	else if (sWin32Colour == GRAY_WIN32) {
-		return GRAY_ANSI;
-	}
-	else if (sWin32Colour == LRED_WIN32) {
-		return LRED_ANSI;
-	}
-	else if (sWin32Colour == LGRN_WIN32) {
-		return LGRN_ANSI;
-	}
-	else if (sWin32Colour == LYLW_WIN32) {
-		return LYLW_ANSI;
-	}
-	else if (sWin32Colour == LBLU_WIN32) {
-		return LBLU_ANSI;
-	}
-	else if (sWin32Colour == LMAG_WIN32) {
-		return LMAG_ANSI;
-	}
-	else if (sWin32Colour == LCYN_WIN32) {
-		return LCYN_ANSI;
-	}
-	else if (sWin32Colour == LWHT_WIN32) {
-		return LWHT_ANSI;
-	}
-	else {
-		return "";
-	}
-}
-
-// A switch-case function that returns the ANSI RGB equivalent of Win32 colours
-std::string AnsiToWin32Colours(std::string sAnsiColour)
-{
-	if (sAnsiColour == BLK_ANSI) {
-		return BLK_WIN32;
-	}
-	else if (sAnsiColour == RED_ANSI) {
-		return RED_WIN32;
-	}
-	else if (sAnsiColour == GRN_ANSI) {
-		return GRN_WIN32;
-	}
-	else if (sAnsiColour == YLW_ANSI) {
-		return YLW_WIN32;
-	}
-	else if (sAnsiColour == BLU_ANSI) {
-		return BLU_WIN32;
-	}
-	else if (sAnsiColour == MAG_ANSI) {
-		return MAG_WIN32;
-	}
-	else if (sAnsiColour == CYN_ANSI) {
-		return CYN_WIN32;
-	}
-	else if (sAnsiColour == WHT_ANSI) {
-		return WHT_WIN32;
-	}
-	else if (sAnsiColour == GRAY_ANSI) {
-		return GRAY_WIN32;
-	}
-	else if (sAnsiColour == LRED_ANSI) {
-		return LRED_WIN32;
-	}
-	else if (sAnsiColour == LGRN_ANSI) {
-		return LGRN_WIN32;
-	}
-	else if (sAnsiColour == LYLW_ANSI) {
-		return LYLW_WIN32;
-	}
-	else if (sAnsiColour == LBLU_ANSI) {
-		return LBLU_WIN32;
-	}
-	else if (sAnsiColour == LMAG_ANSI) {
-		return LMAG_WIN32;
-	}
-	else if (sAnsiColour == LCYN_ANSI) {
-		return LCYN_WIN32;
-	}
-	else if (sAnsiColour == LWHT_ANSI) {
-		return LWHT_WIN32;
-	}
-	else {
-		return "";
-	}
-}
-
-// Checks all ConfigObjMain.sColour colours to see if they don't exceed the WIN32 colour limit (8192)
-// Returns TRUE for all correct, FALSE for 1 or more variables incorrect.
-bool ValidateColourStringsWin32() {
-	bool bSuccess = true;
-
-	// Check validity of WIN32 values - They may not exceed 8192 (base 10).
-	if (not (isNumberi(ConfigObjMain.sColourGlobal) && std::stoi(ConfigObjMain.sColourGlobal) < 8192)) {
-		ConfigObjMain.sColourGlobal = LWHT_WIN32;
-		bSuccess = false;
-	}
-	if (not (isNumberi(ConfigObjMain.sColourGlobalBack) && std::stoi(ConfigObjMain.sColourGlobalBack) < 8192)) {
-		ConfigObjMain.sColourGlobalBack = BLK_WIN32;
-		bSuccess = false;
-	}
-	if (not (isNumberi(ConfigObjMain.sColourHighlight) && std::stoi(ConfigObjMain.sColourHighlight) < 8192)) {
-		ConfigObjMain.sColourHighlight = LWHT_WIN32;
-		bSuccess = false;
-	}
-	if (not (isNumberi(ConfigObjMain.sColourHighlightBack) && std::stoi(ConfigObjMain.sColourHighlightBack) < 8192)) {
-		ConfigObjMain.sColourHighlightBack = BLU_WIN32;
-		bSuccess = false;
-	}
-	if (not (isNumberi(ConfigObjMain.sColourTitle) && std::stoi(ConfigObjMain.sColourTitle) < 8192)) {
-		ConfigObjMain.sColourTitle = BLK_WIN32;
-		bSuccess = false;
-	}
-	if (not (isNumberi(ConfigObjMain.sColourTitleBack) && std::stoi(ConfigObjMain.sColourTitleBack) < 8192)) {
-		ConfigObjMain.sColourTitleBack = LCYN_WIN32;
-		bSuccess = false;
-	}
-	if (not (isNumberi(ConfigObjMain.sColourSubheading) && std::stoi(ConfigObjMain.sColourSubheading) < 8192)) {
-		ConfigObjMain.sColourSubheading = LWHT_WIN32;
-		bSuccess = false;
-	}
-	if (not (isNumberi(ConfigObjMain.sColourSubheadingBack) && std::stoi(ConfigObjMain.sColourSubheadingBack) < 8192)) {
-		ConfigObjMain.sColourSubheadingBack = MAG_WIN32;
-		bSuccess = false;
-	}
-
-	return bSuccess;
-}
-
-// VerifyANSIColourString - Verifies an ANSI colour string with the following rules:
-//                        - 1. It must only contain numbers and semicolons
-//                        - 2. The numbers in the colour string must be less than 256.
-// Parameters: sColourString - The colour string to check.
-// Return Values: TRUE or 1 for a valid colour string, FALSE or 0 for a bad colour string.
-//
-bool VerifyANSIColourString(std::string sColourString)
-{
-	std::size_t nLastSemicolonPlus1 = 0;
-
-	// Check if sColourString contains nothing - if so, it's not valid
-	if (sColourString.empty()) return false;
-
-	for (uint8_t i = 0; i < 3; i++)
-	{
-		// Parse up to first non-number
-		std::string sBuffer = "";
-		for (size_t j = nLastSemicolonPlus1; j < sColourString.length(); j++, nLastSemicolonPlus1 = j + 1) {
-			if (sColourString[j] == ';') {
-				break;
-			}
-			else sBuffer.push_back(sColourString[j]);
-		}
-
-		// Check if buffer is empty - if so, it means that the colour string doesn't have enough colour values to make a colour
-		if (sBuffer == "") {
-			return false;
-		}
-		// Check if buffer is a number
-		if (!isNumberi(sBuffer)) {
-			return false;
-		}
-		// Check if number is below 256 (convert as well)
-		if (std::stoi(sBuffer) > 255) {
-			return false;
-		}
-	}
-
-	// Check if whole string checked - if not, it means that there's unwanted characters that are out of the scope of this algorithm, 
-	// and therefore the colour string is invalid
-	if (nLastSemicolonPlus1 - 1 < sColourString.length()) return false;
-
-	return true;
-}
-
-// Checks all ConfigObjMain.sColour colours to see if they are valid, in the 255;255;255 format.
-// Returns TRUE for all correct, FALSE for 1 or more variables incorrect.
-bool ValidateColourStringsANSI() {
-	bool bSuccess = true;
-
-	// Check validity of ANSI string values
-	if (!VerifyANSIColourString(ConfigObjMain.sColourGlobal)) {
-		ConfigObjMain.sColourGlobal = LWHT_ANSI;
-		bSuccess = false;
-	}
-	if (!VerifyANSIColourString(ConfigObjMain.sColourGlobalBack)) {
-		ConfigObjMain.sColourGlobalBack = BLK_ANSI;
-		bSuccess = false;
-	}
-	if (!VerifyANSIColourString(ConfigObjMain.sColourHighlight)) {
-		ConfigObjMain.sColourHighlight = LWHT_ANSI;
-		bSuccess = false;
-	}
-	if (!VerifyANSIColourString(ConfigObjMain.sColourHighlightBack)) {
-		ConfigObjMain.sColourHighlightBack = BLU_ANSI;
-		bSuccess = false;
-	}
-	if (!VerifyANSIColourString(ConfigObjMain.sColourTitle)) {
-		ConfigObjMain.sColourTitle = BLK_ANSI;
-		bSuccess = false;
-	}
-	if (!VerifyANSIColourString(ConfigObjMain.sColourTitleBack)) {
-		ConfigObjMain.sColourTitleBack = LCYN_ANSI;
-		bSuccess = false;
-	}
-	if (!VerifyANSIColourString(ConfigObjMain.sColourSubheading)) {
-		ConfigObjMain.sColourSubheading = LWHT_ANSI;
-		bSuccess = false;
-	}
-	if (!VerifyANSIColourString(ConfigObjMain.sColourSubheadingBack)) {
-		ConfigObjMain.sColourSubheadingBack = MAG_ANSI;
-		bSuccess = false;
-	}
-
-	return bSuccess;
-}
-
-// Function that hides console cursor and returns value of previous setting to set later.
-// Commonly used for progress bars to prevent cursor flickering
-//
-bool DisableCursorVisibility() {
-	bool bPreviousSetting = ConfigObjMain.bShowCursor;
-
-	// Set to FALSE and write cursor attributes
-	ConfigObjMain.bShowCursor = false;
-	SetCursorAttributes();
-
-	// Return previous setting in case user wants to put back to normal
-	return bPreviousSetting;
-}
-
 // Mission Impossible Theme Song in Beeps
 //
 void MissionImpossibleTheme() {
@@ -723,7 +1493,7 @@ void MissionImpossibleTheme() {
 //
 void HappyBirthdaySong() {
 	MultimediaEngine meSong;
-	
+
 	meSong.BeepSound(1059.274, 300);
 	meSong.BeepSound(1059.274, 200);
 	meSong.BeepSound(1188.995, 500);
@@ -1127,7 +1897,7 @@ void RickRollSong() {
 
 // Get Einstein quote based on value (1 to 50)
 //
-std::string GetEinsteinQuote(int nQuoteValue) 
+std::string GetEinsteinQuote(int nQuoteValue)
 {
 	switch (nQuoteValue) {
 	case 1:
@@ -1591,8 +2361,8 @@ void OutputCow(std::string sSayText, std::string sCowColourFore, std::string sCo
 	}
 
 
-	std::cout	<< "       ||----W |\n"
-				<< "       ||     ||\n";
+	std::cout << "       ||----W |\n"
+		<< "       ||     ||\n";
 }
 
 // Output cat
@@ -1663,11 +2433,11 @@ void OutputBunny(std::string sSayText, std::string sBunnyColourFore, std::string
 			<< "           \\ | \\\n";
 	}
 
-	std::cout	<< "       _ _ /  ^ ^\n"
-			<< "     /    \\  =>X<=\n"
-			<< "   /|      |   /\n"
-			<< "   \\|     /__| |\n"
-			<< "     \\_____\\ \\__\\\n";
+	std::cout << "       _ _ /  ^ ^\n"
+		<< "     /    \\  =>X<=\n"
+		<< "   /|      |   /\n"
+		<< "   \\|     /__| |\n"
+		<< "     \\_____\\ \\__\\\n";
 }
 
 // HackerTyper - Traditional hacker-typer using a snippet of the linux kernel source code
@@ -1824,7 +2594,7 @@ bool HackerTyperFile(std::string sFilePath, uint64_t nSpeed = 3) {
 // Return values: TRUE or 1 for success, FALSE or 0 for fail.
 //
 bool ResetExpl() {
-	
+
 	// Kill explorer.exe
 	system("taskkill /f /im explorer.exe");
 
@@ -1849,7 +2619,7 @@ bool ResetExpl() {
 //
 int GetWholeNumberDigitLength(long double dNumber) {
 	// -1 because if number was less than 1, it can support 16dp when long double is 64-bit (no. 0 would be taking no space of the 64-bit container)
-	int nNumberDigitLength = -1; 
+	int nNumberDigitLength = -1;
 	constexpr uint64_t nMaxMultiplierNum = std::numeric_limits<uint64_t>::max() / 10; // divide by 10 so it stops early before overflow occurs
 
 	// Count number of place value digits
@@ -1910,25 +2680,6 @@ std::string FormatValueForEuropeanNotation(long double dValue) {
 
 	// Return string from stringstream
 	return sFormatBuffer;
-}
-
-// SettingsBoolToString - Converts a boolean value to either 'enabled' (TRUE) or 'disabled' (FALSE).
-// Arguments: bValue - Value to convert.
-// Return value: Final string.
-//
-std::string SettingsBoolToString(bool bValue) {
-	if (bValue == true) {
-		return "Enabled";
-	}
-	else if (bValue == false) {
-		return "Disabled";
-	}
-	else {
-		VerbosityDisplay("In SettingsBoolToString(): ERROR - Invalid argument value.\n");
-		return "";
-	}
-
-	return "";
 }
 
 /* MessageBox Codes */

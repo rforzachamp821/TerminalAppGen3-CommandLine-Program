@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{3e2f9738-7ba0-4b67-91a6-b18578f0886e}</ProjectGuid>
-    <RootNamespace>TerminalAppGen3</RootNamespace>
+    <RootNamespace>ZeeTerminal</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>ZeeTerminal</ProjectName>
   </PropertyGroup>
@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)  _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -140,11 +140,51 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CommandFiles\CalculationAlgorithm\CalculationAlgorithm.cpp" />
+    <ClCompile Include="Core\ColourConv.cpp" />
+    <ClCompile Include="Core\ZeeTerminalCore.cpp" />
+    <ClCompile Include="Core\ZTFormattingDefinitions.cpp" />
+    <ClCompile Include="Engine\ConfigFile-System\ConfigFile-System.cpp" />
+    <ClCompile Include="Engine\FileOpenGUIEngine\FileOpenGUIEngine.cpp" />
+    <ClCompile Include="Engine\FileParse-System\FileParse-System.cpp" />
+    <ClCompile Include="Engine\LogFile-System\LogFile-System.cpp" />
+    <ClCompile Include="Engine\MemoryTestEngine\MemoryTestEngine.cpp" />
+    <ClCompile Include="Engine\MultimediaEngine\MultimediaEngine.cpp" />
+    <ClCompile Include="Engine\NotesSystem\NotesSystem.cpp" />
+    <ClCompile Include="Engine\OptionSelectEngine\OptionSelectEngine.cpp" />
+    <ClCompile Include="Engine\RGBColourPresetSystem\RGBColourPresetSystem.cpp" />
+    <ClCompile Include="Engine\ScreenNavigateEngine\ScreenNavigateEngine.cpp" />
+    <ClCompile Include="Engine\SystemInfo\SystemInfo.cpp" />
+    <ClCompile Include="Engine\TableEngine\TableEngine.cpp" />
+    <ClCompile Include="Engine\TerminalDefaultAttributes\TerminalDefaultAttributes.cpp" />
+    <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.cpp" />
+    <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.cpp" />
+    <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarInfo\CarInfo.cpp" />
     <ClCompile Include="ZeeTerminal.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Definitions.h" />
+    <ClInclude Include="CommandFiles\CalculationAlgorithm\CalculationAlgorithm.h" />
+    <ClInclude Include="Core\ZeeTerminalCore.h" />
+    <ClInclude Include="Core\ZTConstDefinitions.h" />
+    <ClInclude Include="Core\ZTFormattingDefinitions.h" />
+    <ClInclude Include="Engine\ConfigFile-System\ConfigFile-System.h" />
+    <ClInclude Include="Engine\FileOpenGUIEngine\FileOpenGUIEngine.h" />
+    <ClInclude Include="Engine\FileParse-System\FileParse-System.h" />
+    <ClInclude Include="Engine\LogFile-System\LogFile-System.h" />
+    <ClInclude Include="Engine\MemoryTestEngine\MemoryTestEngine.h" />
+    <ClInclude Include="Engine\MultimediaEngine\MultimediaEngine.h" />
+    <ClInclude Include="Engine\NotesSystem\NotesSystem.h" />
+    <ClInclude Include="Engine\OptionSelectEngine\OptionSelectEngine.h" />
+    <ClInclude Include="Engine\RGBColourPresetSystem\RGBColourPresetSystem.h" />
+    <ClInclude Include="Engine\ScreenNavigateEngine\ScreenNavigateEngine.h" />
+    <ClInclude Include="Engine\SystemInfo\SystemInfo.h" />
+    <ClInclude Include="Engine\TableEngine\TableEngine.h" />
+    <ClInclude Include="Engine\TerminalDefaultAttributes\TerminalDefaultAttributes.h" />
+    <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.h" />
+    <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.h" />
+    <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarInfo\CarInfo.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="RyRyCryptor\RyRyCryptor.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ZeeTerminal.rc" />
