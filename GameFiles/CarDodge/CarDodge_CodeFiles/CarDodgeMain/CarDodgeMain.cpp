@@ -57,7 +57,7 @@ void CarDodgeMain::UpdatePanelInfo() {
 	SetCursorPosition(nScreenWidth - nRightBorderWidth + 3, 9);
 	std::cout << "Level: " << (nSessionLevel == 12 ? "OMEGA" : std::to_string(nSessionLevel));
 	SetCursorPosition(nScreenWidth - nRightBorderWidth + 3, 10);
-	std::cout << "Interval Period: " << nSessionEnemyCarInterval.count() * (nSessionPowerUp == 1 ? 2 : 1) << "ms";
+	std::cout << "Interval Period: " << nSessionEnemyCarInterval.count() * (nSessionPowerUp == 1 ? 2 : 1) << "ms ";
 	SetCursorPosition(nScreenWidth - nRightBorderWidth + 3, 11);
 	std::cout << "_______________";
 
@@ -93,7 +93,7 @@ void CarDodgeMain::UpdatePanelInfo() {
 	SetCursorPosition(nScreenWidth - nRightBorderWidth + 2, 27);
 	std::cout << "|                     |";
 	SetCursorPosition(nScreenWidth - nRightBorderWidth + 2, 28);
-	std::cout << "| Extra Life: " << (bExtraLife ? "True    |" : "False   |");
+	std::cout << "| Extra Life: " << (bExtraLife ? "Yes     |" : "No      |");
 
 	// Reset to global colours
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -691,7 +691,7 @@ void CarDodgeMain::CarDodgeMainGame()
 				// Reset nSessionPowerUp variable if power up time complete
 				if (nPowerUpTime >= std::chrono::milliseconds(10000)) {
 					nSessionPowerUp = 0;
-					nChanceForPowerUpCarMultiplier = 1; // Reset power-up car chance variable
+					nChanceForPowerUpCarMultiplier = 1; // Reset power-up car chance multiplier variable
 				}
 			}
 

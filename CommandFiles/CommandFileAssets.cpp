@@ -245,11 +245,11 @@ void help(bool bFromTutorial) {
 		"\n\n3) I'm using the Windows 7 terminal. How do I scroll up and down in the terminal without using the mouse?\n  3a) To scroll up and down without the mouse, press Alt + Space and then the keys 'E' and 'L', and then scroll with the up/down arrow keys. Use the PageUp/PageDown keys to scroll full pages in the terminal.\n"
 		"\n\n4) What is the difference between the 'old' and 'new' OptionSelect Session styles?\n  4a) The 'old' style is an inspiration from the TerminalAppGen2, the previous iteration of this program. It is very robust, simple and works by associating a number with each option, which you type in and press ENTER to select.\nThe 'new' style isn't exactly new, and has been in ZeeTerminal since v0.1.0. However, it is newer than the 'old' style, hence it's referred to as 'new'. It relies on using the arrow/WS keys to move a highlight up and down, to select an option.\n",
 
-		"___ABOUT THIS PROGRAM___\n\nThis is the ZeeTerminal Commandline Program, Build " + std::string(ZT_VERSION) + ".\n" +
+		"___ABOUT THIS PROGRAM___\n\nThis is the ZeeTerminal Commandline Program, Build v" + std::string(ZT_VERSION) + ".\n" +
 		"This is a beta build of ZeeTerminal, with an entirely new engine and components.\nThis program is made in C++, with a few very small parts of C." +
 		"\n\nThis program uses the DirectShow API in the MediaPlayer command, licensed by Microsoft Corp. (c) Microsoft Corp.\n\n" +
 		"This program uses the BASS API in the AudioPlayer command, licensed by Un4Seen Developments. (c) Un4Seen Developments.\n\n" +
-		"This program uses the CarDodge game v0.6.0, accessible in the Game command. CarDodge is licensed under Ryan Zorkot with the MIT License. For more information, visit the repository: https://github.com/rforzachamp821/CarDodge\n\n"
+		"This program uses the CarDodge game v0.6.0, accessible in the Game command. CarDodge is licensed under Ryan Zorkot with the MIT License. For more information, visit the archived repo: https://github.com/rforzachamp821/CarDodge\n\n"
 		"\nZeeTerminal is licensed under the MIT License. The license and credits can be viewed on Page 4.\n\n"
 		"  _____        _____                   _             _ \n"
 		" |__  /___  __|_   _|__ _ __ _ __ ___ (_)_ __   __ _| |\n"
