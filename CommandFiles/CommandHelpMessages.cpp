@@ -394,6 +394,7 @@ namespace helpmsgs
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n <source>\tThe original file to be copied to another file. Put the file directory in place of <source>.\n <dest>\t\tThe file directory of the new/existing file. Put the file directory in place of <dest>.")
+			<< wordWrap("\n\nSyntax: copyfile <source> <dest> (in this exact order).")
 			<< wordWrap("\n\nExample: copyfile \"C:\\test\\a file.txt\" C:\\Users\\newfile.txt")
 			<< wordWrap("\n\nNOTE: For any directory with spaces, use quotes like in the example.\nNOTE: You must have both the source and the destination directories when using them as arguments.\nNOTE: Read this article for information on the different forms of filepaths: ");
 
@@ -422,6 +423,7 @@ namespace helpmsgs
 		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n -o\t\tEnable overwrite mode. Any existing file with the same filename as the file to copy will be overwritten when specified."
 			"\n -d\t\tEnable folder copy mode. When a folder is specified as a source, the contents of that folder will be recursively copied to the destination."
 			"\n <source>\tThe file to copy. Put the file directory in place of <source>.\n <dest>\t\tThe destination location/directory. Put the directory path in place of <dest>.\n\n"
+			"Syntax: copy <source <dest> (in this exact order).\n\n"
 			"Example: copy \"C:\\test\\a file.txt\" C:\\Users\n\n"
 			"NOTE: For any directory with spaces, use quotes like in the example.\nNOTE: You must have both the source and the destination directories when using them as arguments.\nNOTE: Read this article for information on the different forms of filepaths: ");
 
@@ -549,7 +551,7 @@ namespace helpmsgs
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n -i\t\tStart immediately, with default settings when no argument is given.\n --display\tStarts the hacking text part of this command.\n --type\t\tStarts the hacker typing part of this command.\n --typecustom\tStarts the hacker typing part of this command, with custom file output abilities.\n <speed>\tSpeed of output characters for 'type' and 'typecustom' arguments. Must be a number.\n <filepath>\tCustom filepath argument for 'typecustom' argument. Must be a valid filepath.")
 			<< wordWrap("\n\nSyntax for '--type' argument:\t\t --type <speed>\nSyntax for '--typecustom' argument:\t --typecustom <filepath> <speed> (In order)")
-			<< wordWrap("\n\nExample: hacker --type\n\n");
+			<< wordWrap("\n\nExample: hacker --type\n\nNOTE: When using the --typecustom argument, in the <filepath> argument, you can use \"*open\" without quotes to use the Windows File Dialogue to open files.\n\n");
 
 		return;
 	}

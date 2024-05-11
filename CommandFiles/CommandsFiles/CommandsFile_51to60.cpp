@@ -35,7 +35,7 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 		OptionSelectEngine oseGame;
 		oseGame.nSizeOfOptions = 1;
 		std::string sOptions[] = {
-			"Car Dodge (v0.5.1)"  
+			"Car Dodge"
 		};
 		oseGame.sOptions = sOptions;
 		

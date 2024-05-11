@@ -57,9 +57,43 @@ void CarDodgeMain::UpdatePanelInfo() {
 	SetCursorPosition(nScreenWidth - nRightBorderWidth + 3, 9);
 	std::cout << "Level: " << (nSessionLevel == 12 ? "OMEGA" : std::to_string(nSessionLevel));
 	SetCursorPosition(nScreenWidth - nRightBorderWidth + 3, 10);
-	std::cout << "Interval Period: " << nSessionEnemyCarInterval.count() << "ms";
+	std::cout << "Interval Period: " << nSessionEnemyCarInterval.count() * (nSessionPowerUp == 1 ? 2 : 1) << "ms";
 	SetCursorPosition(nScreenWidth - nRightBorderWidth + 3, 11);
 	std::cout << "_______________";
+
+	// Render power-up box
+	SetCursorPosition(nScreenWidth - nRightBorderWidth + 2, 25);
+	std::cout << "|___Current Power-Up__|";
+	SetCursorPosition(nScreenWidth - nRightBorderWidth + 2, 26);
+	std::cout << "| ";
+	// Write the right current power-up text to display based on nSessionPowerUp variable
+	if (nSessionPowerUp == 0 && bExtraLife == true) {
+		colour(BLK, LCYN);
+		std::cout << "ExtraLife Activated";
+	}
+	else if (nSessionPowerUp == 0) std::cout << "    No Power-Up    ";
+	else if (nSessionPowerUp == 1) {
+		colour(BLK, LYLW);
+		std::cout << "  10sec 2x Slowdown";
+	}
+	else if (nSessionPowerUp == 3) {
+		colour(LWHT, GRN);
+		std::cout << "10sec Invincibility";
+	}
+	else if (nSessionPowerUp == 4) {
+		colour(WHT, RED);
+		std::cout << " 10sec Double Score";
+	}
+	else if (nSessionPowerUp == 5) {
+		colour(WHT, MAG);
+		std::cout << "10s 3xPowerUpChance";
+	}
+	colour(GetLevelBorderColourFore(), GetLevelBorderColourBack());
+	std::cout << " |";
+	SetCursorPosition(nScreenWidth - nRightBorderWidth + 2, 27);
+	std::cout << "|                     |";
+	SetCursorPosition(nScreenWidth - nRightBorderWidth + 2, 28);
+	std::cout << "| Extra Life: " << (bExtraLife ? "True    |" : "False   |");
 
 	// Reset to global colours
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -141,16 +175,20 @@ void CarDodgeMain::ResetGame() {
 	std::array<std::array<char, 4>, 4> UserCarStyle = UserCar.CarStyle;
 
 	// Reset everything
-	CarStyles ResetStyle;
 	for (int i = 0; i < nEnemyCarArraySize; i++) {
 		ResetCarInfoObject(&EnemyCars[i]);
-		EnemyCars[i].CarStyle = ResetStyle.EnemyCar;
+		EnemyCars[i].CarStyle = CarStyles::EnemyCar;
 	}
 	nSessionPoints = 0;
 	nSessionTime = std::chrono::milliseconds::zero();
 	ResetCarInfoObject(&UserCar);
 	UserCar.CarStyle = UserCarStyle;
 	bPanelAlreadyUpdated = false;
+	nSessionPowerUp = 0;
+	nChanceForPowerUpCarMultiplier = 1;
+	bExtraLife = false;
+
+	return;
 }
 
 // GetSessionLevel
@@ -322,6 +360,9 @@ void CarDodgeMain::CarDodgeMainGame()
 	short int nReiterationCount = 0; // number of reiterations in game loop
 	auto TimeStartPoint = std::chrono::steady_clock::now(); // For time start point for session time
 	auto TimeEndPoint = std::chrono::steady_clock::now(); // For time end point for session time AND for measuring enemy car interval time
+	std::chrono::steady_clock::time_point PowerUpTimeStartPoint = std::chrono::steady_clock::now(); // start point for a running powerup
+	std::chrono::steady_clock::time_point PowerUpTimeEndPoint = std::chrono::steady_clock::now(); // end point for a running powerup
+
 	bool bRestartGame = false; // Flag for restarting game (usually on game loss)
 
 	// Ensure that all cursor and colour settings are saved before game initialisation
@@ -420,6 +461,9 @@ void CarDodgeMain::CarDodgeMainGame()
 		//
 		while (true)
 		{
+			// Start time point for current loop iteration (for measuring execution time for calculating enemy car production interval)
+			auto LoopTimeStartPoint = std::chrono::steady_clock::now();
+
 			// Verify if game is runnable in current terminal state
 			if (!VerifyIfGameIsRunnable(true, true)) {
 				std::cout << "Take your time to resize the game window. The game will resume automatically with a countdown.\nPress any key to exit to main menu.\n";
@@ -470,9 +514,6 @@ void CarDodgeMain::CarDodgeMainGame()
 				SetCursorPosition(30, 5);
 				std::cout << "      ";
 			}
-
-			// Start time point for current loop iteration (for measuring execution time for calculating enemy car production interval)
-			auto LoopTimeStartPoint = std::chrono::steady_clock::now();
 
 			// Get input from user if user presses key
 			short int cFirstValue = ' ', cSecondValue = ' ';
@@ -542,11 +583,60 @@ void CarDodgeMain::CarDodgeMainGame()
 			}
 
 			// Check if user car collided with enemy car; if so, exit
-			if (CheckForCarCollision()) {
-				bRestartGame = DisplayUserLossScreen(); // User lost
+			int nEnemyCarCollisionIndexVal = 0;
+			if (CheckForCarCollision(&nEnemyCarCollisionIndexVal)) 
+			{
+				// Check if the car that user crashed into was a power-up car
+				if (EnemyCars[nEnemyCarCollisionIndexVal].bIsPowerUpCar == true) {
+					// Delete the power-up car and re-render the user car to prevent the user car from looking disintegrated
+					DeleteEnemyCarAndResetSafely(nEnemyCarCollisionIndexVal);
+					RenderCar(UserCar);
 
-				// Exit game loop
-				break;
+					// Generate random number, randomly pick a power-up
+					std::random_device rdRandNumGen;
+					std::uniform_int_distribution<short int> DistPowerUpGen(1, 5);
+					nSessionPowerUp = DistPowerUpGen(rdRandNumGen); // Directly assign power-up now, as it should be within acceptable range.
+					nChanceForPowerUpCarMultiplier = 1; // Reset power-up car chance multiplier
+
+					// Check if nSessionPowerUp is 2; if so, set it to 0 and assign bExtraLife to true
+					if (nSessionPowerUp == 2) {
+						nSessionPowerUp = 0;
+						bExtraLife = true;
+					}
+					else {
+						// Else start timer for power-ups (all the other power-ups are all the same time, so this should work)
+						PowerUpTimeStartPoint = std::chrono::steady_clock::now();
+					}
+
+					// Set multiplier to 3 when associated power-up is enabled
+					if (nSessionPowerUp == 5) {
+						nChanceForPowerUpCarMultiplier = 3;
+					}
+				}
+
+				else {
+					// Extra life
+					if (bExtraLife == true || nSessionPowerUp == 3) {
+						// Delete the power-up car and re-render the user car to prevent the user car from looking disintegrated
+						DeleteEnemyCarAndResetSafely(nEnemyCarCollisionIndexVal);
+						RenderCar(UserCar);
+
+						// Do some specific things when extra life has been granted
+						if (bExtraLife == true && nSessionPowerUp != 3) {
+							bExtraLife = false; // No more extra life; reset associated variable
+
+							// Reset power-ups as extra life has been granted
+							nSessionPowerUp = 0;
+							nChanceForPowerUpCarMultiplier = 1;
+						}
+					}
+					else {
+						bRestartGame = DisplayUserLossScreen(); // User lost
+						
+						// Exit game loop
+						break;
+					}
+				}
 			}
 
 			// Render a new enemy car if there is one less than car's worth of space between another enemy car (one less because of shorter hitbox size)
@@ -558,6 +648,8 @@ void CarDodgeMain::CarDodgeMainGame()
 			// Check if an enemy car is on the lower border of the screen - if so, one enemy car has died, therefore increase points by 1.
 			if (DeleteEnemyCarOnLowerBorderHit()) {
 				nSessionPoints++;
+				// Double the amount of session points if the associated power-up is enabled
+				if (nSessionPowerUp == 4) nSessionPoints++;
 
 				// After session points increase, check if player level should be increased and if the enemy car interval should change (this was implemented like this as an optimisation)
 				uint64_t nSessionLevelPrev = nSessionLevel;
@@ -590,14 +682,27 @@ void CarDodgeMain::CarDodgeMainGame()
 			// Increase reiteration count to indicate when the next enemy car should be created
 			nReiterationCount++;
 
+			// Check if power-up time has reached 15 seconds; if so, set the nSessionPowerUp variable to 0
+			if (nSessionPowerUp > 0) {
+				PowerUpTimeEndPoint = std::chrono::steady_clock::now();
+				// Get power-up time
+				std::chrono::milliseconds nPowerUpTime = std::chrono::duration_cast<std::chrono::milliseconds>(PowerUpTimeEndPoint - PowerUpTimeStartPoint);
+
+				// Reset nSessionPowerUp variable if power up time complete
+				if (nPowerUpTime >= std::chrono::milliseconds(10000)) {
+					nSessionPowerUp = 0;
+					nChanceForPowerUpCarMultiplier = 1; // Reset power-up car chance variable
+				}
+			}
+
 			// Get current time again, for measuring how much time is needed to wait for next loop
 			std::chrono::duration<uint64_t, std::milli> ExecTime{};
 			TimeEndPoint = std::chrono::steady_clock::now();
 			// Work out execution time of this loop
-			std::chrono::milliseconds nExecTime = std::chrono::duration_cast<std::chrono::milliseconds>(LoopTimeStartPoint - TimeEndPoint);
+			std::chrono::milliseconds nExecTime = std::chrono::duration_cast<std::chrono::milliseconds>(TimeEndPoint - LoopTimeStartPoint);
 
 			// Check if execution time is less than required interval speed. If so, sleep until interval speed is reached, else continue
-			if (nExecTime < nSessionEnemyCarInterval)
+			if (nExecTime < nSessionEnemyCarInterval * (nSessionPowerUp == 1 ? 2 : 1))
 			{
 				// The following code is equivalent to:
 				// 
@@ -609,7 +714,7 @@ void CarDodgeMain::CarDodgeMainGame()
 					// Wait until execution time of current game loop iteration is the enemy car interval time.
 					// This is to prevent the user gaining a reaction time advantage and game scores being invalid.
 					const auto TimeNow = std::chrono::steady_clock::now();
-					if (TimeEndPoint + (nSessionEnemyCarInterval - ExecTime) <= TimeNow) {
+					if (TimeEndPoint + (nSessionEnemyCarInterval * (nSessionPowerUp == 1 ? 2 : 1) - ExecTime) <= TimeNow) {
 						break;
 					}
 				}
@@ -652,8 +757,6 @@ void CarDodgeMain::CarDodgeMainGame()
 
 // CarDodgeChangeUserCar
 void CarDodgeMain::CarDodgeChangeUserCar() {
-	CarStyles CarChangeStyle;
-
 	// Output title
 	std::cout << "\n";
 	colour(LWHT, RED);
@@ -697,7 +800,7 @@ void CarDodgeMain::CarDodgeChangeUserCar() {
 	nDirectionsTextRightColumn = nScreenCentre + 29; // 27 is half of 54
 
 	// Set car style
-	ciMainMenuUserCar.CarStyle = CarChangeStyle.TheSlicer;
+	ciMainMenuUserCar.CarStyle = CarStyles::TheSlicer;
 
 	// Draw left car with border
 	SetCursorPosition(nDirectionsTextLeftColumn - 9, 4);
@@ -714,7 +817,7 @@ void CarDodgeMain::CarDodgeChangeUserCar() {
 	RenderCar(ciMainMenuUserCar);
 
 	// Set car style
-	ciMainMenuUserCar.CarStyle = CarChangeStyle.GTSpeed;
+	ciMainMenuUserCar.CarStyle = CarStyles::GTSpeed;
 
 	// Draw right car with border
 	SetCursorPosition(nDirectionsTextRightColumn + 2, 4);
@@ -739,22 +842,22 @@ void CarDodgeMain::CarDodgeChangeUserCar() {
 	int nInput = UserCarOptions.OptionSelect("Please select what car you would like to use:", "", true, true, true);
 
 	if (nInput == 1) {
-		UserCar.CarStyle = CarChangeStyle.UserCarDefault;
+		UserCar.CarStyle = CarStyles::UserCarDefault;
 	}
 	else if (nInput == 2) {
-		UserCar.CarStyle = CarChangeStyle.HoverRocket;
+		UserCar.CarStyle = CarStyles::HoverRocket;
 	}
 	else if (nInput == 3) {
-		UserCar.CarStyle = CarChangeStyle.TheSweeper;
+		UserCar.CarStyle = CarStyles::TheSweeper;
 	}
 	else if (nInput == 4) {
-		UserCar.CarStyle = CarChangeStyle.TheSlicer;
+		UserCar.CarStyle = CarStyles::TheSlicer;
 	}
 	else if (nInput == 5) {
-		UserCar.CarStyle = CarChangeStyle.GTSpeed;
+		UserCar.CarStyle = CarStyles::GTSpeed;
 	}
 	else if (nInput == 6) {
-		UserCar.CarStyle = CarChangeStyle.XtraAero;
+		UserCar.CarStyle = CarStyles::XtraAero;
 	}
 	else if (nInput == 7) {
 		return;
@@ -796,11 +899,24 @@ void CarDodgeMain::CarDodgeInstructions() {
 	slowcharCentredFn(true, "Dodge all the incoming Enemy Cars to gain points.");
 	slowcharCentredFn(true, "Each car you pass, you get 1 more point.");
 	slowcharCentredFn(true, "The aim of the game is to rack up as many points as you can, without crashing into any of the Enemy Cars.");
-	slowcharCentredFn(true, "Press the Left Arrow key or the 'A' key to move left, and press the Right Arrow Key or the 'D' key to move right.");
+	slowcharCentredFn(true, "Press the Left Arrow key or the 'A' key to move left, and press the Right Arrow Key or the 'D' key to move right.\n");
+	slowcharCentredFn(true, "You can also crash into 'good' power-up cars to gain a power-up.");
+	slowcharCentredFn(true, "The power-up that is recieved can be viewed in the bottom-right corner of the game.");
+	slowcharCentredFn(true, "Power-up cars look like this:");
+
+	// Render power-up car
+	sleep(500);
+	CarInfo InfoCar;
+	CONSOLE_SCREEN_BUFFER_INFO csbiInfo{};
+	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiInfo);
+	InfoCar.CarStyle = CarStyles::PowerUpCar;
+	InfoCar.bottomLeft.X = (csbiInfo.srWindow.Right - csbiInfo.srWindow.Left) / 2;
+	InfoCar.bottomLeft.Y = csbiInfo.dwCursorPosition.Y + 4;
+	RenderCar(InfoCar);
 
 	sleep(500);
 	colour(YLW, ConfigObjMain.sColourGlobalBack);
-	std::cout << wordWrap("\nPress ENTER to exit to menu now...");
+	std::cout << wordWrap("\nGood luck!\n\nPress ENTER to exit to menu now...");
 	std::cin.ignore((std::numeric_limits<int>::max)(), '\n');
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 

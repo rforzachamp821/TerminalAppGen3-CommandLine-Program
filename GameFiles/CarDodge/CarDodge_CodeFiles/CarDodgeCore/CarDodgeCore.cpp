@@ -127,6 +127,7 @@ void CarDodgeCore::RenderBorders(std::string sSetBorderColourFore, std::string s
 
 	}
 
+	// Reset colours and exit
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	return;
@@ -171,6 +172,8 @@ void CarDodgeCore::MoveUserCarRight() {
 // RenderNewEnemyCar
 void CarDodgeCore::RenderNewEnemyCar() {
 	static std::uniform_int_distribution<short int> Dist(nLeftBorderWidth, nScreenWidth - nRightBorderWidth - 4);
+	static std::uniform_int_distribution<short int> DistPowerUpCar(1, 100);
+	static std::random_device rdRandNum;
 
 	// Too many rendered enemy cars at once
 	if (nNumOfCurrentRenderedEnemyCars > 128) return;
@@ -185,6 +188,15 @@ void CarDodgeCore::RenderNewEnemyCar() {
 	EnemyCars[nEnemyCarIndex].bottomLeft = { nRandomXCoord, 3 };
 	nRandomXCoord += 3;
 	EnemyCars[nEnemyCarIndex].bottomRight = { nRandomXCoord, 3 };
+
+	// Set the car to be a power-up car if random number is between 1 and nChanceForPowerUpCarMultiplier * 5 inclusive (5 because 1x is 5% chance for power-up car to appear)
+	short int nPowerUpCarChanceCheck = DistPowerUpCar(rdRandNum);
+	if (nPowerUpCarChanceCheck > 0 && nPowerUpCarChanceCheck < 1 + 5 * nChanceForPowerUpCarMultiplier) {
+		// Set car design to power-up car
+		EnemyCars[nEnemyCarIndex].CarStyle = CarStyles::PowerUpCar;
+		// Attribute the car to be a power-up car
+		EnemyCars[nEnemyCarIndex].bIsPowerUpCar = true;
+	}
 
 	// Render the new car now
 	RenderCar(EnemyCars[nEnemyCarIndex]);
@@ -211,6 +223,21 @@ void CarDodgeCore::MoveAllEnemyCars() {
 	}
 }
 
+void CarDodgeCore::DeleteEnemyCarAndResetSafely(int nEnemyCarArrayIndex) {
+	// Erase car
+	EraseCar(EnemyCars[nEnemyCarArrayIndex]);
+
+	// Reset car to defaults
+	EnemyCars[nEnemyCarArrayIndex].bInUse = false;
+	EnemyCars[nEnemyCarArrayIndex].bottomLeft = { 0,0 };
+	EnemyCars[nEnemyCarArrayIndex].bottomRight = { 0,0 };
+	if (EnemyCars[nEnemyCarArrayIndex].bIsPowerUpCar) EnemyCars[nEnemyCarArrayIndex].CarStyle = CarStyles::EnemyCar;
+	EnemyCars[nEnemyCarArrayIndex].bIsPowerUpCar = false;
+
+	// Index is inactive - enemy car no longer existent, so decrement nNumOfCurrentRenderedEnemyCars by 1
+	nNumOfCurrentRenderedEnemyCars--;
+}
+
 // DeleteEnemyCarOnLowerBorderHit
 bool CarDodgeCore::DeleteEnemyCarOnLowerBorderHit() {
 	for (int nEnemyCarIterator = 0; nEnemyCarIterator < nEnemyCarArraySize; nEnemyCarIterator++) {
@@ -219,14 +246,8 @@ bool CarDodgeCore::DeleteEnemyCarOnLowerBorderHit() {
 
 		// Check if found enemy car is touching lower border
 		if (EnemyCars[nEnemyCarIterator].bottomLeft.Y >= nSessionConsoleHeight) {
-			// Erase car
-			EraseCar(EnemyCars[nEnemyCarIterator]);
-
-			// Reset car to defaults
-			EnemyCars[nEnemyCarIterator].bInUse = false;
-			EnemyCars[nEnemyCarIterator].bottomLeft = { 0,0 };
-			EnemyCars[nEnemyCarIterator].bottomRight = { 0,0 };
-			nNumOfCurrentRenderedEnemyCars--;
+			// Delete Enemy Car
+			DeleteEnemyCarAndResetSafely(nEnemyCarIterator);
 
 			// Because of how cars are rendered one-by-one, we shouldn't expect another car touching the border at this moment, so exit
 			return true;
@@ -237,7 +258,8 @@ bool CarDodgeCore::DeleteEnemyCarOnLowerBorderHit() {
 }
 
 // CheckForCarCollision
-bool CarDodgeCore::CheckForCarCollision() {
+// nEnemyCarIteratorValOut - out pointer to int variable containing exact index of colliding enemy car if collision detected
+bool CarDodgeCore::CheckForCarCollision(int* nEnemyCarIteratorValOut) {
 	// Reiterate through all enemy cars to check each one for crash
 	for (int nEnemyCarIterator = 0; nEnemyCarIterator < nEnemyCarArraySize; nEnemyCarIterator++) {
 		// Don't attempt to check if enemy car is not in use
@@ -247,6 +269,7 @@ bool CarDodgeCore::CheckForCarCollision() {
 		if (EnemyCars[nEnemyCarIterator].bottomLeft.Y >= nSessionConsoleHeight - 3) {
 			// Check if car is in the necessary X-coordinates to be in a crash
 			if (EnemyCars[nEnemyCarIterator].bottomLeft.X <= UserCar.bottomRight.X && EnemyCars[nEnemyCarIterator].bottomRight.X >= UserCar.bottomLeft.X) {
+				*nEnemyCarIteratorValOut = nEnemyCarIterator;
 				return true;
 			}
 		}

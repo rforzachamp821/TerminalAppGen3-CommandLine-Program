@@ -816,8 +816,21 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 			}
 
 			if (sFileName == "") {
-				sFileName = StrInput("Please input the filepath for the custom file (0 to exit): > ");
+				sFileName = StrInput("Please input the filepath for the custom file (0 to exit, *open for Windows File Dialogue): > ");
 				if (sFileName == "0") {
+					Exiting();
+					return true;
+				}
+			}
+
+			// Open file with Windows File Dialogue
+			if (sFileName == "*open") {
+				// Use the Windows File Dialogue
+				std::cout << wordWrap("Opening with the Windows File Dialogue...\n");
+				FileOpenGUIEngine HackerFileOpen;
+				HackerFileOpen.FileOpenDialogue("Open a File to Use for Hacker Type");
+				sFileName = HackerFileOpen.GetRetrievedPathName();
+				if (sFileName == "") {
 					Exiting();
 					return true;
 				}

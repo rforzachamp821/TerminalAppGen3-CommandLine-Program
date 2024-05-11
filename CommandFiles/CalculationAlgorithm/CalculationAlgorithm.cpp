@@ -1020,9 +1020,6 @@ bool CalculationAlgorithm::UseEuropeanNotation(bool bToggleValue) {
 		cDecimalPoint = cDefaultDecimalPoint;
 		cThousandsSeparator = cDefaultThousandsSeparator;
 		break;
-	default:
-		VerbosityDisplay("In CalculationAlgorithm::UseEuropeanNotation(): ERROR - Unknown value recieved from bToggleValue, therefore setting notation failed. Not true/false (1/0).\n", nObjectID);
-		return false;
 	}
 
 	return true;
