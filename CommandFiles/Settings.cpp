@@ -1159,6 +1159,12 @@ void CarDodgeGameSettings(short int nChoiceMain = 0, int nChoiceCarTurnSpeed = 0
 			nChoiceForeground = oseCarDodgeSettings.OptionSelect("Please select what foreground colour you want CarDodge to use (note that this only affects the car colours on-screen):"
 				"\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sCarDodgeGameplayColourFore) + ")", " ___GAME FOREGROUND COLOUR SETTINGS___ ");
 		}
+
+		// Exit on command
+		if (nChoiceForeground == -1) {
+			Exiting();
+			return;
+		}
 		
 		ColourForegroundSwitch(&nChoiceForeground, &ConfigObjMain.sCarDodgeGameplayColourBack, &ConfigObjMain.sCarDodgeGameplayColourFore);
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -1177,6 +1183,12 @@ void CarDodgeGameSettings(short int nChoiceMain = 0, int nChoiceCarTurnSpeed = 0
 				"\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sCarDodgeGameplayColourBack) + ")", " ___GAME BACKGROUND COLOUR SETTINGS___ ");
 		}
 
+		// Exit on command
+		if (nChoiceBackground == -1) {
+			Exiting();
+			return;
+		}
+
 		ColourBackgroundSwitch(&nChoiceBackground, &ConfigObjMain.sCarDodgeGameplayColourBack, &ConfigObjMain.sCarDodgeGameplayColourFore);
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
@@ -1191,6 +1203,79 @@ void CarDodgeGameSettings(short int nChoiceMain = 0, int nChoiceCarTurnSpeed = 0
 	}
 	else {
 		VerbosityDisplay("In CarDodgeGameSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+		UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
+
+		return;
+	}
+}
+
+// Guess The Number Game Settings
+void GuessTheNumberGameSettings(short int nChoiceMain = 0, int nChoiceGameForeground = 0, int nChoiceGameBackground = 0) {
+	OptionSelectEngine oseGTNSettings;
+
+	if (nChoiceMain == 0) {
+		oseGTNSettings.nSizeOfOptions = 2;
+		std::string sOptions[] = {
+			"Game Foreground Colour",
+			"Game Background Colour"
+		};
+		oseGTNSettings.sOptions = sOptions;
+		nChoiceMain = oseGTNSettings.OptionSelect("Please select which setting you want to change relating to the Guess The Number game:", " ___GUESS THE NUMBER GAME SETTINGS___ ");
+	}
+
+
+	if (nChoiceMain == 1) {
+		if (nChoiceGameForeground == 0) {
+			oseGTNSettings.nSizeOfOptions = 16;
+			oseGTNSettings.sOptions = sOptionsColour;
+
+			nChoiceGameForeground = oseGTNSettings.OptionSelect("Please select what foreground colour you want Guess The Number to use (affects whole game):"
+				"\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sGTNGameplayColourFore) + ")", " ___GAME FOREGROUND COLOUR SETTINGS___ ");
+		}
+
+		// Exit on command
+		if (nChoiceGameForeground == -1) {
+			Exiting();
+			return;
+		}
+
+		ColourForegroundSwitch(&nChoiceGameForeground, &ConfigObjMain.sGTNGameplayColourBack, &ConfigObjMain.sGTNGameplayColourFore);
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << CentreText("Guess The Number game foreground colour successfully set!") << std::endl;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		return;
+	}
+	else if (nChoiceMain == 2) {
+		if (nChoiceGameBackground == 0) {
+			oseGTNSettings.nSizeOfOptions = 16;
+			oseGTNSettings.sOptions = sOptionsColour;
+
+			nChoiceGameBackground = oseGTNSettings.OptionSelect("Please select what background colour you want Guess The Number to use (affects whole game):"
+				"\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sGTNGameplayColourBack) + ")", " ___GAME BACKGROUND COLOUR SETTINGS___ ");
+		}
+
+		// Exit on command
+		if (nChoiceGameBackground == -1) {
+			Exiting();
+			return;
+		}
+
+		ColourBackgroundSwitch(&nChoiceGameBackground, &ConfigObjMain.sGTNGameplayColourBack, &ConfigObjMain.sGTNGameplayColourFore);
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << CentreText("Guess The Number game background colour successfully set!") << std::endl;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		return;
+	}
+	else if (nChoiceMain == -1) {
+		Exiting();
+		return;
+	}
+	else {
+		VerbosityDisplay("In GuessTheNumberGameSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 		UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 
 		return;

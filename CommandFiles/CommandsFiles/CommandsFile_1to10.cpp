@@ -807,10 +807,32 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 
 				return true;
 			}
+			else if (sStringOptionCommandArgs[0] == "gtnforeground") {
+				if (isNumberi(sStringDataCommandArgs[0])) {
+					GuessTheNumberGameSettings(1, std::stoi(sStringDataCommandArgs[0]), 0);
+				}
+				else {
+					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
+				}
+
+				return true;
+			}
+			else if (sStringOptionCommandArgs[0] == "gtnbackground") {
+				if (isNumberi(sStringDataCommandArgs[0])) {
+					GuessTheNumberGameSettings(2, 0, std::stoi(sStringDataCommandArgs[0]));
+				}
+				else {
+					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
+				}
+
+				return true;
+			}
 		}
 
 		OptionSelectEngine oseSettings;
-		oseSettings.nSizeOfOptions = 11;
+		oseSettings.nSizeOfOptions = 12;
 		std::string sOptions[] = {
 			"Highlight Colour Settings",
 			"Title Colour Settings",
@@ -822,6 +844,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			"Cursor Settings",
 			"LogFile System Settings",
 			"CarDodge Game Settings",
+			"Guess The Number Game Settings",
 			"Other Settings"
 		};
 		oseSettings.sOptions = sOptions;
@@ -866,6 +889,9 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 				CarDodgeGameSettings();
 				break;
 			case 11:
+				GuessTheNumberGameSettings();
+				break;
+			case 12:
 				OtherSettings();
 				break;
 

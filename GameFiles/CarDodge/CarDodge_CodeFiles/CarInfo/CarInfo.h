@@ -16,6 +16,9 @@ struct CarInfo {
 	// Describes if car is in use - by default, it's not
 	bool bInUse = false;
 
+	// Describes if car is a power-up car - by default, it's not
+	bool bIsPowerUpCar = false;
+
 	// CarStyle - Defines the design of the car.
 	std::array<std::array<char, 4>, 4> CarStyle{};
 };
@@ -29,13 +32,15 @@ inline void ResetCarInfoObject(CarInfo* ObjToReset) {
 	ObjToReset->bottomLeft = { 0,0 };
 	ObjToReset->bottomRight = { 0,0 };
 	ObjToReset->bInUse = false;
+	ObjToReset->bIsPowerUpCar = false;
 	ObjToReset->CarStyle.fill({});
 
 	return;
 }
 
 // CarStyles - structure containing the different styles that a car can have, with names.
-struct CarStyles {
+namespace CarStyles {
+	const std::array<std::array<char, 4>, 4> PowerUpCar = { '0', '/', '\\', '0', '|', ':', 'D', '|', '|', ':', ')', '|', '0', '\\', '/', '0' };
 	const std::array<std::array<char, 4>, 4> EnemyCar = { '\xb2', 'T', 'T', '\xb2', '|', '0', '0', '|', '\xb2', '0', '0', '\xb2', 'x', '|', '|', 'x' };
 	const std::array<std::array<char, 4>, 4> UserCarDefault = { '=','|','|','=','0','=','=','0','|',':',':','|','0','=','=','0' };
 	const std::array<std::array<char, 4>, 4> HoverRocket = { '/','T','T','\\','|','_','_','|','|',' ',' ','|','/','\\','/','\\' };

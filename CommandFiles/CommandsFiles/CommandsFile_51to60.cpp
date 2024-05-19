@@ -29,13 +29,20 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 				CarDodgeMainMenu();
 				return true;
 			}
+			else if (sStringOptionCommandArgs[i] == "gtn") {
+				// Start Guess The Number
+				GuessTheNumber GameLoader;
+				GameLoader.GuessTheNumber_GameMenu();
+				return true;
+			}
 		}
 
 		// Standard user interface
 		OptionSelectEngine oseGame;
-		oseGame.nSizeOfOptions = 1;
+		oseGame.nSizeOfOptions = 2;
 		std::string sOptions[] = {
-			"Car Dodge (v0.5.1)"  
+			"Car Dodge",
+			"Guess The Number"
 		};
 		oseGame.sOptions = sOptions;
 		
@@ -44,12 +51,23 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 			int nInput = oseGame.OptionSelect("Please select which game you would like to play:", " ___GAME___ ");
 
 			if (nInput == 1) {
+				// Start Car Dodge
 				CarDodgeMainMenu();
 			}
+
+			else if (nInput == 2) {
+				// Start Guess The Number
+				GuessTheNumber GameLoader;
+				GameLoader.GuessTheNumber_GameMenu();
+			}
+
+			// Exit
 			else if (nInput == -1) {
 				Exiting();
 				break;
 			}
+
+			// Error
 			else {
 				VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 				UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
@@ -395,6 +413,291 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 
 		return true;
 	} 
+
+	// Factorial
+	else if (sCommand == "factorial" || sCommand == "54") {
+		uint64_t nNumberToCalculate = 0;
+
+		// Arguments Interface
+		for (int i = 0; i < nArgArraySize; i++) {
+			if (cCommandArgs[i] == 'h') {
+				helpmsgs::FactorialHelp();
+				return true;
+			}
+
+			if (sStringDataCommandArgs[i] != "") {
+				// Assign argument to number to calculate variable
+				if (isNumberull(sStringDataCommandArgs[i])) {
+					nNumberToCalculate = std::stoull(sStringDataCommandArgs[i]);
+				}
+			}
+		}
+
+		// Display user interface if nothing recieved from argument/parameter
+		if (nNumberToCalculate == 0) {
+			CentreColouredText(" ___FACTORIAL___ ", 1);
+			std::cout << "\n\n";
+			colour(LBLU, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("This command calculates the factors and prime factors of a positive integer.\n\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+			// Prompt
+			nNumberToCalculate = PositiveNumInputull("Please input the number you want to find factors of (0 to exit): > ");
+
+			// Exit on 0
+			if (nNumberToCalculate == 0) {
+				Exiting();
+				return true;
+			}
+		}
+
+		// Calculate and output results
+		std::cout << "\n";
+		colourSubheading();
+		std::cout << " Results: " << NOULINE_STR;
+
+		colour(RED, ConfigObjMain.sColourGlobalBack);
+		std::cout << "\n\nPrime Factors of " << nNumberToCalculate << ": ";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << GetNumPrimeFactorsAsString(nNumberToCalculate) << "\n";
+		colour(GRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << "Factors of " << nNumberToCalculate << ": ";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << GetNumFactorsAsString(nNumberToCalculate) << "\n";
+
+		// Complete - exit
+		return true;
+	}
+
+	// CalcQuadratic
+	else if (sCommand == "calcquadratic" || sCommand == "55") {
+		long double dAValue = 0;
+		long double dBValue = 0;
+		long double dCValue = 0;
+		bool bFromArgument = false;
+
+		// Arguments Interface
+		for (int i = 0; i < nArgArraySize; i++) {
+			if (cCommandArgs[i] == 'h') {
+				helpmsgs::CalcQuadraticHelp();
+				return true;
+			}
+
+			// Calculate from argument
+			if (sStringDataCommandArgs[0] != "" || sStringDataCommandArgs[1] != "" || sStringDataCommandArgs[2] != "") {
+				// Report error if not all necessary arguments are given
+				if (sStringDataCommandArgs[0] == "" || sStringDataCommandArgs[1] == "" || sStringDataCommandArgs[2] == "") {
+					VerbosityDisplay("In commands::Commands51To60(): ERROR - Vital arguments not found. User may have not supplied them properly.\n");
+					UserErrorDisplay("ERROR - An A, B or C argument has been detected to be missing when attempting to calculate. Please ensure that the arguments are there or properly formatted, and try again.\nSee \"calcquadratic -h\" for more info.\n");
+					return true;
+				}
+				else {
+					if (isNumberld(sStringDataCommandArgs[0])) {
+						// Assign A-value
+						dAValue = std::stold(sStringDataCommandArgs[0]);
+						bFromArgument = true;
+					}
+					else {
+						// Error - bad argument
+						VerbosityDisplay("In commands::Commands51To60(): ERROR - A argument is not a usable/recognisable number. Unable to continue quadratic calculation.\n");
+						UserErrorDisplay("ERROR - The supplied C argument is not a number. Please ensure that the A argument that has been supplied is numerical, and try again.\nSee \"calcquadratic -h\" for more info.\n");
+						return true;
+					}
+					if (isNumberld(sStringDataCommandArgs[1])) {
+						// Assign B-value
+						dBValue = std::stold(sStringDataCommandArgs[1]);
+						bFromArgument = true;
+					}
+					else {
+						// Error - bad argument
+						VerbosityDisplay("In commands::Commands51To60(): ERROR - B argument is not a usable/recognisable number. Unable to continue quadratic calculation.\n");
+						UserErrorDisplay("ERROR - The supplied C argument is not a number. Please ensure that the B argument that has been supplied is numerical, and try again.\nSee \"calcquadratic -h\" for more info.\n");
+						return true;
+					}
+					if (isNumberld(sStringDataCommandArgs[2])) {
+						// Assign C-value
+						dCValue = std::stold(sStringDataCommandArgs[2]);
+						bFromArgument = true;
+					}
+					else {
+						// Error - bad argument
+						VerbosityDisplay("In commands::Commands51To60(): ERROR - C argument is not a usable/recognisable number. Unable to continue quadratic calculation.\n");
+						UserErrorDisplay("ERROR - The supplied C argument is not a number. Please ensure that the C argument that has been supplied is numerical, and try again.\nSee \"calcquadratic -h\" for more info.\n");
+						return true;
+					}
+				}
+			}
+		}
+
+		// User interface
+		if (bFromArgument == false) {
+			CentreColouredText(" ___CALCQUADRATIC___ ", 1);
+			colour(LBLU, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("\n\nThis command allows you to calculate the values of a quadratic expression quickly and easily, by only asking for A, B and C values to do so.\nThis is based on the expression form: Ax^2 + Bx + C = 0.\n\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+			// Get A-value
+			while (true) {
+				std::string sInput = StrInput("Please input the A-value for the expression (\"exit\" to exit): > ");
+				if (sInput == "exit") {
+					Exiting();
+					return true;
+				}
+				// Convert sInput to long double, assign to corresponding variable
+				if (isNumberld(sInput)) {
+					dAValue = std::stold(sInput);
+					break;
+				}
+				else {
+					colour(RED, ConfigObjMain.sColourGlobalBack);
+					std::cerr << wordWrap("Your input was incorrect, or the number inputted was too high/low. Please try again.\n");
+					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+					continue;
+				}
+			}
+
+
+			// Get B-value
+			while (true) {
+				std::string sInput = StrInput("Please input the B-value for the expression (\"exit\" to exit): > ");
+				if (sInput == "exit") {
+					Exiting();
+					return true;
+				}
+				// Convert sInput to long double, assign to corresponding variable
+				if (isNumberld(sInput)) {
+					dBValue = std::stold(sInput);
+					break;
+				}
+				else {
+					colour(RED, ConfigObjMain.sColourGlobalBack);
+					std::cerr << wordWrap("Your input was incorrect, or the number inputted was too high/low. Please try again.\n");
+					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+					continue;
+				}
+			}
+
+			// Get C-value
+			while (true) {
+				std::string sInput = StrInput("Please input the C-value for the expression (\"exit\" to exit): > ");
+				if (sInput == "exit") {
+					Exiting();
+					return true;
+				}
+				// Convert sInput to long double, assign to corresponding variable
+				if (isNumberld(sInput)) {
+					dCValue = std::stold(sInput);
+					break;
+				}
+				else {
+					colour(RED, ConfigObjMain.sColourGlobalBack);
+					std::cerr << wordWrap("Your input was incorrect, or the number inputted was too high/low. Please try again.\n");
+					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+					continue;
+				}
+			}
+		}
+
+		// Compute values
+		long double dFinalValue1 = (-(dBValue)+sqrtl(std::powl(dBValue, 2) - 4 * dAValue * dCValue)) / (2 * dAValue);
+		long double dFinalValue2 = (-(dBValue)-sqrtl(std::powl(dBValue, 2) - 4 * dAValue * dCValue)) / (2 * dAValue);
+
+		// Output results
+		std::cout << "\n";
+		colourSubheading();
+		std::cout << " Results: " << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		// Only output both values if they do not equal each other
+		if (dFinalValue1 == dFinalValue2) {
+			std::cout << wordWrap("\n\nCalculated Value: ");
+			colour(LCYN, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap(std::to_string(dFinalValue1) + "\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
+
+		// Otherwise, output both computed values
+		else {
+			std::cout << wordWrap("\n\nFirst Calculated Value: ");
+			colour(LCYN, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap(std::to_string(dFinalValue1));
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("\nSecond Calculated Value: ");
+			colour(LCYN, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap(std::to_string(dFinalValue2) + "\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
+
+		return true;
+	}
+
+	// Y2038
+	else if (sCommand == "y2038" || sCommand == "56") {
+		// Arguments Interface
+		for (int i = 0; i < nArgArraySize; i++) {
+			if (cCommandArgs[i] == 'h') {
+				helpmsgs::Y2038Help();
+				return true;
+			}
+		}
+
+		// Get current time since epoch, calculate time until Y2038 bug
+		const time_t nTimeSinceEpoch = time(0);
+		time_t nTimeUntilY2038WorkingVar = std::numeric_limits<int32_t>::max() - nTimeSinceEpoch;
+
+		// Calculate years and days and hours and minutes and seconds (all in one) until crisis occurence
+		// Calculate years
+		time_t nTimeUntilY2038Years = nTimeUntilY2038WorkingVar / 31536000;
+		nTimeUntilY2038WorkingVar -= nTimeUntilY2038Years * 31536000;
+
+		// Calculate days
+		time_t nTimeUntilY2038Days = nTimeUntilY2038WorkingVar / 86400;
+		nTimeUntilY2038WorkingVar -= nTimeUntilY2038Days * 86400;
+
+		// Calculate hours
+		time_t nTimeUntilY2038Hours = nTimeUntilY2038WorkingVar / 3600;
+		nTimeUntilY2038WorkingVar -= nTimeUntilY2038Hours * 3600;
+
+		// Calculate minutes
+		time_t nTimeUntilY2038Minutes = nTimeUntilY2038WorkingVar / 60;
+		nTimeUntilY2038WorkingVar -= nTimeUntilY2038Minutes * 60;
+
+		// Finally, use remaining as seconds (which it is correct).
+		time_t nTimeUntilY2038Seconds = nTimeUntilY2038WorkingVar;
+
+		// Display the time left in seconds
+		std::cout << wordWrap("Raw seconds left until Y2038 crisis: ");
+		colour(LCYN, ConfigObjMain.sColourGlobalBack);
+		std::cout << std::numeric_limits<int32_t>::max() - nTimeSinceEpoch;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << " sec\n\n";
+		
+		// Display time left in a more readable format (years, months, days, hours, seconds left, etc)
+		std::cout << wordWrap("Time left (in a more readable format): ");
+		colour(LCYN, ConfigObjMain.sColourGlobalBack);
+		std::cout << nTimeUntilY2038Years;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap(" years, ");
+		colour(LCYN, ConfigObjMain.sColourGlobalBack);
+		std::cout << nTimeUntilY2038Days;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap(" days, ");
+		colour(LCYN, ConfigObjMain.sColourGlobalBack);
+		std::cout << nTimeUntilY2038Hours;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap(" hours, ");
+		colour(LCYN, ConfigObjMain.sColourGlobalBack);
+		std::cout << nTimeUntilY2038Minutes;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap(" minutes, ");
+		colour(LCYN, ConfigObjMain.sColourGlobalBack);
+		std::cout << nTimeUntilY2038Seconds;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap(" seconds.\n");
+
+		return true;
+	}
+
 	else return false;
 
 	return true;

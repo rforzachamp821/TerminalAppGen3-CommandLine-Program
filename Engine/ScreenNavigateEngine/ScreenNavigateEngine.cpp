@@ -69,16 +69,18 @@ void ScreenNavigateEngine::ScreenNavigate(std::string sTitle) {
 		std::string sPageNum = "~~PAGE NUMBER: " + std::to_string(nIndex) + "/" + std::to_string(nNumberOfScreens) + "~~\n";
 		CentreColouredText(sPageNum, 2);
 
+		// Output directions of use using DirectionsDisplay()
+		if (ConfigObjMain.bDisplayDirections) {
+			std::cout << '\n';
+			DirectionsDisplay(sDirectionsText, true);
+			std::cout << '\n';
+		}
+
 		// Output correct screen
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap(sScreens[nIndex - 1]) << '\n';
 
-		// Output directions of use using DirectionsDisplay()
-		if (ConfigObjMain.bDisplayDirections) {
-			std::cout << '\n';
-			DirectionsDisplay(sDirectionsText);
-			std::cout << '\n';
-		}
+
 
 		// Check ending cursor height to see if scroll-up message should be outputted
 		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiScreenNavigate);

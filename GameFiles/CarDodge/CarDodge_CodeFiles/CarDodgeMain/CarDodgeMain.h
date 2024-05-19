@@ -14,6 +14,20 @@ private:
 	uint64_t nSessionLevel = 1;
 	std::chrono::milliseconds nSessionEnemyCarInterval = GetSessionLevelEnemyCarInterval();
 	bool bPanelAlreadyUpdated = false;
+	bool bExtraLife = false; // Flag for giving an extra life to user, gained through power-ups
+
+
+	/*	
+	Defines current power up for this session
+	- 0 for unset
+	- 1 for game 10-second slowdown
+	- 2 for extra life
+	- 3 for invincibility for the next 10 seconds
+	- 4 for double score for 10 seconds
+	- 5 for 3x chance for another good car for 10 seconds
+	*/
+	short int nSessionPowerUp = 0;
+
 
 	// UpdatePanelInfo - Updates panel info (points, time, etc)
 	void UpdatePanelInfo();

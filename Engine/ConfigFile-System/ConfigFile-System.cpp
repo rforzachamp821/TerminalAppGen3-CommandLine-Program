@@ -69,7 +69,11 @@ std::string ConfigFileSystem::UpdateConfigContents()
 		+ "nCarDodgeCarTurningSpeed=" + std::to_string(nCarDodgeCarTurningSpeed) + "\n"
 		+ "nCarDodgeGameStartupCar=" + std::to_string(nCarDodgeGameStartupCar) + "\n"
 		+ "sCarDodgeGameplayColourFore=" + sCarDodgeGameplayColourFore + "\n"
-		+ "sCarDodgeGameplayColourBack=" + sCarDodgeGameplayColourBack + "\n\n";
+		+ "sCarDodgeGameplayColourBack=" + sCarDodgeGameplayColourBack + "\n\n"
+		
+		+ "# Guess The Number Game Settings\n#\n"
+		+ "sGTNGameplayColourFore=" + sGTNGameplayColourFore + "\n"
+		+ "sGTNGameplayColourBack=" + sGTNGameplayColourBack + "\n\n";
 
 	// Return config value to skip programming steps in some parts of config file system
 	return sConfigFileContents;
@@ -388,6 +392,14 @@ bool ConfigFileSystem::ReadConfigFile()
 		}
 		else if (sOptionBuffer == "sCarDodgeGameplayColourBack") {
 			sCarDodgeGameplayColourBack = sValueBuffer;
+		}
+
+		// Guess The Number Game Settings
+		else if (sOptionBuffer == "sGTNGameplayColourFore") {
+			sGTNGameplayColourFore = sValueBuffer;
+		}
+		else if (sOptionBuffer == "sGTNGameplayColourBack") {
+			sGTNGameplayColourBack = sValueBuffer;
 		}
 
 		// Integer Variables

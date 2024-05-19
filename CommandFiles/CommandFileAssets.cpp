@@ -220,7 +220,24 @@ void help(bool bFromTutorial) {
 	sneHelp.nSizeOfScreens = 4;
 	std::string sScreens[] =
 	{
-		"___LIST OF COMMANDS___\n\nTo see more about a command, type in \"<command> -h\". This will work for all commands, except: echo and title.\n\n[1] Help\n[2] Exit\n[3] Tutorial\n[4] Echo\n[5] CLS\n[6] DevTools\n[7] CPUStress\n[8] Colour\n[9] Settings\n[10] Title\n[11] Date\n[12] ColourNumbers\n[13] MediaPlayer\n[14] AudioPlayer\n[15] TTS\n[16] Stopwatch\n[17] Read\n[18] Timer\n[19] Beep\n[20] MessageBox\n[21] Copy\n[22] CopyFile\n[23] TextInfo\n[24] ConfigAction\n[25] BeepSounds\n[26] RickRoll\n[27] ShellExecute\n[28] Hacker\n[29] Calculator\n[30] Logoff\n[31] Shutdown\n[32] Reboot (or Restart)\n[33] Hibernate\n[34] ResetExpl\n[35] MemTest\n[36] RandCol\n[37] Pause\n[38] CommandNum\n[39] SlowChar\n[40] ReverseText\n[41] Notes\n[42] FileParse\n[43] Disp\n[44] SysInfo\n[45] Einstein\n[46] Edison\n[47] Tesla\n[48] Cow\n[49] Cat\n[50] Bunny\n[51] Game\n[52] FileCryptor\n[53] Delete\n\nMore will be added soon!\n",
+		"___LIST OF COMMANDS___\n\nTo see more info about a command, type in \"<command> -h\". This will work for all commands, except: echo and title.\n\n"
+		"[1] Help\t\t[16] Stopwatch\t\t[31] Shutdown\t\t[46] Edison\n"
+		"[2] Exit\t\t[17] Read\t\t[32] Reboot\t\t[47] Tesla\n"
+		"[3] Tutorial\t\t[18] Timer\t\t[33] Hibernate\t\t[48] Cow\n"
+		"[4] Echo\t\t[19] Beep\t\t[34] ResetExpl\t\t[49] Cat\n"
+		"[5] CLS\t\t\t[20] MessageBox\t\t[35] MemTest\t\t[50] Bunny\n"
+		"[6] DevTools\t\t[21] Copy\t\t[36] RandCol\t\t[51] Game\n"
+		"[7] CPUStress\t\t[22] CopyFile\t\t[37] Pause\t\t[52] FileCryptor\n"
+		"[8] Colour\t\t[23] TextInfo\t\t[38] CommandNum\t\t[53] Delete\n"
+		"[9] Settings\t\t[24] ConfigAction\t[39] SlowChar\t\t[54] Factorial\n"
+		"[10] Title\t\t[25] BeepSounds\t\t[40] ReverseText\t[55] CalcQuadratic\n"
+		"[11] Date\t\t[26] RickRoll\t\t[41] Notes\t\t[56] Y2038\n"
+		"[12] ColourNumbers\t[27] ShellExecute\t[42] FileParse\n"
+		"[13] MediaPlayer\t[28] Hacker\t\t[43] Disp\n"
+		"[14] AudioPlayer\t[29] Calculator\t\t[44] SysInfo\n"
+		"[15] TTS\t\t[30] Logoff\t\t[45] Einstein\n"
+
+		"\nMore will be added soon!\n",
 
 		"___FREQUENTLY ASKED QUESTIONS___\n\n"
 		"1) I can't see the terminal text. How can I zoom in?\n  1a) You can zoom in, of course. Press and hold the Ctrl button and scroll with the mouse to your desired text size.\n"
@@ -228,11 +245,11 @@ void help(bool bFromTutorial) {
 		"\n\n3) I'm using the Windows 7 terminal. How do I scroll up and down in the terminal without using the mouse?\n  3a) To scroll up and down without the mouse, press Alt + Space and then the keys 'E' and 'L', and then scroll with the up/down arrow keys. Use the PageUp/PageDown keys to scroll full pages in the terminal.\n"
 		"\n\n4) What is the difference between the 'old' and 'new' OptionSelect Session styles?\n  4a) The 'old' style is an inspiration from the TerminalAppGen2, the previous iteration of this program. It is very robust, simple and works by associating a number with each option, which you type in and press ENTER to select.\nThe 'new' style isn't exactly new, and has been in ZeeTerminal since v0.1.0. However, it is newer than the 'old' style, hence it's referred to as 'new'. It relies on using the arrow/WS keys to move a highlight up and down, to select an option.\n",
 
-		"___ABOUT THIS PROGRAM___\n\nThis is the ZeeTerminal Commandline Program, Build " + std::string(ZT_VERSION) + ".\n" +
-		"This is an early alpha build of ZeeTerminal, with an entirely new engine and components.\nThis program is made in C++, with a few very small parts of C." +
-		"\n\nThis program uses the DirectShow API in the MediaPlayer command, which is licensed by Microsoft Corporation. (c) Microsoft Corporation.\n\n" +
-		"This program uses the BASS API in the AudioPlayer command, which is licensed by Un4Seen Developments. (c) Un4Seen Developments.\n\n" +
-		"This program uses a slightly modified version of the CarDodge game v0.5.1, accessible in the Game command. CarDodge is licensed under Ryan Zorkot with the MIT License. For more information, visit the repository: https://github.com/rforzachamp821/CarDodge\n\n"
+		"___ABOUT THIS PROGRAM___\n\nThis is the ZeeTerminal Commandline Program, Build v" + std::string(ZT_VERSION) + ".\n" +
+		"This is a beta build of ZeeTerminal, with an entirely new engine and components.\nThis program is made in C++, with a few very small parts of C." +
+		"\n\nThis program uses the DirectShow API in the MediaPlayer command, licensed by Microsoft Corp. (c) Microsoft Corp.\n\n" +
+		"This program uses the BASS API in the AudioPlayer command, licensed by Un4Seen Developments. (c) Un4Seen Developments.\n\n" +
+		"This program uses the CarDodge game v0.6.0, accessible in the Game command. CarDodge is licensed under Ryan Zorkot with the MIT License. For more information, visit the archived repo: https://github.com/rforzachamp821/CarDodge\n\n"
 		"\nZeeTerminal is licensed under the MIT License. The license and credits can be viewed on Page 4.\n\n"
 		"  _____        _____                   _             _ \n"
 		" |__  /___  __|_   _|__ _ __ _ __ ___ (_)_ __   __ _| |\n"
@@ -2680,6 +2697,59 @@ std::string FormatValueForEuropeanNotation(long double dValue) {
 
 	// Return string from stringstream
 	return sFormatBuffer;
+}
+
+// GetNumPrimeFactorsAsString - Get the prime factors of a specified integer argument and return them as a string in this format: "<n>, <n>, <n>"...
+// Parameters: nNumToUse - The number to calculate the prime factors of.
+// Return Values: std::string containing the prime factors of nNumToUse, as a string.
+//
+std::string GetNumPrimeFactorsAsString(uint64_t nNumToUse) {
+	std::string sPrimeFactorStr = "";
+
+	// Repeat until square root of nNumToUse
+	for (uint64_t i = 2; i * i <= nNumToUse; ++i) {
+
+		// Check if divisible by i
+		while (nNumToUse % i == 0) {
+			// Add prime factor to string with space
+			sPrimeFactorStr += std::to_string(i) + ", ";
+			// Divide by i to move on to next prime factor
+			nNumToUse /= i;
+		}
+	}
+
+	// nNumToUse has been divided all the way, do not forget about it
+	if (nNumToUse > 1) {
+		// Add prime factor to string with space
+		sPrimeFactorStr += std::to_string(nNumToUse) + ", ";
+	}
+
+	// There should be an unnecessary extra ", " at the end of the string - remove it
+	sPrimeFactorStr.erase(sPrimeFactorStr.length() - 2, 2);
+
+	// Return string
+	return sPrimeFactorStr;
+}
+
+// GetNumFactorsAsString - Get the factors of a specified integer argument and return it as a string in this format: "<n>, <n>, <n>"...
+// Parameters: nNumToUse - The number to calculate the factors of.
+// Return Values: std::string containing the factors of nNumToUse, as a string.
+//
+std::string GetNumFactorsAsString(uint64_t nNumToUse) {
+	std::string sFactorsStr = "";
+
+	// Iterate until number with increment of 1 (brute-force technique)
+	for (uint64_t i = 1; i <= nNumToUse; i++) {
+		if (nNumToUse % i == 0) {
+			// Add number to string
+			sFactorsStr += std::to_string(i) + ", ";
+		}
+	}
+
+	// There should be an unnecessary extra ", " at the end of the string - remove it
+	sFactorsStr.erase(sFactorsStr.length() - 2, 2);
+
+	return sFactorsStr;
 }
 
 /* MessageBox Codes */

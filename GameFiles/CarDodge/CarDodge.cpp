@@ -15,7 +15,6 @@ bool VerifyIfGameIsRunnable(bool, bool);
 extern CarInfo EnemyCars[128];
 extern CarInfo UserCar;
 extern const int nEnemyCarArraySize;
-CarStyles Style;
 
 // Menu colours
 std::string sMenuColourFore = LWHT;
@@ -32,28 +31,28 @@ void InitialiseCarDodge()
 
 	// Initialise EnemyCars array
 	for (int i = 0; i < nEnemyCarArraySize; i++) {
-		EnemyCars[i].CarStyle = Style.EnemyCar;
+		EnemyCars[i].CarStyle = CarStyles::EnemyCar;
 	}
 
 	// Initialise user car style to what configuration object indicates
 	switch (ConfigObjMain.nCarDodgeGameStartupCar) {
 	case 1:
-		UserCar.CarStyle = Style.UserCarDefault;
+		UserCar.CarStyle = CarStyles::UserCarDefault;
 		break;
 	case 2:
-		UserCar.CarStyle = Style.HoverRocket;
+		UserCar.CarStyle = CarStyles::HoverRocket;
 		break;
 	case 3:
-		UserCar.CarStyle = Style.TheSweeper;
+		UserCar.CarStyle = CarStyles::TheSweeper;
 		break;
 	case 4:
-		UserCar.CarStyle = Style.TheSlicer;
+		UserCar.CarStyle = CarStyles::TheSlicer;
 		break;
 	case 5:
-		UserCar.CarStyle = Style.GTSpeed;
+		UserCar.CarStyle = CarStyles::GTSpeed;
 		break;
 	case 6:
-		UserCar.CarStyle = Style.XtraAero;
+		UserCar.CarStyle = CarStyles::XtraAero;
 		break;
 	}
 
@@ -128,8 +127,8 @@ inline void RenderMainMenuCars() {
 	nDirectionsTextRightColumn = nScreenCentre + 27; // 27 is half of 54
 
 	// Set car styles
-	ciMainMenuUserCar.CarStyle = Style.UserCarDefault;
-	ciMainMenuEnemyCar.CarStyle = Style.EnemyCar;
+	ciMainMenuUserCar.CarStyle = CarStyles::UserCarDefault;
+	ciMainMenuEnemyCar.CarStyle = CarStyles::EnemyCar;
 
 	// Set up left side of main menu
 	ciMainMenuUserCar.bottomLeft = { short(nDirectionsTextLeftColumn - 10), 14 };
@@ -142,7 +141,7 @@ inline void RenderMainMenuCars() {
 
 	// Set up right side of main menu
 	ciMainMenuUserCar.bottomLeft = { short(nDirectionsTextRightColumn + 6), 14 };
-	ciMainMenuUserCar.CarStyle = Style.XtraAero;
+	ciMainMenuUserCar.CarStyle = CarStyles::XtraAero;
 
 	ciMainMenuEnemyCar.bottomLeft = { short(nDirectionsTextRightColumn + 11), 11 };
 

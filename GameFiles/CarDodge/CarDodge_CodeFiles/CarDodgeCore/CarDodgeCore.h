@@ -29,7 +29,6 @@ private:
 	short int nNumOfCurrentRenderedEnemyCars = 0; // Symbolises the number of rendered enemy cars currently being rendered on screen
 	std::mt19937_64 RandEngine; // Random number generation engine
 	bool bCarDodgeCoreInitialised = false; // Indicator to show if game is initialised or not
-
 	bool bSyncWithStdioPrevious = true; // Previous stdio sync value
 
 	// Keys for encryption and decryption for High Scores (This is just a small game - there is no need to go balls-to-the-wall with encrypting hardcoded keys)
@@ -54,6 +53,7 @@ protected:
 
 	uint64_t nCurrentPointsHighScore = 0;
 
+	short int nChanceForPowerUpCarMultiplier = 1; // 1 for 1x chance, 2 for 2x chance, 3 for 3x chance, etc.
 
 	// UninitialiseCarDodgeCore - Uninitialise the CarDodge Core.
 	// No parameters or return values.
@@ -102,6 +102,9 @@ protected:
 	// MoveAllEnemyCars
 	void MoveAllEnemyCars();
 
+	// DeleteEnemyCarAndResetSafely
+	void DeleteEnemyCarAndResetSafely(int nEnemyCarArrayIndex);
+
 	// DeleteEnemyCarOnLowerBorderHit
 	// Return Values: TRUE or 1 for enemy car deleted, FALSE or 0 for no enemy car deleted.
 	bool DeleteEnemyCarOnLowerBorderHit();
@@ -110,7 +113,7 @@ protected:
 	// Parameters: None
 	// Return values: TRUE or 1 for collision occured, FALSE or 0 for no collision occured.
 	//
-	bool CheckForCarCollision();
+	bool CheckForCarCollision(int* nEnemyCarIteratorValOut = nullptr);
 
 	// CentreTextCarDodge - The CentreText() function, but tuned to centre text between the left and right game borders.
 	//                    - The text is centred using spaces, and then returned as an updated string.
