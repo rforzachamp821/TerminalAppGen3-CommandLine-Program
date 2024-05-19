@@ -28,6 +28,7 @@
 #include "CommandHelpMessages.cpp"
 #include "CalculationAlgorithm/CalculationAlgorithm.h"
 #include "../GameFiles/CarDodge/CarDodge.cpp"
+#include "../GameFiles/GuessTheNumber/GuessTheNumber.h"
 
 #include <vector>
 #include <string>

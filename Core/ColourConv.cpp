@@ -344,6 +344,14 @@ namespace zt {
 				ConfigObjMain.sCarDodgeGameplayColourBack = BLK_WIN32;
 				bSuccess = false;
 			}
+			if (not (isNumberi(ConfigObjMain.sGTNGameplayColourFore) && std::stoi(ConfigObjMain.sGTNGameplayColourFore) < 8192)) {
+				ConfigObjMain.sGTNGameplayColourFore = LWHT_WIN32;
+				bSuccess = false;
+			}
+			if (not (isNumberi(ConfigObjMain.sGTNGameplayColourBack) && std::stoi(ConfigObjMain.sGTNGameplayColourBack) < 8192)) {
+				ConfigObjMain.sGTNGameplayColourBack = CYN_WIN32;
+				bSuccess = false;
+			}
 
 			return bSuccess;
 		}
@@ -437,6 +445,14 @@ namespace zt {
 			}
 			if (!VerifyANSIColourString(ConfigObjMain.sCarDodgeGameplayColourBack)) {
 				ConfigObjMain.sCarDodgeGameplayColourBack = BLK_ANSI;
+				bSuccess = false;
+			}
+			if (!VerifyANSIColourString(ConfigObjMain.sGTNGameplayColourFore)) {
+				ConfigObjMain.sGTNGameplayColourFore = LWHT_ANSI;
+				bSuccess = false;
+			}
+			if (!VerifyANSIColourString(ConfigObjMain.sGTNGameplayColourBack)) {
+				ConfigObjMain.sGTNGameplayColourBack = CYN_ANSI;
 				bSuccess = false;
 			}
 

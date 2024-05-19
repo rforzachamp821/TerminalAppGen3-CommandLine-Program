@@ -178,8 +178,10 @@ namespace helpmsgs
 			<< wordWrap("\n --newoptionselect <toggle>\tUse the new OptionSelect Engine style. Set either true/t or false/f in place of <toggle>.")
 			<< wordWrap("\n --cdcarturnspeed <speed>\tSet the car turning speed in the CarDodge game. Cannot be >10 and <1. Put the speed in place of <speed>.")
 			<< wordWrap("\n --cdstartupcar <car>\t\tToggle the type of car auto-selected on startup in the CarDodge game. Put the car style in place of <style>.")
-			<< wordWrap("\n --cdforeground <num>\tSet the foreground colour in the CarDodge game. Put the colour number in place of <num>.")
-			<< wordWrap("\n --cdbackground <num>\tSet the background colour in the CarDodge game. Put the colour number in place of <num>.")
+			<< wordWrap("\n --cdforeground <num>\t\tSet the foreground colour in the CarDodge game. Put the colour number in place of <num>.")
+			<< wordWrap("\n --cdbackground <num>\t\tSet the background colour in the CarDodge game. Put the colour number in place of <num>.")
+			<< wordWrap("\n --gtnforeground <num>\t\tSet the foreground colour in the Guess The Number game. Put the colour number in place of <num>.")
+			<< wordWrap("\n --gtnbackground <num>\t\tSet the background colour in the Guess The Number game. Put the colour number in place of <num>.")
 			<< wordWrap("\n\nExample: settings --titlefore 1")
 			<< wordWrap("\n\nNote: You can get colour numbers by executing the \"ColourNumbers\" command.") << "\n\n";
 
@@ -1036,7 +1038,8 @@ namespace helpmsgs
 		colourSubheading();
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n --cardodge\tStarts the CarDodge game, a game where you dodge enemy cars to gain points.\n\n"
+		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n --cardodge\tStarts the CarDodge game, a game where you dodge enemy cars to gain points.\n"
+			" --gtn\t\tStarts the Guess The Number game, a game where you guess a number between 1 and 100 in as little tries as you can.\n\n"
 			"Example: game --cardodge\n\n");
 
 		return;
@@ -1081,6 +1084,70 @@ namespace helpmsgs
 		std::cout << wordWrap("\n -h\tDisplays this help message.\n <path>\tPath to the file or folder. Put path in place of <path>.\n\n"
 			"Example: delete \"C:\\Users\\Public\\A Random File.txt\"\n\nNOTE: Please use quotes like the example for any directories containing spaces.\n"
 			"NOTE: In place of <path>, you can type in \"*open\" for Windows File Dialogue, or \"*openfolder\" for Windows Folder Dialogue.\n\n");
+
+		return;
+	}
+
+	// FactorialHelp
+	void FactorialHelp() {
+		CentreColouredText(" ___FACTORIAL___ ", 1);
+		std::cout << "\n";
+		CentreColouredText("This command calculates the factors and prime factors of a positive integer.", 2);
+		std::cout << "\n\n";
+
+		colourSubheading();
+		std::cout << "What this command does:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n- This command simply calculates the prime factors and factors of a positive integer.\n- The results are displayed on the terminal screen.\n\n");
+
+		colourSubheading();
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n -h\tDisplays this help message.\n <num>\tFactorise a number from an argument parameter. Put the number in place of <num>.\n\nExample: factorial 45\n\n");
+
+		return;
+	}
+
+	// CalcQuadraticHelp
+	void CalcQuadraticHelp() {
+		CentreColouredText(" ___CALCQUADRATIC___ ", 1);
+		std::cout << "\n";
+		CentreColouredText("CalcQuadratic allows you to compute all values of a quadratic equation quickly and easily.", 2);
+		std::cout << "\n\n";
+
+		colourSubheading();
+		std::cout << "What this command does:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n- This command calculates all the values of a quadratic mathematical equation quickly and easily.\n- All the command needs is the A, B and C values, from this quadratic equation form: [ax^2 + bx + c = 0].\n\n");
+
+		colourSubheading();
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n <a> <b> <c>\tCompute values of quadratic equation from arguments. Put A, B and C values in place of <a>, <b> and <c> respectively.\n\n"
+			"Example: calcquadratic 1 9 18\n\nNOTE: The A, B and C arguments must be numerical for the calculator to work.\n\n");
+
+		return;
+	}
+
+	// Y2038Help
+	void Y2038Help() {
+		CentreColouredText(" ___Y2038___ ", 1);
+		std::cout << "\n";
+		CentreColouredText("This command displays how long is left until the Y2038 time overflow occurs.", 2);
+		std::cout << "\n\n";
+
+		colourSubheading();
+		std::cout << "What this command does:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n- This command displays how long is left until the Y2038 time overflow occurs (aka the Y2038 problem, Y2K38).\n- This bug occurs because there are simply too many seconds to fit into a 32-bit integer. Therefore, it affects all 32-bit systems."
+			"\n- You can find out more about this phenomenon on the Wikipedia page: ");
+		colour(LBLU, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("https://en.wikipedia.org/wiki/Year_2038_problem\n\n");
+
+		colourSubheading();
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n -h\tDisplays this help message.\n\nExample: y2038 -h\n\n");
 
 		return;
 	}

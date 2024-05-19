@@ -160,10 +160,12 @@
     <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.cpp" />
     <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.cpp" />
     <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarInfo\CarInfo.cpp" />
+    <ClCompile Include="GameFiles\GuessTheNumber\GuessTheNumber.cpp" />
     <ClCompile Include="ZeeTerminal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommandFiles\CalculationAlgorithm\CalculationAlgorithm.h" />
+    <ClInclude Include="CommandFiles\CommandsFiles\Commands.h" />
     <ClInclude Include="Core\ZeeTerminalCore.h" />
     <ClInclude Include="Core\ZTConstDefinitions.h" />
     <ClInclude Include="Core\ZTFormattingDefinitions.h" />
@@ -183,6 +185,7 @@
     <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.h" />
     <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.h" />
     <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarInfo\CarInfo.h" />
+    <ClInclude Include="GameFiles\GuessTheNumber\GuessTheNumber.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="RyRyCryptor\RyRyCryptor.h" />
   </ItemGroup>

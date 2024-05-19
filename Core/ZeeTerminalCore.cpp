@@ -422,7 +422,7 @@ namespace zt {
 		std::cout << std::string(nBoxWidth, '=');
 
 		std::cout << '\n';
-		colour(sColourTextFore, sColourTextBack);
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 		return;
 	}

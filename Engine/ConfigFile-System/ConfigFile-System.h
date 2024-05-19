@@ -56,6 +56,10 @@ public:
 	std::string sCarDodgeGameplayColourFore = LWHT; // Only affects car colours
 	std::string sCarDodgeGameplayColourBack = BLK; // Only affects game background colour, borders aren't affected
 
+	// Guess The Number Game Settings
+	std::string sGTNGameplayColourFore = LWHT;
+	std::string sGTNGameplayColourBack = CYN;
+
 	long long int nSlowCharSpeed = 32;
 	long long int nCursorShape = 5; // TYPES are: block blinking (1), block steady (2), underline blinking (3), underline steady (4), bar blinking (5), bar steady (6)
 

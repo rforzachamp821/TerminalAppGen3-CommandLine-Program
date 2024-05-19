@@ -229,9 +229,9 @@ void help(bool bFromTutorial) {
 		"[6] DevTools\t\t[21] Copy\t\t[36] RandCol\t\t[51] Game\n"
 		"[7] CPUStress\t\t[22] CopyFile\t\t[37] Pause\t\t[52] FileCryptor\n"
 		"[8] Colour\t\t[23] TextInfo\t\t[38] CommandNum\t\t[53] Delete\n"
-		"[9] Settings\t\t[24] ConfigAction\t[39] SlowChar\n"
-		"[10] Title\t\t[25] BeepSounds\t\t[40] ReverseText\n"
-		"[11] Date\t\t[26] RickRoll\t\t[41] Notes\n"
+		"[9] Settings\t\t[24] ConfigAction\t[39] SlowChar\t\t[54] Factorial\n"
+		"[10] Title\t\t[25] BeepSounds\t\t[40] ReverseText\t[55] CalcQuadratic\n"
+		"[11] Date\t\t[26] RickRoll\t\t[41] Notes\t\t[56] Y2038\n"
 		"[12] ColourNumbers\t[27] ShellExecute\t[42] FileParse\n"
 		"[13] MediaPlayer\t[28] Hacker\t\t[43] Disp\n"
 		"[14] AudioPlayer\t[29] Calculator\t\t[44] SysInfo\n"
@@ -2697,6 +2697,59 @@ std::string FormatValueForEuropeanNotation(long double dValue) {
 
 	// Return string from stringstream
 	return sFormatBuffer;
+}
+
+// GetNumPrimeFactorsAsString - Get the prime factors of a specified integer argument and return them as a string in this format: "<n>, <n>, <n>"...
+// Parameters: nNumToUse - The number to calculate the prime factors of.
+// Return Values: std::string containing the prime factors of nNumToUse, as a string.
+//
+std::string GetNumPrimeFactorsAsString(uint64_t nNumToUse) {
+	std::string sPrimeFactorStr = "";
+
+	// Repeat until square root of nNumToUse
+	for (uint64_t i = 2; i * i <= nNumToUse; ++i) {
+
+		// Check if divisible by i
+		while (nNumToUse % i == 0) {
+			// Add prime factor to string with space
+			sPrimeFactorStr += std::to_string(i) + ", ";
+			// Divide by i to move on to next prime factor
+			nNumToUse /= i;
+		}
+	}
+
+	// nNumToUse has been divided all the way, do not forget about it
+	if (nNumToUse > 1) {
+		// Add prime factor to string with space
+		sPrimeFactorStr += std::to_string(nNumToUse) + ", ";
+	}
+
+	// There should be an unnecessary extra ", " at the end of the string - remove it
+	sPrimeFactorStr.erase(sPrimeFactorStr.length() - 2, 2);
+
+	// Return string
+	return sPrimeFactorStr;
+}
+
+// GetNumFactorsAsString - Get the factors of a specified integer argument and return it as a string in this format: "<n>, <n>, <n>"...
+// Parameters: nNumToUse - The number to calculate the factors of.
+// Return Values: std::string containing the factors of nNumToUse, as a string.
+//
+std::string GetNumFactorsAsString(uint64_t nNumToUse) {
+	std::string sFactorsStr = "";
+
+	// Iterate until number with increment of 1 (brute-force technique)
+	for (uint64_t i = 1; i <= nNumToUse; i++) {
+		if (nNumToUse % i == 0) {
+			// Add number to string
+			sFactorsStr += std::to_string(i) + ", ";
+		}
+	}
+
+	// There should be an unnecessary extra ", " at the end of the string - remove it
+	sFactorsStr.erase(sFactorsStr.length() - 2, 2);
+
+	return sFactorsStr;
 }
 
 /* MessageBox Codes */
