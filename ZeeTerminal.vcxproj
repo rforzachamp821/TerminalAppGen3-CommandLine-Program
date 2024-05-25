@@ -160,6 +160,8 @@
     <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.cpp" />
     <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.cpp" />
     <ClCompile Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarInfo\CarInfo.cpp" />
+    <ClCompile Include="GameFiles\GameHighScoresSystem\GameHighScoresSystem.cpp" />
+    <ClCompile Include="GameFiles\GuessTheNumberExtreme\GuessTheNumberExtreme.cpp" />
     <ClCompile Include="GameFiles\GuessTheNumber\GuessTheNumber.cpp" />
     <ClCompile Include="ZeeTerminal.cpp" />
   </ItemGroup>
@@ -185,6 +187,8 @@
     <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeCore\CarDodgeCore.h" />
     <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarDodgeMain\CarDodgeMain.h" />
     <ClInclude Include="GameFiles\CarDodge\CarDodge_CodeFiles\CarInfo\CarInfo.h" />
+    <ClInclude Include="GameFiles\GameHighScoresSystem\GameHighScoresSystem.h" />
+    <ClInclude Include="GameFiles\GuessTheNumberExtreme\GuessTheNumberExtreme.h" />
     <ClInclude Include="GameFiles\GuessTheNumber\GuessTheNumber.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="RyRyCryptor\RyRyCryptor.h" />

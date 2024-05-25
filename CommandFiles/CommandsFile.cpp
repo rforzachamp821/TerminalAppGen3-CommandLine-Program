@@ -29,6 +29,7 @@
 #include "CalculationAlgorithm/CalculationAlgorithm.h"
 #include "../GameFiles/CarDodge/CarDodge.cpp"
 #include "../GameFiles/GuessTheNumber/GuessTheNumber.h"
+#include "../GameFiles/GuessTheNumberExtreme/GuessTheNumberExtreme.h"
 
 #include <vector>
 #include <string>

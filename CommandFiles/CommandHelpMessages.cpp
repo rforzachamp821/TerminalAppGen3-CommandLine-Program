@@ -182,6 +182,8 @@ namespace helpmsgs
 			<< wordWrap("\n --cdbackground <num>\t\tSet the background colour in the CarDodge game. Put the colour number in place of <num>.")
 			<< wordWrap("\n --gtnforeground <num>\t\tSet the foreground colour in the Guess The Number game. Put the colour number in place of <num>.")
 			<< wordWrap("\n --gtnbackground <num>\t\tSet the background colour in the Guess The Number game. Put the colour number in place of <num>.")
+			<< wordWrap("\n --gtneforeground <num>\t\tSet the foreground colour in the Guess The Number Extreme game. Put the colour number in place of <num>.")
+			<< wordWrap("\n --gtnebackground <num>\t\tSet the background colour in the Guess The Number Extreme game. Put the colour number in place of <num>.")
 			<< wordWrap("\n\nExample: settings --titlefore 1")
 			<< wordWrap("\n\nNote: You can get colour numbers by executing the \"ColourNumbers\" command.") << "\n\n";
 
@@ -1039,7 +1041,8 @@ namespace helpmsgs
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n --cardodge\tStarts the CarDodge game, a game where you dodge enemy cars to gain points.\n"
-			" --gtn\t\tStarts the Guess The Number game, a game where you guess a number between 1 and 100 in as little tries as you can.\n\n"
+			" --gtn\t\tStarts the Guess The Number game, a game where you guess a number between 1 and 100 in as little tries as you can.\n"
+			" --gtne\t\tStarts the Guess The Number Extreme game, a game where you guess a number between 2 random numbers in under 5 tries, fighting for the highest score.\n\n"
 			"Example: game --cardodge\n\n");
 
 		return;

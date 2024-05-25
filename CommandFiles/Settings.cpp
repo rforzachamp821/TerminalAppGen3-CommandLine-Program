@@ -1282,6 +1282,79 @@ void GuessTheNumberGameSettings(short int nChoiceMain = 0, int nChoiceGameForegr
 	}
 }
 
+// Guess The Number Extreme Game Settings
+void GuessTheNumberExtremeGameSettings(short int nChoiceMain = 0, int nChoiceGameForeground = 0, int nChoiceGameBackground = 0) {
+	OptionSelectEngine oseGTNSettings;
+
+	if (nChoiceMain == 0) {
+		oseGTNSettings.nSizeOfOptions = 2;
+		std::string sOptions[] = {
+			"Game Foreground Colour",
+			"Game Background Colour"
+		};
+		oseGTNSettings.sOptions = sOptions;
+		nChoiceMain = oseGTNSettings.OptionSelect("Please select which setting you want to change relating to the Guess The Number Extreme game:", " ___GUESS THE NUMBER GAME SETTINGS___ ");
+	}
+
+
+	if (nChoiceMain == 1) {
+		if (nChoiceGameForeground == 0) {
+			oseGTNSettings.nSizeOfOptions = 16;
+			oseGTNSettings.sOptions = sOptionsColour;
+
+			nChoiceGameForeground = oseGTNSettings.OptionSelect("Please select what foreground colour you want Guess The Number Extreme to use (affects whole game):"
+				"\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sGTNEGameplayColourFore) + ")", " ___GAME FOREGROUND COLOUR SETTINGS___ ");
+		}
+
+		// Exit on command
+		if (nChoiceGameForeground == -1) {
+			Exiting();
+			return;
+		}
+
+		ColourForegroundSwitch(&nChoiceGameForeground, &ConfigObjMain.sGTNEGameplayColourBack, &ConfigObjMain.sGTNEGameplayColourFore);
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << CentreText("Guess The Number Extreme game foreground colour successfully set!") << std::endl;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		return;
+	}
+	else if (nChoiceMain == 2) {
+		if (nChoiceGameBackground == 0) {
+			oseGTNSettings.nSizeOfOptions = 16;
+			oseGTNSettings.sOptions = sOptionsColour;
+
+			nChoiceGameBackground = oseGTNSettings.OptionSelect("Please select what background colour you want Guess The Number Extreme to use (affects whole game):"
+				"\n(Currently set to: " + colconv::ColourToLogicalDisplayName(ConfigObjMain.sGTNEGameplayColourBack) + ")", " ___GAME BACKGROUND COLOUR SETTINGS___ ");
+		}
+
+		// Exit on command
+		if (nChoiceGameBackground == -1) {
+			Exiting();
+			return;
+		}
+
+		ColourBackgroundSwitch(&nChoiceGameBackground, &ConfigObjMain.sGTNEGameplayColourBack, &ConfigObjMain.sGTNEGameplayColourFore);
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << CentreText("Guess The Number Extreme game background colour successfully set!") << std::endl;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		return;
+	}
+	else if (nChoiceMain == -1) {
+		Exiting();
+		return;
+	}
+	else {
+		VerbosityDisplay("In GuessTheNumberExtremeGameSettings() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+		UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
+
+		return;
+	}
+}
+
 void OtherSettings(short int nChoice = 0, long long int nChoiceSlowChSpeed = 0, bool bFromArg = false , short int nChoiceRandColStartup = 0, short int nTermCustomThemeSupport = 0, short int nReadableContrast = 0, std::string sTempConfigFileDir = "", short int nChoiceNewOptionSelect = 0) {
 
 	// Standard interface

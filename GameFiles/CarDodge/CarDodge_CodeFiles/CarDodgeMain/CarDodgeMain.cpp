@@ -7,6 +7,7 @@
 #include "../../../../Engine/OptionSelectEngine/OptionSelectEngine.h"
 #include "../CarDodgeCore/CarDodgeCore.h"
 #include "../CarInfo/CarInfo.h"
+#include "../../GameFiles/GameHighScoresSystem/GameHighScoresSystem.h"
 #include <conio.h>
 
 extern short int nSessionConsoleHeight;
@@ -158,7 +159,8 @@ bool CarDodgeMain::DisplayUserLossScreen() {
 
 	// Set high score and update high score file immediately
 	SetHighScore(nSessionPoints);
-	UpdateHighScoreInFile();
+	GameHighScoresSystem::SetCarDodgeHighScore(nCurrentPointsHighScore);
+	GameHighScoresSystem::UpdateHighScoreFile();
 
 	while (true) {
 		char cInput = _getch();
@@ -730,7 +732,8 @@ void CarDodgeMain::CarDodgeMainGame()
 		SetHighScore(nSessionPoints);
 		// Update the high score in the High Score file
 		ConfigObjMain.bShowCursor = bShowCursorPrevious;
-		UpdateHighScoreInFile();
+		GameHighScoresSystem::SetCarDodgeHighScore(nCurrentPointsHighScore);
+		GameHighScoresSystem::UpdateHighScoreFile();
 		DisableCursorVisibility();
 
 		// Reset the game before leaving or before restart, in case object is not discarded
@@ -925,7 +928,9 @@ void CarDodgeMain::CarDodgeInstructions() {
 
 // CarDodgeHighScore
 void CarDodgeMain::CarDodgeHighScore() {
-	UpdateHighScoreFromFile(); // Make sure the high score is updated before outputting
+	// Make sure the high score is updated before outputting
+	GameHighScoresSystem::UpdateHighScoreVariables();
+	SetHighScore(GameHighScoresSystem::GetCarDodgeHighScore());
 
 	// Output title
 	std::cout << "\n";

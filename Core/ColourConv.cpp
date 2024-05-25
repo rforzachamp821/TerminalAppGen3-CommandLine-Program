@@ -352,6 +352,14 @@ namespace zt {
 				ConfigObjMain.sGTNGameplayColourBack = CYN_WIN32;
 				bSuccess = false;
 			}
+			if (not (isNumberi(ConfigObjMain.sGTNEGameplayColourFore) && std::stoi(ConfigObjMain.sGTNEGameplayColourFore) < 8192)) {
+				ConfigObjMain.sGTNEGameplayColourFore = LWHT_WIN32;
+				bSuccess = false;
+			}
+			if (not (isNumberi(ConfigObjMain.sGTNEGameplayColourBack) && std::stoi(ConfigObjMain.sGTNEGameplayColourBack) < 8192)) {
+				ConfigObjMain.sGTNEGameplayColourBack = GRN_WIN32;
+				bSuccess = false;
+			}
 
 			return bSuccess;
 		}
@@ -453,6 +461,14 @@ namespace zt {
 			}
 			if (!VerifyANSIColourString(ConfigObjMain.sGTNGameplayColourBack)) {
 				ConfigObjMain.sGTNGameplayColourBack = CYN_ANSI;
+				bSuccess = false;
+			}
+			if (!VerifyANSIColourString(ConfigObjMain.sGTNEGameplayColourFore)) {
+				ConfigObjMain.sGTNEGameplayColourFore = LWHT_ANSI;
+				bSuccess = false;
+			}
+			if (!VerifyANSIColourString(ConfigObjMain.sGTNEGameplayColourBack)) {
+				ConfigObjMain.sGTNEGameplayColourBack = GRN_ANSI;
 				bSuccess = false;
 			}
 

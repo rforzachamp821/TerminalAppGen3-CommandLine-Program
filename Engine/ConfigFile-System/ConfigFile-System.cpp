@@ -73,7 +73,11 @@ std::string ConfigFileSystem::UpdateConfigContents()
 		
 		+ "# Guess The Number Game Settings\n#\n"
 		+ "sGTNGameplayColourFore=" + sGTNGameplayColourFore + "\n"
-		+ "sGTNGameplayColourBack=" + sGTNGameplayColourBack + "\n\n";
+		+ "sGTNGameplayColourBack=" + sGTNGameplayColourBack + "\n\n"
+		
+		+ "# Guess The Number Extreme Game Settings\n#\n"
+		+ "sGTNEGameplayColourFore=" + sGTNEGameplayColourFore + "\n"
+		+ "sGTNEGameplayColourBack=" + sGTNEGameplayColourBack + "\n\n";
 
 	// Return config value to skip programming steps in some parts of config file system
 	return sConfigFileContents;
@@ -400,6 +404,14 @@ bool ConfigFileSystem::ReadConfigFile()
 		}
 		else if (sOptionBuffer == "sGTNGameplayColourBack") {
 			sGTNGameplayColourBack = sValueBuffer;
+		}
+
+		// Guess The Number Extreme Game Settings
+		else if (sOptionBuffer == "sGTNEGameplayColourFore") {
+			sGTNEGameplayColourFore = sValueBuffer;
+		}
+		else if (sOptionBuffer == "sGTNEGameplayColourBack") {
+			sGTNEGameplayColourBack = sValueBuffer;
 		}
 
 		// Integer Variables

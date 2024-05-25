@@ -32,17 +32,24 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 			else if (sStringOptionCommandArgs[i] == "gtn") {
 				// Start Guess The Number
 				GuessTheNumber GameLoader;
-				GameLoader.GuessTheNumber_GameMenu();
+				GameLoader.GuessTheNumber_MainMenu();
+				return true;
+			}
+			else if (sStringOptionCommandArgs[i] == "gtne") {
+				// Start Guess The Number Extreme
+				GuessTheNumberExtreme GameLoader;
+				GameLoader.GuessTheNumberExtreme_MainMenu();
 				return true;
 			}
 		}
 
 		// Standard user interface
 		OptionSelectEngine oseGame;
-		oseGame.nSizeOfOptions = 2;
+		oseGame.nSizeOfOptions = 3;
 		std::string sOptions[] = {
 			"Car Dodge",
-			"Guess The Number"
+			"Guess The Number",
+			"Guess The Number Extreme"
 		};
 		oseGame.sOptions = sOptions;
 		
@@ -58,7 +65,13 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 			else if (nInput == 2) {
 				// Start Guess The Number
 				GuessTheNumber GameLoader;
-				GameLoader.GuessTheNumber_GameMenu();
+				GameLoader.GuessTheNumber_MainMenu();
+			}
+
+			else if (nInput == 3) {
+				// Start Guess The Number Extreme
+				GuessTheNumberExtreme GameLoader;
+				GameLoader.GuessTheNumberExtreme_MainMenu();
 			}
 
 			// Exit
