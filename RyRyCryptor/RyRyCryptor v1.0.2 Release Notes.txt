@@ -1,0 +1,7 @@
+___RyRyCryptor v1.0.2 Release Notes___
+
+__New Features__
+- None
+
+__Changes and Bugfixes__
+- Compiled with new VS2022 version 17.10.1.

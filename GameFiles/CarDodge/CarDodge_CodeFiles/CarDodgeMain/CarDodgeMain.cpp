@@ -939,7 +939,7 @@ void CarDodgeMain::CarDodgeHighScore() {
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	std::cout << "\n\n\n";
-	OutputBoxWithText('\n' + std::string(33 + std::to_string(GetCurrentHighScore()).length(), ' ') + '\n', RED, YLW, BLK, ConfigObjMain.sColourGlobalBack, true);
+	OutputBoxWithText('\n' + std::string(34 + std::to_string(GetCurrentHighScore()).length(), ' ') + '\n', RED, YLW, BLK, ConfigObjMain.sColourGlobalBack, true);
 
 	// Set to same height as area of output in rendered box
 	CONSOLE_SCREEN_BUFFER_INFO csbiHighScore;
@@ -952,7 +952,7 @@ void CarDodgeMain::CarDodgeHighScore() {
 	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiHighScore);
 	SetCursorPosition(csbiHighScore.dwCursorPosition.X - std::to_string(GetCurrentHighScore()).length() - 2, csbiHighScore.dwCursorPosition.Y);
 	colour(BLU, ConfigObjMain.sColourGlobalBack);
-	slowcharfn(false, std::to_string(GetCurrentHighScore()) + "! ");
+	slowcharfn(false, std::to_string(GetCurrentHighScore()) + "!");
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	std::cout << "\n\n\n\n";

@@ -167,6 +167,9 @@
     <ClInclude Include="GameFiles\GameHighScoresSystem\GameHighScoresSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CommandFiles\PiConstant\PiConstant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ZeeTerminal.rc">

@@ -3,6 +3,7 @@
 //
 
 #include "Commands.h"
+#include "../PiConstant/PiConstant.h"
 
 // Undefine EncryptFile macro defined in Windows.h for FileCryptor command
 #ifdef EncryptFile
@@ -707,6 +708,172 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 		std::cout << nTimeUntilY2038Seconds;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap(" seconds.\n");
+
+		return true;
+	}
+
+	// PiOutput
+	else if (sCommand == "pioutput" || sCommand == "57") {
+		int nNumOfDPOutput = 0;
+
+		// Arguments Interface
+		for (int i = 0; i < nArgArraySize; i++) {
+			if (cCommandArgs[i] == 'h') {
+				helpmsgs::PiOutputHelp();
+				return true;
+			}
+			
+			if (sStringDataCommandArgs[i] != "") {
+				// Incorrect argument type
+				if (!isNumberi(sStringDataCommandArgs[i])) {
+					VerbosityDisplay("In CommandsFile51To60() - ERROR: Number argument (in the form of string) is invalid or out of range.\n");
+					UserErrorDisplay("ERROR - Your number argument seems to be incorrect. Make sure it is an integer, and try again later.\n");
+
+					return true;
+				}
+				// Argument check successful - Convert and check for size of number
+				else {
+					nNumOfDPOutput = std::stoi(sStringDataCommandArgs[i]);
+					if (nNumOfDPOutput < 1 || nNumOfDPOutput > 1000000) {
+						VerbosityDisplay("In CommandsFile51To60() - ERROR: Number argument is less than 1 or more than 1000000, which exceeds the allowed range for the PiOutput command.\n");
+						UserErrorDisplay("ERROR - Your number argument seems to be out of range of acceptable arguments of decimal places. Please ensure that the argument is not less than 1 or more than 1 million, and try again.\nSee \"pioutput -h\" for more info.\n");
+
+						return true;
+					}
+				}
+			}
+		}
+
+		// User Interface
+		if (nNumOfDPOutput == 0) {
+			CentreColouredText(" ___PIOUTPUT___ ", 1);
+
+			colour(CYN, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("\n\nThis command allows you to output Pi to any number of decimal places between 1 and 1 million.\n\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+			// Loop until desired input is given
+			while (true) 
+			{
+				// Prompt for decimal place input
+				nNumOfDPOutput = NumInputi("Please input the number of decimal places you want (min 1, max 1 million) (0 to exit): > ");
+
+				// Exiting
+				if (nNumOfDPOutput == 0) {
+					Exiting();
+					return true;
+				}
+
+				// Range check to ensure number is between 1 and 1 million
+				if (nNumOfDPOutput < 1 || nNumOfDPOutput > 1000000) {
+					UserErrorDisplay("ERROR: The number that has just been inputted is not in between 1 and 1 million. Please try again with a number that is within range.\n");
+					continue;
+				}
+				else break; // Start pi output
+			}
+		}
+
+		// Output
+		// 2 + nNumOfDPOutput to include the beginning "3." as it isn't part of the decimal places
+		std::cout << "\n" << ULINE_STR << wordWrap("Pi truncated to " + std::to_string(nNumOfDPOutput) + " decimal places:") << NOULINE_STR << "\n\n" << piconstant::sPiConstantString.substr(0, 2 + nNumOfDPOutput) << "\n\n";
+
+		// Output success message
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("Output successfully completed.\n");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		return true;
+	}
+
+	// Spam
+	else if (sCommand == "spam" || sCommand == "58") {
+		std::string sSpamString = "";
+
+		// Arguments Interface
+		for (int i = 0; i < nArgArraySize; i++) {
+			if (cCommandArgs[i] == 'h') {
+				helpmsgs::SpamHelp();
+				return true;
+			}
+
+			if (sStringDataCommandArgs[i] != "") {
+				sSpamString = sStringDataCommandArgs[i];
+			}
+		}
+
+		// User interface
+		if (sSpamString == "") {
+			CentreColouredText(" ___SPAM___ ", 1);
+			colour(CYN, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("\n\nThis command allows you to spam any string indefinitely, until the ESC keyboard key is pressed.\n\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+			// Prompt for string
+			sSpamString = StrInput("Please input your desired string to spam (0 to exit): > ");
+
+			// Exit on 0
+			if (sSpamString == "0") {
+				Exiting();
+				return true;
+			}
+		}
+
+		// Spam string with a whitespace character in between
+		std::cout << "\n";
+		while (true) {
+			if (_kbhit()) {
+				if (_getch() == 27) {
+					break;
+				}
+			}
+
+			std::cout << sSpamString << " ";
+		}
+
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n\nESC key pressed. Spam successful.\n");
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		return true;
+	}
+
+	// FAQ
+	else if (sCommand == "faq" || sCommand == "59") {
+		// Arguments Interface
+		for (int i = 0; i < nArgArraySize; i++) {
+			if (cCommandArgs[i] == 'h') {
+				helpmsgs::FAQHelp();
+				return true;
+			}
+		}
+
+		// Output title and subheading for FAQ QA output
+		CentreColouredText(" ___FAQ___ ", 1);
+		std::cout << "\n\n";
+		colourSubheading();
+		std::cout << "___Questions___" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		// Output questions and answers
+		std::cout << wordWrap("\n\n1) I can't see the terminal text. How can I zoom in?\n  1a) You can zoom in, of course. Press and hold the Ctrl button and scroll with the mouse to your desired text size.\n"
+			"\n\n2) The error messages shown aren't detailed enough. How do I get better-quality error messages?\n  2a) To get better quality error messages, just enable the Verbosity Messages setting in the Settings command.\n"
+			"\n\n3) I'm using the Windows 7 terminal. How do I scroll up and down in the terminal without using the mouse?\n  3a) To scroll up and down without the mouse, press Alt + Space and then the keys 'E' and 'L', and then scroll with the up/down arrow keys. Use the PageUp/PageDown keys to scroll full pages in the terminal.\n"
+			"\n\n4) What is the difference between the 'old' and 'new' OptionSelect Session styles?\n  4a) The 'old' style is an inspiration from the TerminalAppGen2, the previous iteration of this program. It is very robust, simple and works by associating a number with each option, which you type in and press ENTER to select.\nThe 'new' style isn't exactly new, and has been in ZeeTerminal since v0.1.0. However, it is newer than the 'old' style, hence it's referred to as 'new'. It relies on using the arrow/WS keys to move a highlight up and down, to select an option.\n\n");
+
+		return true;
+	}
+
+	// About
+	else if (sCommand == "about" || sCommand == "60") {
+		// Arguments Interface
+		for (int i = 0; i < nArgArraySize; i++) {
+			if (cCommandArgs[i] == 'h') {
+				helpmsgs::AboutHelp();
+				return true;
+			}
+		}
+
+		About(false);
 
 		return true;
 	}

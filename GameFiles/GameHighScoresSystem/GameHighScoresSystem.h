@@ -3,6 +3,8 @@
 // GameHighScoresSystem.h - Contains the interface [namespace] for the GameHighScores System.
 //
 #include <stdint.h>
+#include <string>
+#include "../../Core/ZeeTerminalCore.h"
 
 // GameHighScoresSystem - A system dedicated to managing the high scores for different games in ZeeTerminal.
 //
@@ -21,6 +23,27 @@ namespace GameHighScoresSystem {
 
 		// High score file name
 		char sHighScoreFileName[] = "GameHighScores.dat";
+
+		// isNumberUINT64 - A custom implementation of the isNumberull() ZeeTerminal function that skips any character-based checks and goes straight
+		//                  to exception handling of std::stoull.
+		//
+		bool isNumberUINT64(std::string sCandidate) {
+			// Check string validity as number
+			// Test if above stoll() range
+			try {
+				uint64_t nRangeTest = std::stoull(sCandidate);
+			}
+			catch (const std::out_of_range&) {
+				VerbosityDisplay("In isNumberull(): Exception caught - Number is too high/low (out of range).");
+				return false;
+			}
+			catch (const std::invalid_argument&) {
+				VerbosityDisplay("In isNumberull(): Exception caught - Argument cannot be converted whatsoever (invalid argument).");
+				return false;
+			}
+
+			return true;
+		}
 	}
 
 	// UpdateHighScoreVariables - Updates all high score variables in memory with those saved in the High Score file.

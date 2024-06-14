@@ -5,6 +5,49 @@
 #include <iomanip>
 #include <conio.h>
 
+// Function to handle +/- number input - int
+int OptionSelectEngine::OSENumInputi(std::string sPrompt, bool bCentrePromptText) {
+	int num;
+
+	// Add log line
+	if (bConfigAndLogSystemsInitialised && ConfigObjMain.bEnableLogging && ConfigObjMain.bUserInputInfoLogging) {
+		LogFileMain.AddLogLine("In NumInputi(): Input session begin with prompt: {" + sPrompt + "}.", 4);
+	}
+
+	while (true) {
+		// Centre prompt text if boolean says so
+		if (bCentrePromptText == true) {
+			CONSOLE_SCREEN_BUFFER_INFO csbiOptionSelect;
+			GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiOptionSelect);
+			MoveCursorToXCoord(((csbiOptionSelect.srWindow.Right - csbiOptionSelect.srWindow.Left) - sPrompt.length()) / 2);
+		}
+
+		std::cout << wordWrap(sPrompt);
+		colour(LYLW, ConfigObjMain.sColourGlobalBack);
+		std::cin >> num;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+		if (std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<int>::max(), '\n');
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cerr << wordWrap("Your input was incorrect, or the number inputted was too high/low. Please try again.\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			continue;
+		}
+		else {
+			std::cin.ignore(std::numeric_limits<int>::max(), '\n');
+			break;
+		}
+	}
+
+	// Add log line
+	if (bConfigAndLogSystemsInitialised && ConfigObjMain.bEnableLogging && ConfigObjMain.bUserInputInfoLogging) {
+		LogFileMain.AddLogLine("In NumInputi(): Input session end with return value: " + std::to_string(num) + ".", 4);
+	}
+
+	return num;
+}
 
 // MoveCursorToXCoord
 bool OptionSelectEngine::MoveCursorToXCoord(short int xArg) {
@@ -103,10 +146,7 @@ int OptionSelectEngine::SimpleOptionSelect(std::string sPrompt, std::string sTit
 		std::string sInputPrompt = "Please input a desired option number (input 0 to exit): > ";
 
 		// Move prompt to centre if centring prompt is enabled
-		if (bCentrePrompt) {
-			MoveCursorToXCoord(((csbiOptionSelect.srWindow.Right - csbiOptionSelect.srWindow.Left) - sInputPrompt.length()) / 2);
-		}
-		nInput = NumInputi(sInputPrompt);
+		nInput = OSENumInputi(sInputPrompt, bCentrePrompt);
 
 		if (nInput == 0) {
 			// Log that session is ending

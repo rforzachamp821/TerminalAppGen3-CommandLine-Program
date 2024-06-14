@@ -19,7 +19,7 @@ void GuessTheNumberExtreme::DisplayHighScore() {
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	std::cout << "\n\n\n";
-	OutputBoxWithText('\n' + std::string(33 + std::to_string(GameHighScoresSystem::GetGuessTheNumberExtremeHighScore()).length(), ' ') + '\n', RED, YLW, BLK, ConfigObjMain.sColourGlobalBack, true);
+	OutputBoxWithText('\n' + std::string(34 + std::to_string(GameHighScoresSystem::GetGuessTheNumberExtremeHighScore()).length(), ' ') + '\n', RED, YLW, BLK, ConfigObjMain.sColourGlobalBack, true);
 
 	// Set to same height as area of output in rendered box
 	CONSOLE_SCREEN_BUFFER_INFO csbiHighScore;
@@ -32,7 +32,7 @@ void GuessTheNumberExtreme::DisplayHighScore() {
 	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiHighScore);
 	SetCursorPosition(csbiHighScore.dwCursorPosition.X - std::to_string(GameHighScoresSystem::GetGuessTheNumberExtremeHighScore()).length() - 2, csbiHighScore.dwCursorPosition.Y);
 	colour(BLU, ConfigObjMain.sColourGlobalBack);
-	slowcharfn(false, std::to_string(GameHighScoresSystem::GetGuessTheNumberExtremeHighScore()) + "! ");
+	slowcharfn(false, std::to_string(GameHighScoresSystem::GetGuessTheNumberExtremeHighScore()) + "!");
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	std::cout << "\n\n\n\n";
@@ -133,8 +133,8 @@ void GuessTheNumberExtreme::MainGame()
 
 		while (true) 
 		{
-			// End game if 5 nNumOfTriesUsed have passed
-			if (nNumOfTriesUsed == 5) 
+			// End game if PERMISSIBLE_TRIES nNumOfTriesUsed have passed
+			if (nNumOfTriesUsed == PERMISSIBLE_TRIES) 
 			{
 				if (LossScreen(nRightNum, nCurrentSessionScore) == true) {
 					// Play again

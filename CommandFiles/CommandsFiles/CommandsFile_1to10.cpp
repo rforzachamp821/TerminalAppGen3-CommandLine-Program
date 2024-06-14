@@ -854,7 +854,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 		}
 
 		OptionSelectEngine oseSettings;
-		oseSettings.nSizeOfOptions = 12;
+		oseSettings.nSizeOfOptions = 13;
 		std::string sOptions[] = {
 			"Highlight Colour Settings",
 			"Title Colour Settings",

@@ -55,8 +55,11 @@ bool GameHighScoresSystem::UpdateHighScoreVariables() {
 	std::string sCarDodgeStrBuf = sDecryptedData.substr(0, nSemicolonPos);
 	std::string sGTMEStrBuf = sDecryptedData.substr(nSemicolonPos + 1, std::string::npos);
 
+	// Pop the last semicolon in guess the number extreme string
+	sGTMEStrBuf.pop_back();
+
 	// Check parsed decrypted data for validity (number check)
-	if (!isNumberld(sCarDodgeStrBuf) || !isNumberld(sGTMEStrBuf)) {
+	if (!isNumberUINT64(sCarDodgeStrBuf) || !isNumberUINT64(sGTMEStrBuf)) {
 		return false;
 	}
 
@@ -80,7 +83,8 @@ bool GameHighScoresSystem::UpdateHighScoreFile() {
 	// Encrypt high scores and put into string in the format of XXX;YYY where X is Car Dodge and Y is Guess The Number Extreme
 	RyRyCryptor HighScoreEncryptor;
 	std::string sEncryptedHighScore = HighScoreEncryptor.EncryptString(
-		std::to_string(static_cast<long double>(nCarDodgeHighScore)) + ";" + std::to_string(static_cast<long double>(nGuessTheNumberExtremeHighScore)),
+		std::to_string(nCarDodgeHighScore) + "."  + std::to_string(static_cast<uint64_t>(RandNum(90000000, 10000000))) + ";"
+		+ std::to_string(nGuessTheNumberExtremeHighScore) + "." + std::to_string(static_cast<uint64_t>(RandNum(90000000, 10000000))) + ";",
 		nHighScoreKey1, nHighScoreKey2);
 
 	// Open file from fresh in binary mode
