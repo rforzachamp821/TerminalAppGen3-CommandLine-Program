@@ -4,17 +4,18 @@
 // RyRyCryptor.h - Contains the interface for the RyRyCryptor class.
 //
 
-// Ensure that encrypt and decrypt file functions aren't macroed
-#ifdef DecryptFile
-#undef DecryptFile
-#endif // DecryptFile
-#ifdef EncryptFile
-#undef EncryptFile
-#endif // EncryptFile
-
-
 // As this may change, typedef the key format
 typedef uint64_t RYRYKEY;
+
+// Undefine EncryptFile macro defined in Windows.h for FileCryptor command
+#ifdef EncryptFile
+#undef EncryptFile
+#endif // ENCRYPTFILE
+
+// Undefine DecryptFile macro defined in Windows.h for FileCryptor command
+#ifdef DecryptFile
+#undef DecryptFile
+#endif // DECRYPTFILE
 
 // RyRyCryptor - Class that manages and contains an implementation of the RyRy encryption algorithm.
 //
@@ -116,15 +117,3 @@ public:
 	bool DecryptFile(const std::string sFilePath, const RYRYKEY nKey1, const RYRYKEY nKey2);
 
 };
-
-#ifdef UNICODE
-#define EncryptFile  EncryptFileW
-#else
-#define EncryptFile  EncryptFileA
-#endif // !UNICODE
-
-#ifdef UNICODE
-#define DecryptFile  DecryptFileW
-#else
-#define DecryptFile  DecryptFileA
-#endif // !UNICODE

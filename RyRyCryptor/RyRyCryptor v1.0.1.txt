@@ -1,7 +1,0 @@
-___RyRyCryptor v1.0.1 Release Notes___
-
-__New Features__
-- A debug library version of the encryption algorithm has been packaged. All the libraries use Multithreaded libraries without DLLs.
-
-__Changes and Bugfixes__
-- None

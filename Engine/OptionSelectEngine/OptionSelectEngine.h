@@ -17,6 +17,13 @@ private:
 	// Return values: TRUE or 1 for success, FALSE or 0 for fail.
 	bool MoveCursorToXCoord(short int xArg);
 
+	// OSENumInputi - Function to handle user input of 32-bit integers, with a parameter for centring the prompt text all the time.
+	// Parameters: sPrompt - The prompt text to be used.
+	//             bCentrePromptText - Boolean for toggling centring the prompt text.
+	// Return Values: int value containing inputted user value.
+	//
+	int OSENumInputi(std::string sPrompt, bool bCentrePromptText);
+
 	// Object ID
 	int nObjectID;
 protected:

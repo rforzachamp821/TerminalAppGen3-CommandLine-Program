@@ -133,20 +133,26 @@ bool LogFileSystem::UpdateEntryTypesLine() {
 	}
 
 	// Read up to the 16th line
+	bool bCheckForEntryTypesLine = true;
 	while (!LogFileStreamIn.eof()) {
 		std::string sBuffer = "";
 		std::getline(LogFileStreamIn, sBuffer, '\n');
 
 		// Skip the 16th line
-		if (sBuffer.find("Possible entry types in this log:") == std::string::npos) {
+		if (sBuffer.find("# - Possible entry types in this log:") == std::string::npos || bCheckForEntryTypesLine == false) {
 			sFileContents += sBuffer + "\n";
 		}
-		else {
-			sOldEntryLine = sBuffer.substr(sBuffer.find("Possible entry types in this log:") + 34, std::string::npos);
+		else if (bCheckForEntryTypesLine == true) {
+			sOldEntryLine = sBuffer.substr(sBuffer.find("# - Possible entry types in this log:") + 38, std::string::npos);
 			// In place of the 16th line, use the new updated entry types string
 			sFileContents += "# - Possible entry types in this log: " + GetEntryTypesOfLogFileString() + "\n";
+			// Do not check for another one of these lines, as it may be user input (first one of these entry types lines is always part of the log file context)
+			bCheckForEntryTypesLine = false;
 		}
 	}
+
+	// Remove additional newline character that was added in this line: sFileContents += sBuffer + "\n";
+	sFileContents.pop_back();
 
 	// Close input stream
 	LogFileStreamIn.close();
@@ -356,7 +362,7 @@ bool LogFileSystem::AddLogLine(std::string sLogLine, short int nTypeOfLine, int 
 			// Log to Windows Log Database
 			std::vector<std::string> vsErrorInfo{
 				"In LogFileSystem::AddLogFile(): ERROR - Failed to create log file on LogFileSystem::CreateLogFile().",
-				"Context: Failed to create log file after std::ifstream did not detect a known log file.",
+				"Context: Failed to create log file after std::ifstream failed to detect a known log file.",
 				"Object ID: " + std::to_string(nObjectID),
 				"Category: Verbose Message (Error)",
 				"Windows error code info: Code " + std::to_string(GetLastError())
@@ -384,7 +390,7 @@ bool LogFileSystem::AddLogLine(std::string sLogLine, short int nTypeOfLine, int 
 			// Log to Windows Log Database
 			std::vector<std::string> vsErrorInfo{
 				"In LogFileSystem::AddLogFile(): ERROR - Failed to create log file on LogFileSystem::CreateLogFile().",
-				"Context: Failed to create log file after std::ofstream did not detect a known log file.",
+				"Context: Failed to create log file after std::ofstream failed to detect a known log file directory.",
 				"Object ID: " + std::to_string(nObjectID),
 				"Category: Verbose Message (Error)",
 				"Windows error code info: Code " + std::to_string(GetLastError())

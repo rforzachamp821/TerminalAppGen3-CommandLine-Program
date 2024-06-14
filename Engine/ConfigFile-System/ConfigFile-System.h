@@ -60,6 +60,10 @@ public:
 	std::string sGTNGameplayColourFore = LWHT;
 	std::string sGTNGameplayColourBack = CYN;
 
+	// Guess The Number Extreme Game Settings
+	std::string sGTNEGameplayColourFore = LWHT;
+	std::string sGTNEGameplayColourBack = MAG;
+
 	long long int nSlowCharSpeed = 32;
 	long long int nCursorShape = 5; // TYPES are: block blinking (1), block steady (2), underline blinking (3), underline steady (4), bar blinking (5), bar steady (6)
 

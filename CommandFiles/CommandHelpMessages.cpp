@@ -12,9 +12,7 @@ namespace helpmsgs
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << wordWrap("\n- Lists all possible commands in ZeeTerminal.")
-			<< wordWrap("\n- Displays some frequently asked questions with answers.")
-			<< wordWrap("\n- Displays information about the program, such as copyright information, credits and basic program information.") << "\n\n";
+		std::cout << wordWrap("\n- Lists all possible commands in ZeeTerminal, with small amounts of extra information.\n\n");
 
 		colourSubheading();
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
@@ -182,6 +180,8 @@ namespace helpmsgs
 			<< wordWrap("\n --cdbackground <num>\t\tSet the background colour in the CarDodge game. Put the colour number in place of <num>.")
 			<< wordWrap("\n --gtnforeground <num>\t\tSet the foreground colour in the Guess The Number game. Put the colour number in place of <num>.")
 			<< wordWrap("\n --gtnbackground <num>\t\tSet the background colour in the Guess The Number game. Put the colour number in place of <num>.")
+			<< wordWrap("\n --gtneforeground <num>\t\tSet the foreground colour in the Guess The Number Extreme game. Put the colour number in place of <num>.")
+			<< wordWrap("\n --gtnebackground <num>\t\tSet the background colour in the Guess The Number Extreme game. Put the colour number in place of <num>.")
 			<< wordWrap("\n\nExample: settings --titlefore 1")
 			<< wordWrap("\n\nNote: You can get colour numbers by executing the \"ColourNumbers\" command.") << "\n\n";
 
@@ -1039,7 +1039,8 @@ namespace helpmsgs
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n --cardodge\tStarts the CarDodge game, a game where you dodge enemy cars to gain points.\n"
-			" --gtn\t\tStarts the Guess The Number game, a game where you guess a number between 1 and 100 in as little tries as you can.\n\n"
+			" --gtn\t\tStarts the Guess The Number game, a game where you guess a number between 1 and 100 in as little tries as you can.\n"
+			" --gtne\t\tStarts the Guess The Number Extreme game, a game where you guess a number between 2 random numbers in under 5 tries, fighting for the highest score.\n\n"
 			"Example: game --cardodge\n\n");
 
 		return;
@@ -1148,6 +1149,90 @@ namespace helpmsgs
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\tDisplays this help message.\n\nExample: y2038 -h\n\n");
+
+		return;
+	}
+
+	// PiOutputHelp
+	void PiOutputHelp() {
+		CentreColouredText(" ___PIOUTPUT___ ", 1);
+		std::cout << "\n";
+		CentreColouredText("This command outputs an argument-specified number of digits of Pi, up to 1 million d.p.", 2);
+		std::cout << "\n\n";
+
+		colourSubheading();
+		std::cout << "What this command does:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n- This command outputs an argument-specified number of digits of Pi, up to 1 million decimal places.\n- For speed and efficiency purposes, the number is truncated, not rounded up or down.\n- For speed and simplistic purposes, the value of Pi is not calculated at run-time, however it was hard-coded at the compile-time of this program."
+			"\n- You can learn more about Pi here: ");
+		colour(LBLU, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("https://en.wikipedia.org/wiki/Pi\n\n");
+
+		colourSubheading();
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n -h\tDisplays this help message.\n <dp>\tNumber of decimal places to output Pi to. Put the integer desired in place of <dp>.\n\nExample: pioutput 16\n\nNOTE: <dp> argument cannot be less than 1 or more than 1 million.\n\n");
+
+		return;
+	}
+
+	// SpamHelp
+	void SpamHelp() {
+		CentreColouredText(" ___SPAM___ ", 1);
+		std::cout << "\n";
+		CentreColouredText("This command outputs an argument-specified string non-stop until the ESC key is pressed.", 2);
+		std::cout << "\n\n";
+
+		colourSubheading();
+		std::cout << "What this command does:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n- This command outputs a string a specific number of times until infinity or until the ESC key is pressed on the keyboard.\n\n");
+
+		colourSubheading();
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n -h\tDisplays this help message.\n <str>\tThe string to spam output of. Put the desired string in place of <str>.\n\nExample: spam \"ZOO WEE MAMA\"\n\n"
+			"NOTE: For any strings containing spaces, please enclose them in quotes like the example.\n\n");
+
+		return;
+	}
+
+	// FAQHelp
+	void FAQHelp() {
+		CentreColouredText(" ___FAQ___ ", 1);
+		std::cout << "\n";
+		CentreColouredText("This command outputs frequently-asked questions and answers about ZeeTerminal.", 2);
+		std::cout << "\n\n";
+
+		colourSubheading();
+		std::cout << "What this command does:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n- This command displays frequently-asked questions with answers, about ZeeTerminal.\n\n");
+
+		colourSubheading();
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n -h\tDisplays this help message.\n\nExample: faq -h\n\n");
+
+		return;
+	}
+
+	// AboutHelp
+	void AboutHelp() {
+		CentreColouredText(" ___ABOUT___ ", 1);
+		std::cout << "\n";
+		CentreColouredText("This command outputs information about ZeeTerminal, including copyright.", 2);
+		std::cout << "\n\n";
+		
+		colourSubheading();
+		std::cout << "What this command does:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n- This command outputs information about ZeeTerminal, including copyright information about different modules/APIs, thank-you messages, and license information.\n\n");
+
+		colourSubheading();
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n -h\tDisplays this help message.\n\nExample: about -h\n\n");
 
 		return;
 	}

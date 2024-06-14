@@ -31,13 +31,6 @@ private:
 	bool bCarDodgeCoreInitialised = false; // Indicator to show if game is initialised or not
 	bool bSyncWithStdioPrevious = true; // Previous stdio sync value
 
-	// Keys for encryption and decryption for High Scores (This is just a small game - there is no need to go balls-to-the-wall with encrypting hardcoded keys)
-	uint64_t nHighScoreKey1 = 19375937;
-	uint64_t nHighScoreKey2 = 8452904164671;
-
-	// High score file name
-	static constexpr char sHighScoreFileName[] = "GameHighScores.dat";
-
 protected:
 
 	// Constants that define the dimensions of the gameplay experience
@@ -121,19 +114,4 @@ protected:
 	// Return Values: Centred text string.
 	//
 	std::string CentreTextCarDodge(std::string sText, size_t nCustomStringLength = (std::numeric_limits<size_t>::max)());
-	
-	// UpdateHighScoreFromFile - Gets the current points high score from the High Score file, and store it in nCurrentPointsHighScore.
-	//                         - It first must decrypt the high score, and then it can retrieve it.
-	// Parameters: None
-	// Return Values: TRUE or 1 for success, FALSE or 0 for fail.
-	// NOTE: If there is no file to read, the current memory high score will not be updated. A file can be created and updated manually with the UpdateHighScoreInFile() function.
-	// NOTE: The current high score will not be updated if the high score that is stored in the high score file is smaller than or equal to the current high score in memory.
-	//
-	bool UpdateHighScoreFromFile();
-
-	// UpdateHighScoreInFile - Updates the high score value in the high score file, from what is stored in the global variable.
-	// Parameters: None
-	// Return Values: TRUE or 1 for success, FALSE or 0 for fail.
-	//
-	bool UpdateHighScoreInFile();
 };

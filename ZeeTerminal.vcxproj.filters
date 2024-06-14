@@ -81,6 +81,12 @@
     <ClCompile Include="GameFiles\GuessTheNumber\GuessTheNumber.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameFiles\GuessTheNumberExtreme\GuessTheNumberExtreme.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFiles\GameHighScoresSystem\GameHighScoresSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -153,6 +159,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommandFiles\CommandsFiles\Commands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFiles\GuessTheNumberExtreme\GuessTheNumberExtreme.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFiles\GameHighScoresSystem\GameHighScoresSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandFiles\PiConstant\PiConstant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

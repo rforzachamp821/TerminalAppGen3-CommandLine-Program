@@ -1,3 +1,4 @@
+#pragma once
 //
 // GuessTheNumber.h - Contains the interface of the GuessTheNumber class.
 //
@@ -32,8 +33,8 @@ public:
 		// Nothing to do
 	}
 
-	// GuessTheNumber_GameMenu - Game menu for the GuessTheNumber game.
+	// GuessTheNumber_MainMenu - Game menu for the GuessTheNumber game.
 	// No parameters or return values are accepted/available.
 	//
-	void GuessTheNumber_GameMenu();
+	void GuessTheNumber_MainMenu();
 };

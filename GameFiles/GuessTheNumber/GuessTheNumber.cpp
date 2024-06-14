@@ -15,13 +15,13 @@ void GuessTheNumber::MainGameFn() {
 		int nCorrectRandNum = RandNum(100, 0);
 		int nNumberOfTriesUsed = 0;
 		cls();
-		std::cout << "\nLet the games begin!\n";
+		std::cout << wordWrap("\nLet the games begin!\n");
 		sleep(1000);
 		cls();
 
 		while (true) {
 			// Lose if 10 tries passed
-			if (nNumberOfTriesUsed == nNumOfTriesAllowed) 
+			if (nNumberOfTriesUsed >= nNumOfTriesAllowed) 
 			{
 				// Display win screen
 				if (LossScreen(nCorrectRandNum) == true) {
@@ -59,24 +59,24 @@ void GuessTheNumber::MainGameFn() {
 
 			// if guess number is more than 100
 			if (nUserGuessNumber > 100) {
-				std::cout << "That guess number was higher than 100. Please try again.\n";
+				std::cout << wordWrap("That guess number was higher than 100. Please try again.\n");
 				continue;
 			}
 			// if guess number is less than 0
 			else if (nUserGuessNumber < 0) {
-				std::cout << "That guess number was less than 0. Please try again.\n";
+				std::cout << wordWrap("That guess number was less than 0. Please try again.\n");
 				continue;
 			}
 
-			// if guess number is wrong but lower than the correct number
+			// If wrong but guess number was lower than the correct number
 			if (nUserGuessNumber < nCorrectRandNum) {
 				nNumberOfTriesUsed++;
-				std::cout << "\nWrong! Your guess was lower than the correct number.\nYou have " << (nNumOfTriesAllowed - nNumberOfTriesUsed) << " tries left (out of " << nNumOfTriesAllowed << ").\n";
+				std::cout << wordWrap("\nWrong! Your guess was lower than the correct number.\nYou have " + std::to_string(nNumOfTriesAllowed - nNumberOfTriesUsed) + " tries left (out of " + std::to_string(nNumOfTriesAllowed) + ").\n");
 			}
-			// if guess number is wrong but higher than the correct number
+			// If wrong but guess number was higher than the correct number
 			else if (nUserGuessNumber > nCorrectRandNum) {
 				nNumberOfTriesUsed++;
-				std::cout << "\nWrong! Your guess was higher than the correct number.\nYou have " << (nNumOfTriesAllowed - nNumberOfTriesUsed) << " tries left (out of " << nNumOfTriesAllowed << ").\n";
+				std::cout << wordWrap("\nWrong! Your guess was higher than the correct number.\nYou have " + std::to_string(nNumOfTriesAllowed - nNumberOfTriesUsed) + " tries left (out of " + std::to_string(nNumOfTriesAllowed) + ").\n");
 			}
 
 			sleep(700);
@@ -90,7 +90,7 @@ bool GuessTheNumber::LossScreen(int nCorrectNumber) {
 
 	// Display loss screen, display prompt to restart
 	colour(LWHT, RED);
-	std::cout << "  YOU RAN OUT OF TRIES...       ";
+	std::cout << wordWrap("  YOU RAN OUT OF TRIES...       ");
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 	sleep(500);
 
@@ -111,9 +111,9 @@ bool GuessTheNumber::LossScreen(int nCorrectNumber) {
 bool GuessTheNumber::WinScreen(int nCorrectNumber, int nNumOfTriesUsed) {
 	cls();
 
-	// Display loss screen, display prompt to restart
+	// Display win screen, display prompt to restart
 	colour(LWHT, GRN);
-	std::cout << "  YOU GUESSED THE NUMBER!       ";
+	std::cout << wordWrap("  YOU GUESSED THE NUMBER!       ");
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 	sleep(500);
 
@@ -135,7 +135,7 @@ bool GuessTheNumber::WinScreen(int nCorrectNumber, int nNumOfTriesUsed) {
 }
 
 // GuessTheNumber_MainMenu
-void GuessTheNumber::GuessTheNumber_GameMenu() 
+void GuessTheNumber::GuessTheNumber_MainMenu() 
 {
 	// Change the global colours temporarily - this will be changed back on exit
 	std::string sColourGlobalUser = ConfigObjMain.sColourGlobal;
@@ -179,7 +179,7 @@ void GuessTheNumber::GuessTheNumber_GameMenu()
 			slowcharfn(true, "If you get the answer wrong, the game will tell you if your answer was higher or lower than the correct number.");
 			std::cout << "\n";
 			slowcharfn(true, "Good luck!\n");
-			std::cout << "Press any key to go back to main menu...\n";
+			std::cout << wordWrap("Press any key to go back to main menu...\n");
 			std::cout << "#################################################################################################\n";
 			_getch();
 		}
@@ -188,7 +188,7 @@ void GuessTheNumber::GuessTheNumber_GameMenu()
 			break;
 		}
 		else {
-			VerbosityDisplay("In GuessTheNumber::GuessTheNumber_GameMenu() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In GuessTheNumber::GuessTheNumber_MainMenu() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 			std::cout << wordWrap("Press any key to exit game...");
 			_getch();

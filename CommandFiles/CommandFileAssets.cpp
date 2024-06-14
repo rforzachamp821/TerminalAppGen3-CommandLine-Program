@@ -215,12 +215,19 @@ void RGBColourPresets() {
 // Also has tutorial directions text support.
 //
 void help(bool bFromTutorial) {
-	ScreenNavigateEngine sneHelp;
+	// Output title
+	CentreColouredText(" ___HELP___ ", 1);
+	std::cout << "\n\n";
 
-	sneHelp.nSizeOfScreens = 4;
-	std::string sScreens[] =
-	{
-		"___LIST OF COMMANDS___\n\nTo see more info about a command, type in \"<command> -h\". This will work for all commands, except: echo and title.\n\n"
+	// Output subheading and information about commands to display help commands under
+	colourSubheading();
+	std::cout << wordWrap("___LIST OF COMMANDS___") << NOULINE_STR;
+	colour(LCYN, ConfigObjMain.sColourGlobalBack);
+	std::cout << wordWrap("\n\nTo see more info about a command, type in \"<command> -h\". This will work for all commands, except: echo and title.\n\n");
+	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
+	// Output help commands
+	std::cout <<
 		"[1] Help\t\t[16] Stopwatch\t\t[31] Shutdown\t\t[46] Edison\n"
 		"[2] Exit\t\t[17] Read\t\t[32] Reboot\t\t[47] Tesla\n"
 		"[3] Tutorial\t\t[18] Timer\t\t[33] Hibernate\t\t[48] Cow\n"
@@ -232,19 +239,26 @@ void help(bool bFromTutorial) {
 		"[9] Settings\t\t[24] ConfigAction\t[39] SlowChar\t\t[54] Factorial\n"
 		"[10] Title\t\t[25] BeepSounds\t\t[40] ReverseText\t[55] CalcQuadratic\n"
 		"[11] Date\t\t[26] RickRoll\t\t[41] Notes\t\t[56] Y2038\n"
-		"[12] ColourNumbers\t[27] ShellExecute\t[42] FileParse\n"
-		"[13] MediaPlayer\t[28] Hacker\t\t[43] Disp\n"
-		"[14] AudioPlayer\t[29] Calculator\t\t[44] SysInfo\n"
-		"[15] TTS\t\t[30] Logoff\t\t[45] Einstein\n"
+		"[12] ColourNumbers\t[27] ShellExecute\t[42] FileParse\t\t[57] PiOutput\n"
+		"[13] MediaPlayer\t[28] Hacker\t\t[43] Disp\t\t[58] Spam\n"
+		"[14] AudioPlayer\t[29] Calculator\t\t[44] SysInfo\t\t[59] FAQ\n"
+		"[15] TTS\t\t[30] Logoff\t\t[45] Einstein\t\t[60] About\n"
 
-		"\nMore will be added soon!\n",
+		"\nMore will be added soon!\n";
 
-		"___FREQUENTLY ASKED QUESTIONS___\n\n"
-		"1) I can't see the terminal text. How can I zoom in?\n  1a) You can zoom in, of course. Press and hold the Ctrl button and scroll with the mouse to your desired text size.\n"
-		"\n\n2) The error messages shown aren't detailed enough. How do I get better-quality error messages?\n  2a) To get better quality error messages, just enable the Verbosity Messages setting in the Settings command.\n"
-		"\n\n3) I'm using the Windows 7 terminal. How do I scroll up and down in the terminal without using the mouse?\n  3a) To scroll up and down without the mouse, press Alt + Space and then the keys 'E' and 'L', and then scroll with the up/down arrow keys. Use the PageUp/PageDown keys to scroll full pages in the terminal.\n"
-		"\n\n4) What is the difference between the 'old' and 'new' OptionSelect Session styles?\n  4a) The 'old' style is an inspiration from the TerminalAppGen2, the previous iteration of this program. It is very robust, simple and works by associating a number with each option, which you type in and press ENTER to select.\nThe 'new' style isn't exactly new, and has been in ZeeTerminal since v0.1.0. However, it is newer than the 'old' style, hence it's referred to as 'new'. It relies on using the arrow/WS keys to move a highlight up and down, to select an option.\n",
+	// Exit
+	return;
+}
 
+// About - A function that displays all about and copyright information for ZeeTerminal,
+//         using the ScreenNavigate engine.
+//
+void About(bool bFromTutorial) {
+	ScreenNavigateEngine sneAbout;
+
+	sneAbout.nSizeOfScreens = 2;
+	std::string sScreens[] =
+	{
 		"___ABOUT THIS PROGRAM___\n\nThis is the ZeeTerminal Commandline Program, Build v" + std::string(ZT_VERSION) + ".\n" +
 		"This is a beta build of ZeeTerminal, with an entirely new engine and components.\nThis program is made in C++, with a few very small parts of C." +
 		"\n\nThis program uses the DirectShow API in the MediaPlayer command, licensed by Microsoft Corp. (c) Microsoft Corp.\n\n" +
@@ -270,15 +284,15 @@ void help(bool bFromTutorial) {
 		"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n"
 	};
 
-	sneHelp.sScreens = sScreens;
-
+	sneAbout.sScreens = sScreens;
+	
+	// Set custom direction text when coming from tutorial
 	if (bFromTutorial) {
-		// Set custom direction text when coming from tutorial
-		sneHelp.SetDirectionsText("Press the 'A' key or left arrow key to move left.\nPress the 'D' key or right arrow key to move right.\nPress ESC to exit the Help command and continue with the tutorial.");
+		sneAbout.SetDirectionsText("Press the 'A' key or left arrow key to move left.\nPress the 'D' key or right arrow key to move right.\nPress ESC to exit the About command and continue with the tutorial.");
 	}
 
-	// Call sneHelp.ScreenNavigate for screen strings set.
-	sneHelp.ScreenNavigate(" ___HELP___ ");
+	// Call sneAbout.ScreenNavigate for screen strings set.
+	sneAbout.ScreenNavigate(" ___ABOUT___ ");
 
 	return;
 }
@@ -332,9 +346,10 @@ void Tutorial() {
 			std::cout << "Please try again.\n";
 		}
 	}
-	slowcharfn(false, "\nThat previous command also taught you how to use the ScreenNavigate engine.\nYou can move left and right between 'screens' using the the ");
-	slowcolourfn(LCYN, ConfigObjMain.sColourGlobalBack, "A, D and left/right arrow keys");
-	slowcharfn(true, ", to look through any information provided.\n");
+
+	sleep(1000);
+	slowcharfn(true, "\nDid you notice how when you typed in 'help', the Help command executed?\nWhen executing commands, type the name of the command and press ENTER to execute it, just like you did to execute the Help command.\n"
+		"Use the Help command to get a reference of all the commands in the terminal.");
 
 	// OptionSelect Engine Tutorial
 	sleep(1000);

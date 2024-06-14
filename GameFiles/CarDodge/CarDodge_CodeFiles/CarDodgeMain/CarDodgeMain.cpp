@@ -7,6 +7,7 @@
 #include "../../../../Engine/OptionSelectEngine/OptionSelectEngine.h"
 #include "../CarDodgeCore/CarDodgeCore.h"
 #include "../CarInfo/CarInfo.h"
+#include "../../GameFiles/GameHighScoresSystem/GameHighScoresSystem.h"
 #include <conio.h>
 
 extern short int nSessionConsoleHeight;
@@ -158,7 +159,8 @@ bool CarDodgeMain::DisplayUserLossScreen() {
 
 	// Set high score and update high score file immediately
 	SetHighScore(nSessionPoints);
-	UpdateHighScoreInFile();
+	GameHighScoresSystem::SetCarDodgeHighScore(nCurrentPointsHighScore);
+	GameHighScoresSystem::UpdateHighScoreFile();
 
 	while (true) {
 		char cInput = _getch();
@@ -730,7 +732,8 @@ void CarDodgeMain::CarDodgeMainGame()
 		SetHighScore(nSessionPoints);
 		// Update the high score in the High Score file
 		ConfigObjMain.bShowCursor = bShowCursorPrevious;
-		UpdateHighScoreInFile();
+		GameHighScoresSystem::SetCarDodgeHighScore(nCurrentPointsHighScore);
+		GameHighScoresSystem::UpdateHighScoreFile();
 		DisableCursorVisibility();
 
 		// Reset the game before leaving or before restart, in case object is not discarded
@@ -925,7 +928,9 @@ void CarDodgeMain::CarDodgeInstructions() {
 
 // CarDodgeHighScore
 void CarDodgeMain::CarDodgeHighScore() {
-	UpdateHighScoreFromFile(); // Make sure the high score is updated before outputting
+	// Make sure the high score is updated before outputting
+	GameHighScoresSystem::UpdateHighScoreVariables();
+	SetHighScore(GameHighScoresSystem::GetCarDodgeHighScore());
 
 	// Output title
 	std::cout << "\n";
@@ -934,7 +939,7 @@ void CarDodgeMain::CarDodgeHighScore() {
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	std::cout << "\n\n\n";
-	OutputBoxWithText('\n' + std::string(33 + std::to_string(GetCurrentHighScore()).length(), ' ') + '\n', RED, YLW, BLK, ConfigObjMain.sColourGlobalBack, true);
+	OutputBoxWithText('\n' + std::string(34 + std::to_string(GetCurrentHighScore()).length(), ' ') + '\n', RED, YLW, BLK, ConfigObjMain.sColourGlobalBack, true);
 
 	// Set to same height as area of output in rendered box
 	CONSOLE_SCREEN_BUFFER_INFO csbiHighScore;
@@ -947,7 +952,7 @@ void CarDodgeMain::CarDodgeHighScore() {
 	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiHighScore);
 	SetCursorPosition(csbiHighScore.dwCursorPosition.X - std::to_string(GetCurrentHighScore()).length() - 2, csbiHighScore.dwCursorPosition.Y);
 	colour(BLU, ConfigObjMain.sColourGlobalBack);
-	slowcharfn(false, std::to_string(GetCurrentHighScore()) + "! ");
+	slowcharfn(false, std::to_string(GetCurrentHighScore()) + "!");
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	std::cout << "\n\n\n\n";
