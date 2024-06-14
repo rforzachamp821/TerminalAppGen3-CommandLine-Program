@@ -6,8 +6,9 @@ Colours are also brighter, making it more attractive for anyone. There are also 
 
 ZeeTerminal also now has new UI interfaces which make it so much easier to use, where you can select options and navigate through 'screens', all using WASD and arrow keys. 
 Also, due to the support of arguments, speed of navigation can increase, and can not only teach new users how terminals may work by arguments, but allow the more professional to get tasks done quicker.
+There are also fun, small games that you can play to kill some time and go against friends with.
 
-Not only that, ZeeTerminal has so many more features coming soon, including games, more commands, some useful features and innovative systems that improve the overall terminal experience.
+Not only that, ZeeTerminal has so many more features coming soon, including more commands, some useful features and innovative systems that improve the overall terminal experience.
 
 All of these above points, technologies and ease-of-use additions improve ZeeTerminal by a substantial amount. The TerminalApp/ZeeTerminal series is now even more fun, and I hope you may try it today.
 
