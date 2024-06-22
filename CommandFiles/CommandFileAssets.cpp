@@ -223,7 +223,7 @@ void help(bool bFromTutorial) {
 	colourSubheading();
 	std::cout << wordWrap("___LIST OF COMMANDS___") << NOULINE_STR;
 	colour(LCYN, ConfigObjMain.sColourGlobalBack);
-	std::cout << wordWrap("\n\nTo see more info about a command, type in \"<command> -h\". This will work for all commands, except: echo and title.\n\n");
+	std::cout << wordWrap("\n\nTo see more info about a command, type in \"<command> -h\". Put the command in the place of <command> here.\n\n");
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	// Output help commands

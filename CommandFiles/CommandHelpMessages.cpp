@@ -41,6 +41,26 @@ namespace helpmsgs
 		return;
 	}
 
+	// Echo
+	void EchoHelp() {
+		CentreColouredText(" ___ECHO___ ", 1);
+		std::cout << "\n";
+		CentreColouredText("This command allows you to output any text of your liking.", 2);
+		std::cout << "\n\n";
+
+		colourSubheading();
+		std::cout << "What this command does:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n- This command allows you to output desired text of your liking.\n- This, as the name suggests, 'echoes' the text that you write to it.\n\n");
+
+		colourSubheading();
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n -h\tDisplays this help message.\n <text>\tThe text to echo. Put the text in place of <text>.\n\nExample: echo \"Hello, World!\"\n\nNOTE: If the text contains spaces, use quotes like in the example.\n\n");
+
+		return;
+	}
+
 	// Cls
 	void ClsHelp() {
 		CentreColouredText(" ___CLS___ ", 1);
@@ -184,6 +204,26 @@ namespace helpmsgs
 			<< wordWrap("\n --gtnebackground <num>\t\tSet the background colour in the Guess The Number Extreme game. Put the colour number in place of <num>.")
 			<< wordWrap("\n\nExample: settings --titlefore 1")
 			<< wordWrap("\n\nNote: You can get colour numbers by executing the \"ColourNumbers\" command.") << "\n\n";
+
+		return;
+	}
+
+	// Title
+	void TitleHelp() {
+		CentreColouredText(" ___TITLE___ ", 1);
+		std::cout << "\n";
+		CentreColouredText("This command allows you to set the title of the current window running ZeeTerminal.", 2);
+		std::cout << "\n\n";
+
+		colourSubheading();
+		std::cout << "What this command does:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n- This command allows you to set the title of this window, which is the window running ZeeTerminal.\n- The title can only be a maximum of 256 characters.\n\n");
+
+		colourSubheading();
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n -h\tDisplays this help message.\n <title>\tThe title to set. Put the title in place of <title>.\n\nExample: title \"Test Title\"\n\nNOTE: If the title contains spaces, use quotes like the example.\n\n");
 
 		return;
 	}
