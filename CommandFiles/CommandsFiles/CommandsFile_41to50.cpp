@@ -346,7 +346,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			CentreColouredText(" ___FILEPARSE___ ", 1);
 			std::cout << '\n';
 
-			colour(colconv::NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
+			colour(colconv::NumberToColour(RandNumld(15, 1)), ConfigObjMain.sColourGlobalBack);
 			slowcharfn(true, "Welcome to FileParse!");
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
@@ -570,7 +570,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 		}
 
 		// Output depending on request
-		std::string sQuote = "\"" + GetEinsteinQuote(RandNum(50, 1)) + "\"";
+		std::string sQuote = "\"" + GetEinsteinQuote(RandNumld(50, 1)) + "\"";
 		if (bSlowcharOutput && bRandColourOutput) {
 			SlowCharColourful(sQuote, false);
 		}
@@ -585,7 +585,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 		}
 
 		std::cout << "\n";
-		colour(colconv::NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
+		colour(colconv::NumberToColour(RandNumld(15, 1)), ConfigObjMain.sColourGlobalBack);
 		std::cout << "- Albert Einstein\n";
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
@@ -613,7 +613,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 		}
 
 		// Output depending on request
-		std::string sQuote = "\"" + GetEdisonQuote(RandNum(50, 1)) + "\"";
+		std::string sQuote = "\"" + GetEdisonQuote(RandNumld(50, 1)) + "\"";
 		if (bSlowcharOutput && bRandColourOutput) {
 			SlowCharColourful(sQuote, false);
 		}
@@ -628,7 +628,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 		}
 
 		std::cout << "\n";
-		colour(colconv::NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
+		colour(colconv::NumberToColour(RandNumld(15, 1)), ConfigObjMain.sColourGlobalBack);
 		std::cout << "- Thomas Edison\n";
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
@@ -656,7 +656,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 		}
 
 		// Output depending on request
-		std::string sQuote = "\"" + GetTeslaQuote(RandNum(50, 1)) + "\"";
+		std::string sQuote = "\"" + GetTeslaQuote(RandNumld(50, 1)) + "\"";
 		if (bSlowcharOutput && bRandColourOutput) {
 			SlowCharColourful(sQuote, false);
 		}
@@ -671,7 +671,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 		}
 
 		std::cout << "\n";
-		colour(colconv::NumberToColour(RandNum(15, 1)), ConfigObjMain.sColourGlobalBack);
+		colour(colconv::NumberToColour(RandNumld(15, 1)), ConfigObjMain.sColourGlobalBack);
 		std::cout << "- Nikola Tesla\n";
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
@@ -692,7 +692,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 				return true;
 			}
 			else if (cCommandArgs[i] == 'c') {
-				sRandomColour = colconv::NumberToColour(RandNum(16, 1));
+				sRandomColour = colconv::NumberToColour(RandNumld(16, 1));
 			}
 			else if (cCommandArgs[i] == 'o') {
 				nChoice = 1;
@@ -731,15 +731,15 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			OutputCow("", sRandomColour, ConfigObjMain.sColourGlobalBack);
 		}
 		else if (nChoice == 2) {
-			int nRandQuoteSet = std::roundl(RandNum(2, 0));
+			int nRandQuoteSet = std::roundl(RandNumld(2, 0));
 			if (nRandQuoteSet == 2) {
-				sText = GetTeslaQuote(RandNum(50, 1));
+				sText = GetTeslaQuote(RandNumld(50, 1));
 			}
 			else if (nRandQuoteSet == 1) {
-				sText = GetEdisonQuote(RandNum(50, 1));
+				sText = GetEdisonQuote(RandNumld(50, 1));
 			}
 			else if (nRandQuoteSet == 0) {
-				sText = GetEinsteinQuote(RandNum(50, 1));
+				sText = GetEinsteinQuote(RandNumld(50, 1));
 			}
 
 			OutputCow(sText, sRandomColour, ConfigObjMain.sColourGlobalBack);
@@ -776,7 +776,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 				return true;
 			}
 			else if (cCommandArgs[i] == 'c') {
-				sRandomColour = colconv::NumberToColour(RandNum(16, 1));
+				sRandomColour = colconv::NumberToColour(RandNumld(16, 1));
 			}
 			else if (cCommandArgs[i] == 'o') {
 				nChoice = 1;
@@ -815,15 +815,15 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			OutputCat("", sRandomColour, ConfigObjMain.sColourGlobalBack);
 		}
 		else if (nChoice == 2) {
-			int nRandQuoteSet = std::roundl(RandNum(2, 0));
+			int nRandQuoteSet = std::roundl(RandNumld(2, 0));
 			if (nRandQuoteSet == 2) {
-				sText = GetTeslaQuote(RandNum(50, 1));
+				sText = GetTeslaQuote(RandNumld(50, 1));
 			}
 			else if (nRandQuoteSet == 1) {
-				sText = GetEdisonQuote(RandNum(50, 1));
+				sText = GetEdisonQuote(RandNumld(50, 1));
 			}
 			else if (nRandQuoteSet == 0) {
-				sText = GetEinsteinQuote(RandNum(50, 1));
+				sText = GetEinsteinQuote(RandNumld(50, 1));
 			}
 
 			OutputCat(sText, sRandomColour, ConfigObjMain.sColourGlobalBack);
@@ -860,7 +860,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 				return true;
 			}
 			else if (cCommandArgs[i] == 'c') {
-				sRandomColour = colconv::NumberToColour(RandNum(16, 1));
+				sRandomColour = colconv::NumberToColour(RandNumld(16, 1));
 			}
 			else if (cCommandArgs[i] == 'o') {
 				nChoice = 1;
@@ -899,15 +899,15 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			OutputBunny("", sRandomColour, ConfigObjMain.sColourGlobalBack);
 		}
 		else if (nChoice == 2) {
-			int nRandQuoteSet = std::roundl(RandNum(2, 0));
+			int nRandQuoteSet = std::roundl(RandNumld(2, 0));
 			if (nRandQuoteSet == 2) {
-				sText = GetTeslaQuote(RandNum(50, 1));
+				sText = GetTeslaQuote(RandNumld(50, 1));
 			}
 			else if (nRandQuoteSet == 1) {
-				sText = GetEdisonQuote(RandNum(50, 1));
+				sText = GetEdisonQuote(RandNumld(50, 1));
 			}
 			else if (nRandQuoteSet == 0) {
-				sText = GetEinsteinQuote(RandNum(50, 1));
+				sText = GetEinsteinQuote(RandNumld(50, 1));
 			}
 
 			OutputBunny(sText, sRandomColour, ConfigObjMain.sColourGlobalBack);

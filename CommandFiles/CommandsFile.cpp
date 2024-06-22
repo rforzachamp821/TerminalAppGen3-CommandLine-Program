@@ -64,6 +64,7 @@ extern uint64_t					nNumOfSuccessfulInputtedCommands;
 #include "CommandsFiles\CommandsFile_31to40.cpp"
 #include "CommandsFiles\CommandsFile_41to50.cpp"
 #include "CommandsFiles\CommandsFile_51to60.cpp"
+#include "CommandsFiles/CommandsFile_61to70.cpp"
 
 
 // Commands function - all command interfaces/start menus will go here
@@ -79,6 +80,7 @@ void Commands(const std::string sCommand, char* cCommandArgs, const std::string 
 		&& !commands::Commands31To40(sCommand, cCommandArgs, sCommandArgsBuffer)
 		&& !commands::Commands41To50(sCommand, cCommandArgs, sCommandArgsBuffer)
 		&& !commands::Commands51To60(sCommand, cCommandArgs, sCommandArgsBuffer)
+		&& !commands::Commands61To70(sCommand, cCommandArgs, sCommandArgsBuffer)
 		)
 	{
 		// Unknown command - fail

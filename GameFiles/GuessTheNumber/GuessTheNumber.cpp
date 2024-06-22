@@ -12,7 +12,7 @@ void GuessTheNumber::MainGameFn() {
 	while (true) 
 	{
 		// Set up environment
-		int nCorrectRandNum = RandNum(100, 0);
+		int nCorrectRandNum = RandNumld(100, 0);
 		int nNumberOfTriesUsed = 0;
 		cls();
 		std::cout << wordWrap("\nLet the games begin!\n");

@@ -29,11 +29,11 @@ void ProgramInitialisation()
 	if (ConfigObjMain.bRandomColoursOnStartup == true) {
 
 		// Pick random foreground colour
-		int nRandForeground = (int)RandNum(16, 1);
+		int nRandForeground = (int)RandNumld(16, 1);
 		ColourForegroundSwitch(&nRandForeground, &ConfigObjMain.sColourGlobalBack, &ConfigObjMain.sColourGlobal);
 
 		// Pick random background colour
-		int nRandBackground = (int)RandNum(16, 1);
+		int nRandBackground = (int)RandNumld(16, 1);
 		ColourBackgroundSwitch(&nRandBackground, &ConfigObjMain.sColourGlobalBack, &ConfigObjMain.sColourGlobal);
 	}
 
@@ -149,7 +149,7 @@ int main(int argc, char* argv[])
 	//
 	if (fparse::bRunningFromScriptOrArgCommand == false)
 	{
-		colour(colconv::NumberToColour(RandNum(16, 1)), ConfigObjMain.sColourGlobalBack);
+		colour(colconv::NumberToColour(RandNumld(16, 1)), ConfigObjMain.sColourGlobalBack);
 
 		if (bAnsiVTSequences == true) std::cout << BLINK_STR;
 		slowcharfn(true, "Welcome to ZeeTerminal!");
@@ -178,7 +178,7 @@ int main(int argc, char* argv[])
 			}
 		}
 
-		colour(colconv::NumberToColour(RandNum(16, 1)), ConfigObjMain.sColourGlobalBack);
+		colour(colconv::NumberToColour(RandNumld(16, 1)), ConfigObjMain.sColourGlobalBack);
 		std::cout << "\nPress ENTER to begin...\n";
 		std::cin.ignore(std::numeric_limits<int>::max(), '\n');
 
@@ -351,28 +351,36 @@ int main(int argc, char* argv[])
 
 		// Copy new sCommandArgsBuffer string to another string, as it will be modified
 		const std::string sCommandArgsBufferRAW = sCommandArgsBuffer + " ";
-
+		
+		// Declare fileout stream for ToFile feature
+		std::ofstream ToFile_Out{};
+		// Declare std::streambuf variable so that just in case tofile feature is enabled, the previous stdout buffer can be saved
+		std::streambuf* coutStreambufBuffer{};
+		
 		/* The following will be based on parsing sCommandArgsBuffer for the actual arguments. */
 		// Copy the string option arguments into sStringOptionCommandArgs with correct formatting
 		sCommandArgsBuffer += " ";
 		sCommandArgsBuffer = " " + sCommandArgsBuffer;
-		for (size_t nDashPos = 0, nSpacePos = 0, i = 0; i < 128; i++, nDashPos = 0, nSpacePos = 0)
+		for (size_t nDashPos = 0, nSpacePos = 0, i = 0; i < nArgArraySize; i++, nDashPos = 0, nSpacePos = 0)
 		{
+			// Exit early if none of the -- parts can be found - optimisation
+			if (sCommandArgsBuffer.find(" --\"", 0) == std::string::npos && sCommandArgsBuffer.find(" --", 0) == std::string::npos) break;
+
 			// Firstly, check which type of string syntax is first (lower is closer to beginning)
 			//
-			if (sCommandArgsBuffer.find("--\"", 0) > sCommandArgsBuffer.find("--", 0))
+			if (sCommandArgsBuffer.find(" --\"", 0) > sCommandArgsBuffer.find(" --", 0))
 			{
 				// Anything with -- at the beginning
-				if (sCommandArgsBuffer.find("--", 0) != std::string::npos)
+				if (sCommandArgsBuffer.find(" --", 0) != std::string::npos)
 				{
 					// Get next occurence of " --"
-					nDashPos = sCommandArgsBuffer.find("--", 0);
+					nDashPos = sCommandArgsBuffer.find(" --", 0);
 					// Get occurence of ' ' after nDashPos new location
-					nSpacePos = sCommandArgsBuffer.find(" ", nDashPos + 2);
+					nSpacePos = sCommandArgsBuffer.find(" ", nDashPos + 3);
 
 					/* Check for confliction with --" */
 					//
-					std::string sTest = sCommandArgsBuffer.substr((nDashPos + 2), nSpacePos - (nDashPos + 2));
+					std::string sTest = sCommandArgsBuffer.substr((nDashPos + 3), nSpacePos - (nDashPos + 3));
 
 					// For loop uses struct so declaration of multiple variables in for loop is possible
 					//
@@ -386,7 +394,7 @@ int main(int argc, char* argv[])
 							// Only read and erase string if first time passing by the line of code
 							if (loop.bAlreadyErased == false) {
 								// Copy from after the dashes to the next space
-								sStringOptionCommandArgs[i] = sCommandArgsBuffer.substr((nDashPos + 2), nSpacePos - (nDashPos + 2));
+								sStringOptionCommandArgs[i] = sCommandArgsBuffer.substr((nDashPos + 3), nSpacePos - (nDashPos + 3));
 
 								// Erase the found string from the argument buffer to remove it from plain sight from parser
 								sCommandArgsBuffer.erase(nDashPos, nSpacePos - (nDashPos));
@@ -401,16 +409,16 @@ int main(int argc, char* argv[])
 			else
 			{
 				// Anything with --" at the beginning
-				if (sCommandArgsBuffer.find("--\"", 0) != std::string::npos)
+				if (sCommandArgsBuffer.find(" --\"", 0) != std::string::npos)
 				{
-					nDashPos = sCommandArgsBuffer.find("--\"", 0);
+					nDashPos = sCommandArgsBuffer.find(" --\"", 0);
 					// Get next occurence of '"'
-					nSpacePos = sCommandArgsBuffer.find("\"", nDashPos + 3);
+					nSpacePos = sCommandArgsBuffer.find("\"", nDashPos + 4);
 					// Use space as fallback if there is no other speechmark
 					if (nSpacePos == std::string::npos) nSpacePos = sCommandArgsBuffer.find(" ", nDashPos);
 
 					// Copy from after the dashes to the next space/speechmark
-					sStringOptionCommandArgs[i] = sCommandArgsBuffer.substr((nDashPos + 3), nSpacePos - (nDashPos + 3));
+					sStringOptionCommandArgs[i] = sCommandArgsBuffer.substr((nDashPos + 4), nSpacePos - (nDashPos + 4));
 
 					// Erase the found string from the argument buffer to remove it from plain sight from parser
 					sCommandArgsBuffer.erase(nDashPos, nSpacePos + 1 - nDashPos);
@@ -419,6 +427,14 @@ int main(int argc, char* argv[])
 
 			}
 
+			// Activate ToFile feature flag if --tofile has been supplied
+			if (sStringOptionCommandArgs[i] == "tofile") { 
+				bToFileFeatureActivated = true; 
+
+				// Remove the toFile argument as we don't want the command to see it
+				sStringOptionCommandArgs[i] = "";
+				i--; // To ensure that the current position is re-used on the next iteration
+			}
 		}
 
 		// Copy the string data arguments into sStringDataCommandArgs with correct formatting
@@ -484,7 +500,7 @@ int main(int argc, char* argv[])
 					// 
 					// 1 is subtracted so the first quotation is removed as well, 
 					// and 1 is added on the last marker here so the ending quotation gets purged
-					sCommandArgsBuffer.erase(nFirstMarkerPos-1, (nLastMarkerPos+1) - (nFirstMarkerPos-1));
+					sCommandArgsBuffer.erase(nFirstMarkerPos - 1, (nLastMarkerPos + 1) - (nFirstMarkerPos - 1));
 				}
 			}
 		}
@@ -517,11 +533,13 @@ int main(int argc, char* argv[])
 
 			// Get number of data string args
 			size_t nDataStringArraySize = 0;
-			for (; nDataStringArraySize < nArgArraySize && sStringDataCommandArgs[nDataStringArraySize] != ""; nDataStringArraySize++) {}
+			for (nDataStringArraySize = nArgArraySize - 1; nDataStringArraySize >= 0 && sStringDataCommandArgs[nDataStringArraySize] == ""; nDataStringArraySize--) {}
+			nDataStringArraySize++;
 
 			// Get number of option string args
 			size_t nOptionStringArraySize = 0;
-			for (; nOptionStringArraySize < nArgArraySize && sStringOptionCommandArgs[nOptionStringArraySize] != ""; nOptionStringArraySize++) {}
+			for (nOptionStringArraySize = nArgArraySize - 1; nOptionStringArraySize >= 0 && sStringOptionCommandArgs[nOptionStringArraySize] == ""; nOptionStringArraySize--) {}
+			nOptionStringArraySize++;
 
 			// Add log line
 			LogFileMain.AddLogLine("Executing command [" + sCommand + "] with "
@@ -530,11 +548,51 @@ int main(int argc, char* argv[])
 				+ std::to_string(nDataStringArraySize) + " data string arguments (User Input: [" + sCommandInput + "]).", 3);
 		}
 
+		// Perform actions for tofile feature if the feature has been activated
+		if (bToFileFeatureActivated == true) {
+			// Get index of last string in data string array by calculating its array size
+			size_t nLastDataStringArrayMemberIndex = 0;
+			for (nLastDataStringArrayMemberIndex = nArgArraySize - 1; nLastDataStringArrayMemberIndex >= 0 && sStringDataCommandArgs[nLastDataStringArrayMemberIndex] == ""; nLastDataStringArrayMemberIndex--) {}
+
+			// Open file using std::ofstream object and the filepath to be the last data string in the data string array
+			ToFile_Out.open(sStringDataCommandArgs[nLastDataStringArrayMemberIndex]);
+
+			// Remove the last data string from the array as it belongs to the ToFile feature
+			sStringDataCommandArgs[nLastDataStringArrayMemberIndex] = "";
+
+			// Check for errors while opening - if error occured, output message and disable ToFile feature
+			if (ToFile_Out.fail()) {
+				bToFileFeatureActivated = false;
+				VerbosityDisplay("In main(): ERROR - Failed to open file for writing, as failed to open std::ofstream to filepath.\nFilepath was: " + sStringDataCommandArgs[nLastDataStringArrayMemberIndex] + "\n");
+				UserErrorDisplay("ERROR - Failed to open file for writing. Path does not exist, out of memory or lack of file permissions in directory.\nPlease try the ToFile feature with a different path.\n");
+				ToFile_Out.close();
+			}
+			else {
+				// Save old buffer
+				coutStreambufBuffer = std::cout.rdbuf();
+
+				// Redirect stdout to the new stream
+				std::cout.rdbuf(ToFile_Out.rdbuf());
+			}
+		}
+
 		// Finally, call commands function
 		//
 		nNumOfInputtedCommands++;
 		nNumOfSuccessfulInputtedCommands++;
 		Commands(sCommand, cCommandInputArgs, sCommandArgsBufferRAW);
+
+		// If the ToFile feature was enabled previously, disable it and return everything back to normal
+		if (bToFileFeatureActivated == true) {
+			bToFileFeatureActivated = false;
+
+			// Undo the streambuf modifications
+			std::cout.rdbuf(coutStreambufBuffer);
+			
+			// Close the file stream
+			ToFile_Out.close();
+		}
+
 		std::cout << '\n';
 
 		// Exit on argument command completion OR exit on script completion (line position check and if exiting after script completion is enabled)

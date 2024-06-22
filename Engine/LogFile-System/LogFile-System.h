@@ -22,20 +22,20 @@ private:
 
 	// GetCurrentMillisecondTime - Gets and returns the millisecond part of the current system time.
 	//                           - This does NOT return the total system time since epoch in milliseconds.
-	// Arguments: None
+	// Parameters: None
 	// Return Value: time_t value, containing the millisecond value.
 	//
 	time_t GetCurrentMillisecondTime();
 
 	// ConvertValueToTimeFormat - Converts a time_t value to a format widely accepted to be the best fit for time (strictly HH:MM:SS, no less digits)
-	// Arguments: nValue - The value to convert. 
+	// Parameters: nValue - The value to convert. 
 	//            nValueWidth - If custom width is wanted for value, this can be specified. Defaults to 2.
 	// Return value: std::string, containing the converted time value.
 	//
 	std::string ConvertValueToTimeFormat(time_t nValue, int nValueWidth = 2);
 
 	// ConvertTimeStructToString - Converts a 'tm' struct into a string format representing time.
-	// Arguments: tmStructArg - The standard time structure to convert.
+	// Parameters: tmStructArg - The standard time structure to convert.
 	//            bIncludeTime - Include the time part of date in string, not just date.
 	//            cDateSeparator - The separator for the date. Default is '/'.
 	// Return Value: std::string, containing the formatted time string.
@@ -43,19 +43,19 @@ private:
 	std::string ConvertTimeStructToString(struct tm tmStructArg, time_t nMillisecondValue, bool bIncludeTime, char cDateSeparator = '/');
 
 	// GetEntryTypesOfLogFileString - Gets the types of entries that are in the current log file, and puts them in a list in a string.
-	// Arguments: None
+	// Parameters: None
 	// Return Value: std::string, containing the types of entries that are in the current log file.
 	//
 	std::string GetEntryTypesOfLogFileString();
 
 	// UpdateEntryTypesLine - Updates the log file line for entry types.
-	// Arguments: None
+	// Parameters: None
 	// Return Values: TRUE or 1 for success, FALSE or 0 for fail.
 	//
 	bool UpdateEntryTypesLine();
 
 	// InitialiseLogFileObject - Initialises the current logfile-system object with the correct parameters and values.
-	// Arguments: None
+	// Parameters: None
 	// Return Values: TRUE or 1 for success, FALSE or 0 for fail.
 	//
 	bool InitialiseLogFileObject();
@@ -93,7 +93,7 @@ protected:
 	std::string sLogFileName = "";
 
 	// GetStartTimeAsString - Gets the start time for this object, and returns it as a string.
-	// Arguments: bIncludeTime - Include the time part of date in string, not just date.
+	// Parameters: bIncludeTime - Include the time part of date in string, not just date.
 	//            cDateSeparator - The separator for the date. Default is '/'.
 	// Return Value: std::string containing the start time.
 	//
@@ -105,7 +105,7 @@ protected:
 
 
 	// UpdateSystemInfo - Update the system info string.
-	// Arguments: None
+	// Parameters: None
 	// Return Value: TRUE or 1 for success, FALSE or 0 for fail.
 	//
 	inline void UpdateSystemInfo()
@@ -122,14 +122,14 @@ protected:
 	}
 
 	// UpdateSystemInfo - Update the system info string.
-	// Arguments: None
+	// Parameters: None
 	// Return Value: TRUE or 1 for success, FALSE or 0 for fail.
 	//
 	void UpdateProgramInfo();
 
 	// CreateLogFile - Creates the log file and sets it up.
 	//               - Also manages the initialisation of the sLogFileName string.
-	// Arguments: None
+	// Parameters: None
 	// Return Values: TRUE or 1 for success, FALSE or 0 for fail.
 	//
 	bool CreateLogFile();
@@ -144,7 +144,7 @@ public:
 
 	// AddLogLine - Adds a logging line to a log file.
 	//            - AddLogLine() will automatically format the line based on the line type (verbose, etc)
-	// Arguments: sLogLine - Logging info/message.
+	// Parameters: sLogLine - Logging info/message.
 	//            nTypeOfLine - The type of line to be outputted. Select: 1 for verbose message, 2 for user-space error, 3 for command input info, and 4 for user input info.
 	//            nObjectID - If coming from an object, optionally specify a custom Object ID. Defaults to 10000 if no argument is given.
 	// Return Values: TRUE or 1 for success, FALSE or 0 for fail.
@@ -152,7 +152,7 @@ public:
 	bool AddLogLine(std::string sLogLine, short int nTypeOfLine, int nObjectID = 10000);
 
 	// UpdateEntryLineOnNextWrite - Force-update the entry line in the current log file on the next log-line write.
-	// Arguments: None
+	// Parameters: None
 	// Return Value: None
 	//
 	inline void UpdateEntryLineOnNextWrite() {

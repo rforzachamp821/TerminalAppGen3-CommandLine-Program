@@ -17,9 +17,9 @@ void CpuStressTestWorker() {
 	long double ldStress = 1.0; 
 
 	while (!StopCpuStress) {
-		ldStress *= RandNum(0, 5);
-		ldStress /= RandNum(0.00000001, 5);
-		ldStress += RandNum(0, 5);
+		ldStress *= RandNumld(0, 5);
+		ldStress /= RandNumld(0.00000001, 5);
+		ldStress += RandNumld(0, 5);
 	}
 
 	return;
@@ -30,9 +30,9 @@ void CpuBenchmarkWorker() {
 	long double ldStress = 1.0;
 
 	while (!StopCpuStress) {
-		ldStress *= RandNum(0, 5);
-		ldStress /= RandNum(0.00000001, 5);
-		ldStress += RandNum(0, 5);
+		ldStress *= RandNumld(0, 5);
+		ldStress /= RandNumld(0.00000001, 5);
+		ldStress += RandNumld(0, 5);
 		nCurrentReiterationNum++;
 	}
 	return;
@@ -96,12 +96,15 @@ void CpuBenchmark(short int nSingleOrMulti, long long int nArgNum = -1) {
 		std::thread SingleCoreWorker(CpuBenchmarkWorker);
 
 		while (true) {
-
+			// Terminate on ESC keypress
 			if (_kbhit()) {
-				bCpuStressKeyboardTermination = true;
-				break;
+				if (_getch_nolock() == 27) {
+					bCpuStressKeyboardTermination = true;
+					break;
+				}
+				ClearKeyboardBuffer();
 			}
-			else if (nCurrentReiterationNum >= nReiterationCount) {
+			if (nCurrentReiterationNum >= nReiterationCount) {
 				break;
 			}
 
@@ -128,7 +131,7 @@ void CpuBenchmark(short int nSingleOrMulti, long long int nArgNum = -1) {
 		else {
 			colour(YLW, ConfigObjMain.sColourGlobalBack);
 			ClearKeyboardBuffer();
-			std::cout << wordWrap("\n\nThe single-core benchmark was terminated by a keyboard press.");
+			std::cout << wordWrap("\n\nThe single-core benchmark was terminated by an ESC keyboard press.");
 			Exiting();
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		}
@@ -155,11 +158,15 @@ void CpuBenchmark(short int nSingleOrMulti, long long int nArgNum = -1) {
 
 		while (true) {
 
+			// Terminate on ESC keypress
 			if (_kbhit()) {
-				bCpuStressKeyboardTermination = true;
-				break;
+				if (_getch_nolock() == 27) {
+					bCpuStressKeyboardTermination = true;
+					break;
+				}
+				ClearKeyboardBuffer();
 			}
-			else if (nCurrentReiterationNum >= nReiterationCount) {
+			if (nCurrentReiterationNum >= nReiterationCount) {
 				break;
 			}
 
@@ -187,7 +194,7 @@ void CpuBenchmark(short int nSingleOrMulti, long long int nArgNum = -1) {
 		}
 		else {
 			colour(YLW, ConfigObjMain.sColourGlobalBack);
-			std::cout << wordWrap("\n\nThe single-core benchmark was terminated by a keyboard press.");
+			std::cout << wordWrap("\n\nThe multi-core benchmark was terminated by an ESC keyboard press.");
 			Exiting();
 			ClearKeyboardBuffer();
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -226,7 +233,7 @@ void CpuStressTest(short int nSingleOrMulti, bool bIsArgument = false) {
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		}
 
-		std::cout << wordWrap("Remember, you can always stop the stress test by pressing any key while it's going.\nPress any key to begin the test, or ESC to terminate...");
+		std::cout << wordWrap("Remember, you can always stop the stress test by pressing the ESC key while it's going.\nPress any key to begin the test, or ESC to terminate...");
 		char cKeyCST = _getch();
 		if (cKeyCST == 27) {
 			colour(YLW, ConfigObjMain.sColourGlobalBack);
@@ -245,7 +252,7 @@ void CpuStressTest(short int nSingleOrMulti, bool bIsArgument = false) {
 		std::thread SingleCoreStressTest(CpuStressTestWorker);
 
 		// Then wait for keyboard hit to kill all the processes
-		while (!_kbhit()) {
+		while (!_kbhit() || _getch() != 27) {
 			sleep(10);
 		}
 
@@ -277,7 +284,7 @@ void CpuStressTest(short int nSingleOrMulti, bool bIsArgument = false) {
 			vThreads[i] = std::thread(CpuStressTestWorker);
 		}
 		// Then wait for keyboard hit to kill all the processes
-		while (!_kbhit()) {
+		while (!_kbhit() || _getch() != 27) {
 			sleep(10);
 		}
 

@@ -60,7 +60,7 @@ private:
 	// BinarySearch - A custom multithreaded binary search algorithm with little optimisation (focused on memory stress, not searching specifically)
 	//              - Binary search requires a sorted list, which is how the memory container is initialised.
 	//              - This custom algorithm looks only at the memory container, and does not accept a memory container pointer argument.
-	// Arguments: nSearchNum - The value to search for.
+	// Parameters: nSearchNum - The value to search for.
 	//            bMultiThreaded - Use multithreading or not.
 	//            nInitialisationThreadNumber - Thread number out of total thread count, which indicates the part of the array to search through for the thread.
 	//                                          If bMultiThreaded is TRUE, this must be passed with 0 or above, to nNumOfThreads - 1.
@@ -93,13 +93,13 @@ protected:
 
 
 	// InitialiseMemoryContainer - Initialise the memory container and fill it linearly, depending on host system memory capacity.
-	// Arguments: None
+	// Parameters: None
 	// Return values: TRUE or 1 for success, FALSE or 0 for fail.
 	//
 	bool InitialiseMemoryContainer();
 
 	// UninitialiseMemoryContainer - Unload and destroy the memory stored in the memory container and bring it back to 0.
-	// Arguments: None
+	// Parameters: None
 	// Return values: None
 	//
 	void UninitialiseMemoryContainer();
@@ -109,7 +109,7 @@ protected:
 	//////////////////////////////
 
 	// PerformLinearSearchOnMemoryThread - Thread worker for PerformLinearSearchOnMemory.
-	// Arguments: bMultiThreaded - Use multithreading or not.
+	// Parameters: bMultiThreaded - Use multithreading or not.
 	//            nInitialisationThreadNumber - Thread number out of total thread count, which indicates the part of the array to search through for the thread.
 	//                                          If bMultiThreaded is TRUE, this must be passed with 0 or above, to nNumOfThreads - 1.
 	// Does not return any values.
@@ -117,7 +117,7 @@ protected:
 	void PerformLinearSearchOnMemoryThread(bool bMultiThreaded, unsigned int nInitialisationThreadNumber, std::atomic_ullong& nProgressCounter);
 
 	// PerformExtendedLinearSearchOnMemoryThread - Thread worker for PerformExtendedLinearSearchOnMemory.
-	// Arguments: bMultiThreaded - Use multithreading or not.
+	// Parameters: bMultiThreaded - Use multithreading or not.
 	//            nInitialisationThreadNumber - Thread number out of total thread count, which indicates the part of the array to search through for the thread.
 	//                                          If bMultiThreaded is TRUE, this must be passed with 0 or above, to nNumOfThreads - 1.
 	// Does not return any values.
@@ -148,7 +148,7 @@ public:
 	// PerformBinarySearchOnMemory - Fills up memory to the maximum that the host's memory can hold, performs random number binary searches depending on the number
 	//                               of passes desired, and unloads the memory.
 	//                             - This function very lightly checks for memory integrity both during the binary search and after it, and is more of a memory stress test.
-	// Arguments: nNumOfPasses - Number of binary search passes to perform.
+	// Parameters: nNumOfPasses - Number of binary search passes to perform.
 	//            bMultiThreaded - Use more than 1 thread for the test when this is TRUE.
 	// Return values: TRUE or 1 for success, FALSE or 0 for fail.
 	//
@@ -157,7 +157,7 @@ public:
 	// PerformLinearSearchOnMemory - Fills up memory to the maximum that the host's memory can hold, performs linear check searches depending on the number of passes
 	//                               desired, and unloads the memory.
 	//                             - This function heavily checks for memory integrity by checking for the right values for each byte on memory. This is more of a memory integrity test.
-	// Arguments: nNumOfPasses - Number of binary search passes to perform.
+	// Parameters: nNumOfPasses - Number of binary search passes to perform.
 	// Return values: TRUE or 1 for success, FALSE or 0 for fail.
 	//
 	bool PerformLinearSearchOnMemory(uint64_t nNumOfPasses, bool bMultiThreaded);
@@ -165,7 +165,7 @@ public:
 	// PerformExtendedLinearSearchOnMemory - Fills up memory to the maximum that the host's memory can hold, checks each 8 bytes of memory for correct values linearly,
 	//                                     - changes the cell of memory to a randomly calculated integer (and checks for validity again), and switches back to the same old
 	//                                     - integer with the same validity check at the beginning.
-	// Arguments: nNumOfPasses - Number of extended linear check search passes to perform.
+	// Parameters: nNumOfPasses - Number of extended linear check search passes to perform.
 	// Return values: TRUE or 1 for success, FALSE or 0 for fail.
 	//
 	bool PerformExtendedLinearSearchOnMemory(uint64_t nNumOfPasses, bool bMultiThreaded);
@@ -173,7 +173,7 @@ public:
 	/* Error functions */
 
 	// GetLastErrorValue - Gets the error code of last error that occured.
-	// Arguments: None
+	// Parameters: None
 	// Return values: Error code of last error that occured.
 	//
 	inline int GetLastErrorValue() {
@@ -181,7 +181,7 @@ public:
 	}
 
 	// GetLastErrorInfo - Gets the error info of the last error that occured.
-	// Arguments: None
+	// Parameters: None
 	// Return values: Error info of last error that occured, as a string.
 	//
 	std::string GetLastErrorInfo();

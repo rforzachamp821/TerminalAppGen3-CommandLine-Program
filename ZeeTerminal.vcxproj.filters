@@ -87,6 +87,9 @@
     <ClCompile Include="GameFiles\GameHighScoresSystem\GameHighScoresSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CommandFiles\ConverterAssets\ConverterAssets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -168,6 +171,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommandFiles\PiConstant\PiConstant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandFiles\ConverterAssets\ConverterAssets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

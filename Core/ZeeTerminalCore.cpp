@@ -28,6 +28,8 @@ uint64_t				nNumOfSuccessfulInputtedCommands = 0; // Counter for number of succe
 std::string				sLastColourFore = ""; // Last set colour of any kind - foreground
 std::string				sLastColourBack = ""; // Last set colour of any kind - background
 
+bool bToFileFeatureActivated = false; // ToFile feature
+
 TerminalDefaultAttributes	DefaultAttributesObj;
 RGBColourPresetSystem	RGBPreset[3]; // Possibly [5] in a future update?
 ConfigFileSystem		ConfigObjMain; // Configuration Object
@@ -83,6 +85,9 @@ namespace zt {
 		// Set colours to their respective last colours
 		sLastColourFore = sColourForegroundChoice;
 		sLastColourBack = sColourBackgroundChoice;
+
+		// Exit the colour function if writing to file (ToFile feature) - otherwise, escape codes may appear in the file
+		if (bToFileFeatureActivated) return;
 
 		if (bAnsiVTSequences) {
 
@@ -201,20 +206,29 @@ namespace zt {
 	// Measures in milliseconds
 	inline void sleep(long long int ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
 
-	// Function to choose random number
-	long double RandNum(long double max, long double min)
+	// Function to choose random number - long double
+	long double RandNumld(long double max, long double min)
 	{
 		std::random_device rdRandNum;
-		std::mt19937_64 mtRandNumGen(rdRandNum());
 
 		// distribution in range [min, max]
 		std::uniform_real_distribution<> dist(min, max);
 
-		return dist(mtRandNumGen);
+		return dist(rdRandNum);
+	}
+
+	// Function to choose random number - int64_t
+	int64_t RandNumll(int64_t max, int64_t min) {
+		std::random_device rdRandNum;
+
+		// distribution in range [min, max]
+		std::uniform_int_distribution<int64_t> dist(min, max);
+
+		return dist(rdRandNum);
 	}
 
 	// LogWindowsEvent - Logs an event of choice on the Windows Event Log Database.
-	// Arguments: vsEventDataArray - Vector array of event data strings to forward to the event report.
+	// Parameters: vsEventDataArray - Vector array of event data strings to forward to the event report.
 	//            dwBinaryDataSize - The size of the lpBinaryData argument. Set this to 0 if no binary data will be included.
 	//            lpBinaryData - Binary data to forward to the event report.
 	// Return Values: TRUE or 1 for success, FALSE or 0 for fail.
@@ -247,7 +261,7 @@ namespace zt {
 
 	// OutputBoxWithText - Outputs a box outline, with text inside.
 	//                   - The box is drawn to the maximum text width, and if that is too big, it's drawn to the terminal width.
-	// Arguments: sText - The text to be boxed.
+	// Parameters: sText - The text to be boxed.
 	//            sColourOutlineFore - The foreground colour for the outline. 
 	//            sColourOutlineBack - The background colour for the outline.
 	//            sColourTextFore - The foreground colour for the text.
@@ -1087,7 +1101,7 @@ namespace zt {
 	}
 
 	// SetWindowTitle - Function to set title for the console window.
-	// Arguments: sTitle for the title string.
+	// Parameters: sTitle for the title string.
 	bool SetWindowTitle(std::string sTitle) {
 		if (bAnsiVTSequences) {
 			if (sTitle.length() > 256) {
@@ -1179,7 +1193,7 @@ namespace zt {
 	}
 
 	// CentreColouredText - Takes in a title string and outputs it centred to the console with padding in relation to the console window size.
-	// Arguments: sText is for the string input, nTypeOfText is for the type of text (title (1), subheading (2), etc).
+	// Parameters: sText is for the string input, nTypeOfText is for the type of text (title (1), subheading (2), etc).
 	void CentreColouredText(std::string sText, short int nTypeOfText) {
 		// Work out width
 		int nWidth = 0;
@@ -1243,7 +1257,7 @@ namespace zt {
 	}
 
 	// slowcharCentredFn - Takes in a string and outputs it centred to the console with padding in relation to the console window size.
-	// Arguments: sText is for string input, bNewLine is for adding a newline after the output.
+	// Parameters: sText is for string input, bNewLine is for adding a newline after the output.
 	void slowcharCentredFn(bool bNewLine, std::string sText) {
 		// Work out width
 		int nWidth = 0;
@@ -1363,11 +1377,11 @@ namespace zt {
 		for (int i = 0; i < sText.size(); i++)
 		{
 			// Get random colour number
-			int nRandomNumber = RandNum(16, 1);
+			int nRandomNumber = RandNumld(16, 1);
 
 			if (bIncludeBackground == true) {
 				// Create another background random number
-				int nRandomNumberBack = RandNum(16, 1);
+				int nRandomNumberBack = RandNumld(16, 1);
 
 				// Set background and foreground colours to random
 				colour(colconv::NumberToColour(nRandomNumber), colconv::NumberToColour(nRandomNumberBack));

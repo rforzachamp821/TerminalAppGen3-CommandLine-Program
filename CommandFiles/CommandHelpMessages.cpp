@@ -347,7 +347,7 @@ namespace helpmsgs
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << wordWrap("\n- Allows for outputting a constant beep sound at a variable frequency and duration.\n- The frequency is measured in Hertz, and the duration is measured in SECONDS.\n\n");
+		std::cout << wordWrap("\n- Allows for outputting a constant beep sound at a variable frequency and duration.\n- The frequency is measured in Hertz, and the duration is measured in SECONDS.\n- You can press the ESC key in the middle of the output to exit early.\n\n");
 
 		colourSubheading();
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
@@ -486,7 +486,7 @@ namespace helpmsgs
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << wordWrap("\n- Provides an interface to play different themes, songs and sounds with beeps.\n- This uses the MMSYSTEM API to play beep sounds.\n\n");
+		std::cout << wordWrap("\n- Provides an interface to play different themes, songs and sounds with beeps.\n- This uses the MMSYSTEM API to play beep sounds.\n- You can press the ESC key at any time during the sound output to exit early.\n\n");
 
 		colourSubheading();
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
@@ -1234,6 +1234,54 @@ namespace helpmsgs
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\tDisplays this help message.\n\nExample: about -h\n\n");
 
+		return;
+	}
+
+	// ConverterHelp
+	void ConverterHelp() {
+		CentreColouredText(" ___CONVERTER___ ", 1);
+		std::cout << "\n";
+		CentreColouredText("This command allows you to convert values of one format to another.", 2);
+		std::cout << "\n\n";
+
+		colourSubheading();
+		std::cout << "What this command does:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n- This command allows you to convert values of one format or unit to another, such as celsius to fahrenheit or miles to kilometres.\n- It is very simple; a value is inputted and then another value is outputted.\n\n");
+
+		colourSubheading();
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n -h\t\t\tDisplays this help message.\n --ctof <val>\t\tConvert from celsius to fahrenheit. Put celsius value in place of <val>.\n"
+			" --ftoc <val>\t\tConvert from fahrenheit to celsius. Put fahrenheit value in place of <val>.\n --kmtomi <val>\t\tConvert from kilometres to miles. Put kilometre value in place of <val>."
+			"\n --mitokm <val>\t\tConvert from miles to kilometres. Put miles value in place of <val>.\n --bintoden <str>\tConvert from binary to denary. Put binary string in place of <str>. Only '1' and '0' characters allowed."
+			"\n --dentobin <val>\tConvert from denary to binary. Put denary value in place of <val>.\n --dentohex <val>\tConvert from denary to hexadecimal. Put denary value in place of <val>."
+			"\n --bintohex <str>\tConvert from binary to hexadecimal. Put binary string in place of <str>. Only '1' and '0' characters allowed.\n --sectoall <val>\tConvert seconds to other time formats (years, days, etc). Put seconds value in place of <val>."
+			"\n --kwtohp <val>\t\tConvert from kilowatts to horsepower. Put kilowatts value in place of <val>.\n --hptokw <val>\t\tConvert from horsepower to kilowatts. Put horsepower value in place of <val>.\n"
+			" --lytokm <val>\t\tConvert from light-years in a vacuum to kilometres. Put light-years value in place of <val>.\n --kmtoly <val>\t\tConvert from kilometres to light-years in a vacuum. Put kilometres value in place of <val>.\n\n"
+			"Example: converter --bintoden 10001011\n\nNOTE: In all arguments containing <val>, <val> must be an integer or floating-point number. They cannot include anything else.\n\n");
+		
+		return;
+	}
+
+	// RandNumHelp
+	void RandNumHelp() {
+		CentreColouredText(" ___RANDNUM___ ", 1);
+		std::cout << "\n";
+		CentreColouredText("This command allows you to generate a random number between 2 user-specified numbers.", 2);
+		std::cout << "\n\n";
+
+		colourSubheading();
+		std::cout << "What this command does:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n- This command allows you to generate a random number between 2 user-specified boundary numbers.\n- This command can also allow for the choice of only allowing random integers to be calculated, or allow floating-point numbers to be calculated instead.\n\n");
+
+		colourSubheading();
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n <max> <min>\tSpecify a maximum and minimum number boundary for the random number to be calculated within. Put maximum in <max>, and minimum in <min>. Must be numerical. Floating-point numbers are rounded to nearest whole here.\n"
+			" -f\t\tAllow floating-point real number to be calculated as the random number. Default is FALSE (integer calculation).\n\nExample: randnum 47 23\n\nNOTE: in the <max> <min> argument, the max number must be larger than the min number. They must also be specified in the order of max first, min last.\n\n");
+		
 		return;
 	}
 }

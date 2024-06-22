@@ -35,7 +35,7 @@ protected:
 	const std::string sOptionIndicator = "~| ";
 
 	// DisplayOptionsIndicator - Displays the options indicator at calltime.
-	// Arguments: sColour - The foreground colour to display for the options indicator, in RGB units.
+	// Parameters: sColour - The foreground colour to display for the options indicator, in RGB units.
 	// Return values: None
 	//
 	inline void DisplayOptionsIndicator(std::string sColour) {
@@ -67,7 +67,7 @@ public:
 
 	// SetDirectionsText - Sets the direction text to a custom text, and replaces the default text.
 	//                   - Because there is a default directions text, this function is optional to call.
-	// Arguments: sText - The text to replace the default direction text with.
+	// Parameters: sText - The text to replace the default direction text with.
 	// Return values: None
 	//
 	inline void SetDirectionsText(std::string sText)

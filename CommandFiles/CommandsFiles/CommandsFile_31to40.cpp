@@ -297,7 +297,7 @@ bool commands::Commands31To40(const std::string sCommand, char* cCommandArgs, co
 
 				std::cout << wordWrap("\n\nThis will fill up the memory on your computer and perform binary search tests on it.\n");
 				colour(LCYN, ConfigObjMain.sColourGlobalBack);
-				std::cout << wordWrap("NOTE: You can stop the test at any time by pressing any key in the duration of the test.\n");
+				std::cout << wordWrap("NOTE: You can stop the test at any time by pressing the ESC key in the duration of the test.\n");
 				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 				if (bMultiThreaded == true) {
 					colour(LCYN, ConfigObjMain.sColourGlobalBack);
@@ -336,7 +336,7 @@ bool commands::Commands31To40(const std::string sCommand, char* cCommandArgs, co
 
 				std::cout << wordWrap("\n\nThis will fill up the memory on your computer and perform linear check search tests on it.\n");
 				colour(LCYN, ConfigObjMain.sColourGlobalBack);
-				std::cout << wordWrap("NOTE: This test may take some time.\nNOTE: You can stop the test at any time by pressing any key during the test.\n");
+				std::cout << wordWrap("NOTE: This test may take some time.\nNOTE: You can stop the test at any time by pressing the ESC key during the test.\n");
 				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 				if (bMultiThreaded == true) {
 					colour(LCYN, ConfigObjMain.sColourGlobalBack);
@@ -377,7 +377,7 @@ bool commands::Commands31To40(const std::string sCommand, char* cCommandArgs, co
 				std::cout << wordWrap("\n\nThis will fill up the memory on your computer and perform extended linear check search tests on it.")
 					<< wordWrap("\nThis won't only comprise of checking digits only (like the non-extended test), but also performing operations on memory, before reiterating to the next memory block.\n");
 				colour(LCYN, ConfigObjMain.sColourGlobalBack);
-				std::cout << wordWrap("NOTE: This test may take a lot of time.\nNOTE: You can stop the test at any time by pressing any key during the test.\n");
+				std::cout << wordWrap("NOTE: This test may take a lot of time.\nNOTE: You can stop the test at any time by pressing the ESC key during the test.\n");
 				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 				if (bMultiThreaded == true) {
 					colour(LCYN, ConfigObjMain.sColourGlobalBack);
@@ -433,8 +433,8 @@ bool commands::Commands31To40(const std::string sCommand, char* cCommandArgs, co
 		std::cout << "Setting random colours...\n";
 
 		// Calculate random numbers
-		ConfigObjMain.sColourGlobal = colconv::NumberToColour(RandNum(16, 1));
-		ConfigObjMain.sColourGlobalBack = colconv::NumberToColour(RandNum(16, 1));
+		ConfigObjMain.sColourGlobal = colconv::NumberToColour(RandNumld(16, 1));
+		ConfigObjMain.sColourGlobalBack = colconv::NumberToColour(RandNumld(16, 1));
 		
 		// Write new values to config file
 		ConfigObjMain.WriteConfigFile();

@@ -246,7 +246,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 
 			std::cout << "\n";
 			colour(LCYN, ConfigObjMain.sColourGlobalBack);
-			std::cout << wordWrap("You can stop a test at any time by pressing a key on the keyboard.");
+			std::cout << wordWrap("You can stop a test at any time by pressing the ESC key on the keyboard.");
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 			CpuStress.nSizeOfOptions = 4;

@@ -262,7 +262,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 		CentreColouredText(" ___STOPWATCH___ ", 1);
 		
 		if (!bSkipStartScreen) {
-			std::cout << wordWrap("\n\nYou can exit the stopwatch at any time by pressing a key on the keyboard.\nPress any key to start, or ESC to exit now...\n");
+			std::cout << wordWrap("\n\nYou can exit the stopwatch at any time by pressing the ESC key on the keyboard.\nPress any key to start, or ESC to exit now...\n");
 			char c = _getch();
 
 			// Exit on ESC key press
@@ -286,7 +286,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 
 		auto start = std::chrono::steady_clock::now();
 
-		while (!_kbhit()) { // exit on keypress
+		while (!_kbhit() || _getch() != 27) { // exit on keypress
 			elapsedSeconds = std::chrono::steady_clock::now() - start;
 			std::cout << "Time: ";
 			colour(LCYN, ConfigObjMain.sColourGlobalBack);
@@ -298,7 +298,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 
 		// Assume keyboard has been pressed
 		colour(GRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << "\n\nKeyboard pressed.\n";
+		std::cout << wordWrap("\n\nESC keyboard key pressed.\n");
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 		// Output final time
@@ -485,7 +485,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			std::cout << " sec)                      \r";
 			// Check for keypress
-			if (_kbhit()) {
+			if (_kbhit() && _getch() == 27) {
 				ClearKeyboardBuffer();
 				std::cout << "\n";
 				Exiting();
@@ -508,6 +508,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << " sec)                      ";
 
+		// Output message that timer finished
 		std::cout << '\n';
 		colour(LGRN, ConfigObjMain.sColourGlobalBack);
 		std::cout << CentreText("Timer finished!") << '\n';
@@ -581,7 +582,10 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 		if (dFrequency <= 0 && dDuration <= 0) {
 			CentreColouredText(" ___BEEP___ ", 1);
 
-			std::cout << "\n\n";
+			colour(CYN, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("\n\nYou can press ESC while the beep sound is being outputted to exit.\n\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+
 			dFrequency = NumInputld("Please input frequency in Hertz (0 to exit): > ");
 			if (dFrequency <= 0) {
 				Exiting();
@@ -601,7 +605,10 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 
 		// Run the MultimediaEngine::BeepSound() function to output beep.
 		MultimediaEngine meBeep;
-		meBeep.BeepSound(dFrequency, (dDuration * 1000));
+		if (!meBeep.BeepSound(dFrequency, (dDuration * 1000), true)) {
+			colour(YLW, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("Exiting early because ESC key was pressed...\n\n");
+		}
 
 		colour(LGRN, ConfigObjMain.sColourGlobalBack);
 		std::cout << CentreText("Beep output operation complete.") << '\n';

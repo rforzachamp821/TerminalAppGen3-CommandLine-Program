@@ -844,12 +844,14 @@ bool MultimediaEngine::BeepSound(long double dFrequency, long double dDuration, 
 	waveOutWrite(hWaveOut, &whdr, sizeof(whdr));
 	while ((whdr.dwFlags & WHDR_DONE) == 0) {
 		std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+
+		// Exit on ESC keypress
 		if (_kbhit() && bExitOnKeyPress == true) {
-			waveOutReset(hWaveOut);
-			// Clean keyboard buffer to clear the key that was inputted
-			ClearKeyboardBuffer();
-			bReturnValue = false;
-			break;
+			if (_getch() == 27) {
+				waveOutReset(hWaveOut);
+				bReturnValue = false;
+				break;
+			}
 		}
 	}
 

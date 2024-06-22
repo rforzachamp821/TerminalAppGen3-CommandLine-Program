@@ -19,7 +19,7 @@ public:
 	~RGBColourPresetSystem();
 
 	// CheckIfAnsiPreset - Checks if the colours in the preset are in the ANSI RGB format.
-	// Arguments: None
+	// Parameters: None
 	// Return values: TRUE or 1 for ANSI RGB preset, FALSE or 0 for WIN32 16-colour preset.
 	//
 	inline bool CheckIfAnsiPreset() {
@@ -31,7 +31,7 @@ public:
 
 	// ResetIfNotSetByUser - Resets the RGB preset if it wasn't set by the user already. 
 	//                     - This is usually for changing the preset from ANSI to WIN32 and vice versa if it's already default, so that it works properly in the current configuration.
-	// Arguments: None
+	// Parameters: None
 	// Return Values: None
 	//
 	inline void ResetIfNotSetByUser() {
@@ -46,7 +46,7 @@ public:
 	}
 
 	// ResetPreset - Resets this RGB colour preset to the default values.
-	// Arguments: None
+	// Parameters: None
 	// Return Values: None
 	inline void ResetPreset() {
 		// Reset to default values

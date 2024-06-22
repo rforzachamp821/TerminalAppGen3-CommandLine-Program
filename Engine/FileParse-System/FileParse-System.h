@@ -22,7 +22,7 @@ namespace fparse {
 	// InitialiseFileParse - Initialises the FileParse System.
 	//                     - This function checks the file path validity, then parses the lines from the file and puts them into a string vector.
 	//                     - Some global boolean values are set, and then exits.
-	// Arguments: sFilePath - The filepath to the script.
+	// Parameters: sFilePath - The filepath to the script.
 	//            bExitOnCompletionParam - Exit on script completion. TRUE/1 for yes, FALSE/0 for no.
 	// Return value: TRUE or 1 for success, FALSE or 0 for fail.
 	//
