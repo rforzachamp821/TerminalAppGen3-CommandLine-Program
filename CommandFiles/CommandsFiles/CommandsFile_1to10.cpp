@@ -965,7 +965,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			std::cout << "\n";
 
 			// Take title input
-			sTitle = StrInput("Please input your desired title (256 characters max): > ");
+			sTitle = StrInput("Please input your desired title (254 characters max): > ");
 		}
 
 		// Set the window title
@@ -976,7 +976,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 		}
 		else {
 			// Failed - too long of a string
-			UserErrorDisplay("Setting console window title failed!\nPlease check if your title is too long. It cannot be longer than 256 characters.\n");
+			UserErrorDisplay("Setting console window title failed!\nPlease check if your title is too long. It cannot be longer than 254 characters.\n");
 		}
 
 		return true;

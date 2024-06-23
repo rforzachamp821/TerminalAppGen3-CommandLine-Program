@@ -218,12 +218,12 @@ namespace helpmsgs
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << wordWrap("\n- This command allows you to set the title of this window, which is the window running ZeeTerminal.\n- The title can only be a maximum of 256 characters.\n\n");
+		std::cout << wordWrap("\n- This command allows you to set the title of this window, which is the window running ZeeTerminal.\n- The title can only be a maximum of 254 characters.\n\n");
 
 		colourSubheading();
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << wordWrap("\n -h\tDisplays this help message.\n <title>\tThe title to set. Put the title in place of <title>.\n\nExample: title \"Test Title\"\n\nNOTE: If the title contains spaces, use quotes like the example.\n\n");
+		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n <title>\tThe title to set. Put the title in place of <title>.\n\nExample: title \"Test Title\"\n\nNOTE: If the title contains spaces, use quotes like the example.\n\n");
 
 		return;
 	}

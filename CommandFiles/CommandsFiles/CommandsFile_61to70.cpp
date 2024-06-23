@@ -272,8 +272,8 @@ bool commands::Commands61To70(const std::string sCommand, char* cCommandArgs, co
 	// RandNum
 	else if (sCommand == "randnum" || sCommand == "62") {
 		bool bCalculateFloatingPoint = false;
-		int64_t nMaxNumber = 0;
-		int64_t nMinNumber = 0;
+		long double nMaxNumber = 0;
+		long double nMinNumber = 0;
 		bool bFromArgument = false;
 
 		// Arguments Interface
@@ -285,16 +285,16 @@ bool commands::Commands61To70(const std::string sCommand, char* cCommandArgs, co
 			else if (cCommandArgs[i] == 'f') {
 				bCalculateFloatingPoint = true;
 			}
-			
+
 			// Max-min arguments
 			if (sStringDataCommandArgs[0] != "") {
 				if (sStringDataCommandArgs[1] != "") {
 					// Convert min argument to 64-bit integer and check
-					if (isNumberll(sStringDataCommandArgs[1])) {
-						nMinNumber = std::stoll(sStringDataCommandArgs[1]);
+					if (isNumberld(sStringDataCommandArgs[1])) {
+						nMinNumber = std::stold(sStringDataCommandArgs[1]);
 					}
 					else {
-						VerbosityDisplay("In Commands61To70() - ERROR: Could not detect numerical value in string-based number argument, due to isNumberll fail.\n");
+						VerbosityDisplay("In Commands61To70() - ERROR: Could not detect numerical value in string-based number argument, due to isNumberld fail.\n");
 						UserErrorDisplay("ERROR - Your minimum number generation boundary argument is invalid. Please try again.\nSee \"randnum -h\" for more info.\n");
 
 						return true;
@@ -306,13 +306,13 @@ bool commands::Commands61To70(const std::string sCommand, char* cCommandArgs, co
 
 					return true;
 				}
-				
+
 				// Convert max argument to 64-bit integer and check
-				if (isNumberll(sStringDataCommandArgs[0])) {
-					nMaxNumber = std::stoll(sStringDataCommandArgs[0]);
+				if (isNumberld(sStringDataCommandArgs[0])) {
+					nMaxNumber = std::stold(sStringDataCommandArgs[0]);
 				}
 				else {
-					VerbosityDisplay("In Commands61To70() - ERROR: Could not detect numerical value in string-based number argument, due to isNumberll fail.\n");
+					VerbosityDisplay("In Commands61To70() - ERROR: Could not detect numerical value in string-based number argument, due to isNumberld fail.\n");
 					UserErrorDisplay("ERROR - Your maximum number generation boundary argument is invalid. Please try again.\nSee \"randnum -h\" for more info.\n");
 
 					return true;
@@ -331,8 +331,8 @@ bool commands::Commands61To70(const std::string sCommand, char* cCommandArgs, co
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 			while (true) {
-				nMaxNumber = NumInputll("Please input the maximum boundary for the generator: > ");
-				nMinNumber = NumInputll("Please input the minimum boundary for the generator: > ");
+				nMaxNumber = NumInputld("Please input the maximum boundary for the generator: > ");
+				nMinNumber = NumInputld("Please input the minimum boundary for the generator: > ");
 
 				// Check if max boundary is less than minimum boundary
 				if (nMaxNumber < nMinNumber) {
@@ -351,21 +351,19 @@ bool commands::Commands61To70(const std::string sCommand, char* cCommandArgs, co
 			return true;
 		}
 
-		// Calculate random number and output result
+		long double dCalculatedNumber = 0.0;
 		if (bCalculateFloatingPoint == true) {
-			// Calculate using RandNumld (floating-point)
-			std::cout << "Final Calculated Number: ";
-			colour(LCYN, ConfigObjMain.sColourGlobalBack);
-			std::cout << RandNumld(nMaxNumber, nMinNumber) << "\n";
-			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			dCalculatedNumber = RandNumld(nMaxNumber, nMinNumber);
 		}
 		else {
-			// Calculate using RandNumll (integral)
-			std::cout << "Final Calculated Number: ";
-			colour(LCYN, ConfigObjMain.sColourGlobalBack);
-			std::cout << RandNumll(nMaxNumber, nMinNumber) << "\n";
-			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			dCalculatedNumber = RandNumll(nMaxNumber, nMinNumber);
 		}
+
+		// Display result for calculated number
+		std::cout << "Final Calculated Number: ";
+		colour(LCYN, ConfigObjMain.sColourGlobalBack);
+		std::cout << dCalculatedNumber << "\n";
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 		return true;
 	}

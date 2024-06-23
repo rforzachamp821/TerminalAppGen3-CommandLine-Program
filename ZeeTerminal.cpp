@@ -354,8 +354,9 @@ int main(int argc, char* argv[])
 		
 		// Declare fileout stream for ToFile feature
 		std::ofstream ToFile_Out{};
-		// Declare std::streambuf variable so that just in case tofile feature is enabled, the previous stdout buffer can be saved
+		// Declare std::streambuf variables so that just in case tofile feature is enabled, the previous stdout buffer can be saved
 		std::streambuf* coutStreambufBuffer{};
+		std::streambuf* cerrStreambufBuffer{};
 		
 		/* The following will be based on parsing sCommandArgsBuffer for the actual arguments. */
 		// Copy the string option arguments into sStringOptionCommandArgs with correct formatting
@@ -552,8 +553,11 @@ int main(int argc, char* argv[])
 		if (bToFileFeatureActivated == true) {
 			// Get index of last string in data string array by calculating its array size
 			size_t nLastDataStringArrayMemberIndex = 0;
-			for (nLastDataStringArrayMemberIndex = nArgArraySize - 1; nLastDataStringArrayMemberIndex >= 0 && sStringDataCommandArgs[nLastDataStringArrayMemberIndex] == ""; nLastDataStringArrayMemberIndex--) {}
-
+			for (nLastDataStringArrayMemberIndex = nArgArraySize - 1; sStringDataCommandArgs[nLastDataStringArrayMemberIndex] == ""; nLastDataStringArrayMemberIndex--) {
+				if (sStringDataCommandArgs[nLastDataStringArrayMemberIndex] == "" && nLastDataStringArrayMemberIndex == 0) {
+					break;
+				}
+			}
 			// Open file using std::ofstream object and the filepath to be the last data string in the data string array
 			ToFile_Out.open(sStringDataCommandArgs[nLastDataStringArrayMemberIndex]);
 
@@ -568,11 +572,17 @@ int main(int argc, char* argv[])
 				ToFile_Out.close();
 			}
 			else {
-				// Save old buffer
+				// Save old buffer for std::cout
 				coutStreambufBuffer = std::cout.rdbuf();
 
-				// Redirect stdout to the new stream
+				// Redirect std::cout to the new stream
 				std::cout.rdbuf(ToFile_Out.rdbuf());
+
+				// Save old buffer for std::cerr
+				cerrStreambufBuffer = std::cerr.rdbuf();
+
+				// Redirect std::cerr to the new stream
+				std::cerr.rdbuf(ToFile_Out.rdbuf());
 			}
 		}
 
@@ -588,6 +598,7 @@ int main(int argc, char* argv[])
 
 			// Undo the streambuf modifications
 			std::cout.rdbuf(coutStreambufBuffer);
+			std::cerr.rdbuf(cerrStreambufBuffer);
 			
 			// Close the file stream
 			ToFile_Out.close();

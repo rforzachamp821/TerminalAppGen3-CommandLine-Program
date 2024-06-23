@@ -212,7 +212,7 @@ namespace zt {
 		std::random_device rdRandNum;
 
 		// distribution in range [min, max]
-		std::uniform_real_distribution<> dist(min, max);
+		std::uniform_real_distribution<long double> dist(min, max);
 
 		return dist(rdRandNum);
 	}
@@ -1104,8 +1104,9 @@ namespace zt {
 	// Parameters: sTitle for the title string.
 	bool SetWindowTitle(std::string sTitle) {
 		if (bAnsiVTSequences) {
-			if (sTitle.length() > 256) {
-				VerbosityDisplay("ERROR: In SetWindowTitle() - String argument incorrect due to ANSI 256 max string char limit for title.\n");
+			if (sTitle.length() > 254) {
+				VerbosityDisplay("ERROR: In SetWindowTitle() - String argument incorrect due to ANSI 254 max string char limit for title.\n");
+				return false;
 			}
 
 			// Use ANSI VT sequences if they work on current terminal
@@ -1117,7 +1118,7 @@ namespace zt {
 				return true;
 			}
 			else {
-				VerbosityDisplay("ERROR: In SetWindowTitle() - String argument incorrect due to WIN32 API 256 max string char limit for title.\n");
+				VerbosityDisplay("ERROR: In SetWindowTitle() - String argument incorrect due to WIN32 API 254 max string char limit for title.\n");
 				return false;
 			}
 		}

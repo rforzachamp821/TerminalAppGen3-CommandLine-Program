@@ -365,7 +365,7 @@ namespace converter
 			slowcolourfn(ConfigObjMain.sColourSubheading, ConfigObjMain.sColourSubheadingBack, "Welcome to the Seconds to Other Time Types Converter!");
 			std::cout << "\n\n";
 			while (true) {
-				dSeconds = NumInputll("Please input the seconds value that you want to convert: > ");
+				dSeconds = NumInputld("Please input the seconds value that you want to convert: > ");
 
 				// Negative numbers are not allowed
 				if (dSeconds < 0) {
@@ -413,7 +413,7 @@ namespace converter
 			slowcolourfn(ConfigObjMain.sColourSubheading, ConfigObjMain.sColourSubheadingBack, "Welcome to the Kilowatts to Horsepower Converter!");
 			std::cout << "\n\n";
 			while (true) {
-				dKilowatts = NumInputll("Please input the kilowatts value that you want to convert: > ");
+				dKilowatts = NumInputld("Please input the kilowatts value that you want to convert: > ");
 
 				// Negative numbers are not allowed
 				if (dKilowatts < 0) {
@@ -438,7 +438,7 @@ namespace converter
 		colourSubheading();
 		std::cout << "Results:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << "\n\nInputted kilowatt value: " << dKilowatts << "\nConverted horsepower value: " << dHorsepower << "\n\n";
+		std::cout << "\n\nInputted kilowatt value: " << dKilowatts << "kw\nConverted horsepower value: " << dHorsepower << "hp\n\n";
 
 		return;
 	}
@@ -447,10 +447,10 @@ namespace converter
 	void HorsepowerToKilowatts(long double dHorsepower, bool bFromArgument) {
 		// Prompt
 		if (!bFromArgument) {
-			slowcolourfn(ConfigObjMain.sColourSubheading, ConfigObjMain.sColourSubheadingBack, "Welcome to Horsepower to Kilowatts Converter!");
+			slowcolourfn(ConfigObjMain.sColourSubheading, ConfigObjMain.sColourSubheadingBack, "Welcome to the Horsepower to Kilowatts Converter!");
 			std::cout << "\n\n";
 			while (true) {
-				dHorsepower = NumInputll("Please input the horsepower value that you want to convert: > ");
+				dHorsepower = NumInputld("Please input the horsepower value that you want to convert: > ");
 
 				// Negative numbers are not allowed
 				if (dHorsepower < 0) {
@@ -475,7 +475,7 @@ namespace converter
 		colourSubheading();
 		std::cout << "Results:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << "\n\nInputted horsepower value: " << dKilowatts << "\nConverted kilowatt value: " << dKilowatts << "\n\n";
+		std::cout << "\n\nInputted horsepower value: " << dHorsepower << "hp\nConverted kilowatt value: " << dKilowatts << "kw\n\n";
 
 		return;
 	}
@@ -487,7 +487,7 @@ namespace converter
 			slowcolourfn(ConfigObjMain.sColourSubheading, ConfigObjMain.sColourSubheadingBack, "Welcome to the Light-Years to Kilometres Converter!");
 			std::cout << "\n\n";
 			while (true) {
-				dLightYears = NumInputll("Please input the light-years value that you want to convert: > ");
+				dLightYears = NumInputld("Please input the light-years value that you want to convert: > ");
 
 				// Negative numbers are not allowed
 				if (dLightYears < 0) {
@@ -512,7 +512,7 @@ namespace converter
 		colourSubheading();
 		std::cout << "Results:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << "\n\nInputted light-years value: " << dLightYears << "\nConverted kilometres value: " << dKilometres << "\n\n";
+		std::cout << "\n\nInputted light-years value: " << dLightYears << " light-years\nConverted kilometres value: " << dKilometres << "km\n\n";
 
 		return;
 	}
@@ -524,7 +524,7 @@ namespace converter
 			slowcolourfn(ConfigObjMain.sColourSubheading, ConfigObjMain.sColourSubheadingBack, "Welcome to the Kilometres to Light-Years Converter!");
 			std::cout << "\n\n";
 			while (true) {
-				dKilometres = NumInputll("Please input the kilometres value that you want to convert: > ");
+				dKilometres = NumInputld("Please input the kilometres value that you want to convert: > ");
 
 				// Negative numbers are not allowed
 				if (dKilometres < 0) {
@@ -549,7 +549,7 @@ namespace converter
 		colourSubheading();
 		std::cout << "Results:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << "\n\nInputted kilometres value: " << dKilometres << "\nConverted light-years value: " << dLightYears << "\n\n";
+		std::cout << "\n\nInputted kilometres value: " << dKilometres << "km\nConverted light-years value: " << dLightYears << " light-years\n\n";
 
 		return;
 	}
