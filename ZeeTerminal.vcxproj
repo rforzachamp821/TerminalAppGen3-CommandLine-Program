@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CommandFiles\CalculationAlgorithm\CalculationAlgorithm.cpp" />
+    <ClCompile Include="CommandFiles\ConverterAssets\ConverterAssets.cpp" />
     <ClCompile Include="Core\ColourConv.cpp" />
     <ClCompile Include="Core\ZeeTerminalCore.cpp" />
     <ClCompile Include="Core\ZTFormattingDefinitions.cpp" />
@@ -168,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="CommandFiles\CalculationAlgorithm\CalculationAlgorithm.h" />
     <ClInclude Include="CommandFiles\CommandsFiles\Commands.h" />
+    <ClInclude Include="CommandFiles\ConverterAssets\ConverterAssets.h" />
     <ClInclude Include="CommandFiles\PiConstant\PiConstant.h" />
     <ClInclude Include="Core\ZeeTerminalCore.h" />
     <ClInclude Include="Core\ZTConstDefinitions.h" />

@@ -120,9 +120,9 @@ void GuessTheNumberExtreme::MainGame()
 	{
 		// Set up environment to default
 		// Calculate random ranges and right numbers for this round
-		short int nRightNum = RandNum(100, 1);
-		short int nLowerNum = RandNum(nRightNum, 1);
-		short int nUpperNum = RandNum(100, nRightNum);
+		short int nRightNum = RandNumld(100, 1);
+		short int nLowerNum = RandNumld(nRightNum, 1);
+		short int nUpperNum = RandNumld(100, nRightNum);
 		short int nNumOfTriesUsed = 0;
 		uint64_t nCurrentSessionScore = 0;
 
@@ -174,9 +174,9 @@ void GuessTheNumberExtreme::MainGame()
 				CorrectGuessScreen(nNumOfTriesUsed, nCurrentSessionScore);
 
 				// Reset and re-calculate necessary variables for next round
-				nRightNum = RandNum(100, 1);
-				nLowerNum = RandNum(nRightNum, 1);
-				nUpperNum = RandNum(100, nRightNum);
+				nRightNum = RandNumld(100, 1);
+				nLowerNum = RandNumld(nRightNum, 1);
+				nUpperNum = RandNumld(100, nRightNum);
 				nNumOfTriesUsed = 0;
 
 				// go to end of game round loop

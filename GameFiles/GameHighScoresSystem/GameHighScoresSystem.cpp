@@ -83,8 +83,8 @@ bool GameHighScoresSystem::UpdateHighScoreFile() {
 	// Encrypt high scores and put into string in the format of XXX;YYY where X is Car Dodge and Y is Guess The Number Extreme
 	RyRyCryptor HighScoreEncryptor;
 	std::string sEncryptedHighScore = HighScoreEncryptor.EncryptString(
-		std::to_string(nCarDodgeHighScore) + "."  + std::to_string(static_cast<uint64_t>(RandNum(90000000, 10000000))) + ";"
-		+ std::to_string(nGuessTheNumberExtremeHighScore) + "." + std::to_string(static_cast<uint64_t>(RandNum(90000000, 10000000))) + ";",
+		std::to_string(nCarDodgeHighScore) + "."  + std::to_string(static_cast<uint64_t>(RandNumld(90000000, 10000000))) + ";"
+		+ std::to_string(nGuessTheNumberExtremeHighScore) + "." + std::to_string(static_cast<uint64_t>(RandNumld(90000000, 10000000))) + ";",
 		nHighScoreKey1, nHighScoreKey2);
 
 	// Open file from fresh in binary mode

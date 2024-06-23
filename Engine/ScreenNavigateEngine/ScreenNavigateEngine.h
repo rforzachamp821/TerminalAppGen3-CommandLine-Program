@@ -29,7 +29,7 @@ public:
 
 	// SetDirectionsText - Sets the direction text to a custom text, and replaces the default text.
 	//                   - Because there is a default directions text, this function is optional to call.
-	// Arguments: sText - The text to replace the default direction text with.
+	// Parameters: sText - The text to replace the default direction text with.
 	// Return values: None
 	//
 	inline void SetDirectionsText(std::string sText)

@@ -100,7 +100,7 @@ int OptionSelectEngine::SimpleOptionSelect(std::string sPrompt, std::string sTit
 	// Initialise option indicator colour vector
 	for (int i = 0; i < nSizeOfOptions; i++) {
 		// Calculate another random colour
-		vsOptionIndicatorColours.push_back(colconv::NumberToColour(RandNum(16, 1)));
+		vsOptionIndicatorColours.push_back(colconv::NumberToColour(RandNumld(16, 1)));
 	}
 
 	// Output a newline to prevent errors with overwriting cells of text
@@ -248,7 +248,7 @@ int OptionSelectEngine::OptionSelect(std::string sPrompt, std::string sTitle, bo
 	// Initialise option indicator colour vector
 	for (int i = 0; i < nSizeOfOptions; i++) {
 		// Calculate another random colour
-		sOptionIndicatorColours.push_back(colconv::NumberToColour(RandNum(16, 1)));
+		sOptionIndicatorColours.push_back(colconv::NumberToColour(RandNumld(16, 1)));
 	}
 
 	// Output a newline to prevent errors with overwriting cells of text

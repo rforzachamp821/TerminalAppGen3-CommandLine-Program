@@ -88,7 +88,8 @@ void MemoryTestEngine::BinarySearch(const uint64_t nSearchNum, bool bMultiThread
 
 // KeyboardAbortHandler
 void MemoryTestEngine::KeyboardAbortHandler() {
-	while (!_kbhit() && !bKillKeyboardAbortHandler) {
+	// Exit on ESC keypress or when bKillKeyboardAbortHandler is true
+	while ((!_kbhit() || _getch() != 27) && !bKillKeyboardAbortHandler) {
 		std::this_thread::sleep_for(std::chrono::nanoseconds(1));
 	}
 
@@ -126,7 +127,7 @@ bool MemoryTestEngine::InitialiseMemoryContainer()
 {
 	// Post message of initialisation
 	colour(YLW, ConfigObjMain.sColourGlobalBack);
-	std::cout << "Initialising Memory Container (press any key to abort test now)...\n";
+	std::cout << wordWrap("Initialising Memory Container (press ESC key to abort test now)...\n");
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	// Start thread for checking for keypress abortion
@@ -184,7 +185,7 @@ void MemoryTestEngine::UninitialiseMemoryContainer() {
 
 	// Post message of uninitialisation
 	colour(YLW, ConfigObjMain.sColourGlobalBack);
-	std::cout << "Uninitialising Memory Container...\n";
+	std::cout << wordWrap("Uninitialising Memory Container...\n");
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	nMemoryContainer.clear();
@@ -243,6 +244,7 @@ void MemoryTestEngine::PerformExtendedLinearSearchOnMemoryThread(bool bMultiThre
 	unsigned int nThreadCount = nNumOfThreads;
 	if (bMultiThreaded == false) nThreadCount = 1;
 
+	// bad argument
 	if (bMultiThreaded == true && (nInitialisationThreadNumber < 0 || nInitialisationThreadNumber > nNumOfThreads - 1)) {
 		nErrorLevel = 3;
 		VerbosityDisplay("In MemoryTestEngine::PerformExtendedLinearSearchOnMemoryThread(): ERROR - Bad argument to nInitialisationThreadNumber parameter.\n", nObjectID);
@@ -274,7 +276,7 @@ void MemoryTestEngine::PerformExtendedLinearSearchOnMemoryThread(bool bMultiThre
 		}
 
 		// Calculate random number
-		uint64_t nRandomNumber = RandNum(std::numeric_limits<uint64_t>::max(), std::numeric_limits<uint64_t>::min());
+		uint64_t nRandomNumber = RandNumld(std::numeric_limits<uint64_t>::max(), std::numeric_limits<uint64_t>::min());
 		nMemoryContainer[i] = nRandomNumber;
 
 		// Check for correct digit
@@ -288,7 +290,7 @@ void MemoryTestEngine::PerformExtendedLinearSearchOnMemoryThread(bool bMultiThre
 		}
 
 		// Perform operation on memory container index
-		uint64_t nRandomDivNumber = RandNum(std::numeric_limits<unsigned short int>::max(), 1); // 1 for prevention from divide by 0 exception
+		uint64_t nRandomDivNumber = RandNumld(std::numeric_limits<unsigned short int>::max(), 1); // 1 for prevention from divide by 0 exception
 		nMemoryContainer[i] /= nRandomDivNumber;
 
 		// Check for correct digit
@@ -366,8 +368,6 @@ bool MemoryTestEngine::FillMemoryToMaximum(bool bKeypressBeforeUnload)
 	// Initialise memory
 	if (!InitialiseMemoryContainer()) {
 		VerbosityDisplay("ERROR: In MemoryTestEngine::FillMemoryToMaximum() - Memory container failed to initialise.\n" + GetLastErrorInfo() + '\n', nObjectID);
-
-		colour(RED, ConfigObjMain.sColourGlobalBack);
 		UserErrorDisplay("ERROR: Failed to initialise memory.\n", nObjectID);
 		Exiting();
 
@@ -388,7 +388,7 @@ bool MemoryTestEngine::FillMemoryToMaximum(bool bKeypressBeforeUnload)
 
 	// Output message
 	colour(LGRN, ConfigObjMain.sColourGlobalBack);
-	std::cout << "Memory initialisation complete.\n";
+	std::cout << wordWrap("Memory initialisation complete.\n");
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 	std::cout << "Elapsed time: ";
 	colour(LCYN, ConfigObjMain.sColourGlobalBack);
@@ -398,7 +398,7 @@ bool MemoryTestEngine::FillMemoryToMaximum(bool bKeypressBeforeUnload)
 
 	// Check for keypress if that's what is wanted
 	if (bKeypressBeforeUnload == true) {
-		std::cout << "Press any key to start memory deallocation...\n";
+		std::cout << wordWrap("Press any key to start memory deallocation...\n");
 		_getch(); // keypress
 	}
 
@@ -417,8 +417,6 @@ bool MemoryTestEngine::PerformBinarySearchOnMemory(uint64_t nNumOfPasses, bool b
 	// Initialise memory
 	if (!InitialiseMemoryContainer()) {
 		VerbosityDisplay("ERROR: In MemoryTestEngine::PerformBinarySearchOnMemory() - Memory container failed to initialise.\n" + GetLastErrorInfo() + '\n', nObjectID);
-
-		colour(RED, ConfigObjMain.sColourGlobalBack);
 		UserErrorDisplay("ERROR: Failed to initialise memory.\n", nObjectID);
 		Exiting();
 
@@ -448,7 +446,7 @@ bool MemoryTestEngine::PerformBinarySearchOnMemory(uint64_t nNumOfPasses, bool b
 		std::chrono::time_point<std::chrono::steady_clock> start = std::chrono::steady_clock::now();
 
 		// Calculate random number
-		uint64_t nRandNumber = RandNum(nMemoryContainer.size(), 0);
+		uint64_t nRandNumber = RandNumld(nMemoryContainer.size(), 0);
 
 		// Perform binary search and get index number
 		std::cout << "Performing binary search " << i + 1 << " on memory...\n";
@@ -499,7 +497,7 @@ bool MemoryTestEngine::PerformBinarySearchOnMemory(uint64_t nNumOfPasses, bool b
 
 			// Output message and exit
 			colour(YLW, ConfigObjMain.sColourGlobalBack);
-			std::cout << "\n\nKeyboard key has been pressed.\nStopping Binary Search Memory Test...\n";
+			std::cout << wordWrap("\n\nESC keyboard key has been pressed.\nStopping Binary Search Memory Test...\n");
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			break;
 		}
@@ -521,9 +519,7 @@ bool MemoryTestEngine::PerformBinarySearchOnMemory(uint64_t nNumOfPasses, bool b
 		if (nIndexNum == 0 && nErrorLevel == 2)
 		{
 			// Error
-			colour(RED, ConfigObjMain.sColourGlobalBack);
 			UserErrorDisplay("ERROR: Binary search error occured. The randomised search value wasn't found.\nThis should not be a memory error.\nStopping memory test...\n");
-			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 			// Uninitialise memory
 			UninitialiseMemoryContainer();
@@ -539,9 +535,7 @@ bool MemoryTestEngine::PerformBinarySearchOnMemory(uint64_t nNumOfPasses, bool b
 
 			// Notify user of memory error
 			VerbosityDisplay("In MemoryTestEngine::PerformBinarySearchOnMemory() - Memory error has been detected.\n", nObjectID);
-			colour(RED, ConfigObjMain.sColourGlobalBack);
 			UserErrorDisplay("A memory error has been detected during the binary search.\nStopping memory test...\n", nObjectID);
-			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 			// Uninitialise memory
 			UninitialiseMemoryContainer();
@@ -586,8 +580,6 @@ bool MemoryTestEngine::PerformLinearSearchOnMemory(uint64_t nNumOfPasses, bool b
 	// Initialise memory
 	if (!InitialiseMemoryContainer()) {
 		VerbosityDisplay("ERROR: In MemoryTestEngine::PerformLinearSearchOnMemory() - Memory container failed to initialise.\n" + GetLastErrorInfo() + '\n', nObjectID);
-
-		colour(RED, ConfigObjMain.sColourGlobalBack);
 		UserErrorDisplay("ERROR: Failed to initialise memory.\n", nObjectID);
 		Exiting();
 
@@ -694,7 +686,7 @@ bool MemoryTestEngine::PerformLinearSearchOnMemory(uint64_t nNumOfPasses, bool b
 
 			// Output message and exit
 			colour(YLW, ConfigObjMain.sColourGlobalBack);
-			std::cout << "\n\nKeyboard key has been pressed.\nStopping Linear Search Memory Test...\n";
+			std::cout << wordWrap("\n\nESC keyboard key has been pressed.\nStopping Linear Search Memory Test...\n");
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			break;
 		}
@@ -731,7 +723,7 @@ bool MemoryTestEngine::PerformLinearSearchOnMemory(uint64_t nNumOfPasses, bool b
 
 	// Completed check searches
 	colour(LGRN, ConfigObjMain.sColourGlobalBack);
-	std::cout << "\n\nLinear Check Searches complete.\n";
+	std::cout << wordWrap("\n\nLinear Check Searches complete.\n");
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	// Memory errorlevel check after check search
@@ -786,8 +778,6 @@ bool MemoryTestEngine::PerformExtendedLinearSearchOnMemory(uint64_t nNumOfPasses
 	// Initialise memory
 	if (!InitialiseMemoryContainer()) {
 		VerbosityDisplay("ERROR: In MemoryTestEngine::PerformExtendedLinearSearchOnMemory() - Memory container failed to initialise.\n" + GetLastErrorInfo() + '\n', nObjectID);
-
-		colour(RED, ConfigObjMain.sColourGlobalBack);
 		UserErrorDisplay("ERROR: Failed to initialise memory.\n", nObjectID);
 		Exiting();
 
@@ -893,7 +883,7 @@ bool MemoryTestEngine::PerformExtendedLinearSearchOnMemory(uint64_t nNumOfPasses
 
 			// Output message and exit
 			colour(YLW, ConfigObjMain.sColourGlobalBack);
-			std::cout << "\n\nKeyboard key has been pressed.\nStopping Extended Linear Search Memory Test...\n";
+			std::cout << wordWrap("\n\nESC keyboard key has been pressed.\nStopping Extended Linear Search Memory Test...\n");
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			break;
 		}
@@ -930,7 +920,7 @@ bool MemoryTestEngine::PerformExtendedLinearSearchOnMemory(uint64_t nNumOfPasses
 
 	// Completed check searches
 	colour(LGRN, ConfigObjMain.sColourGlobalBack);
-	std::cout << "\n\nExtended Linear Check Searches complete.\n";
+	std::cout << wordWrap("\n\nExtended Linear Check Searches complete.\n");
 	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 	// Memory errorlevel check after check search

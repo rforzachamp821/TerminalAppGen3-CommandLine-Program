@@ -13,4 +13,5 @@ namespace commands {
 	bool Commands31To40(const std::string sCommand, char* cCommandArgs, const std::string sCommandArgsBuffer = "");
 	bool Commands41To50(const std::string sCommand, char* cCommandArgs, const std::string sCommandArgsBuffer = "");
 	bool Commands51To60(const std::string sCommand, char* cCommandArgs, const std::string sCommandArgsBuffer = "");
+	bool Commands61To70(const std::string sCommand, char* cCommandArgs, const std::string sCommandArgsBuffer = "");
 }

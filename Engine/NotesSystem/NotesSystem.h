@@ -32,7 +32,7 @@ public:
 	~NotesSystem();
 
 	// AddNoteToArray - Adds a note to a passed note index, on the notes array.
-	// Arguments: nArrayIndex - Note index to save the note to, based on 0. This cannot be higher than the returned value of GetCurrentNotesCount().
+	// Parameters: nArrayIndex - Note index to save the note to, based on 0. This cannot be higher than the returned value of GetCurrentNotesCount().
 	//            sNoteText - The text to be used in the note.
 	// Return values: TRUE or 1 for success, FALSE or 0 for fail.
 	//
@@ -40,47 +40,47 @@ public:
 
 	// WriteToNotesFile - Write to notes file in the same directory as program folder, from contents saved in memory.
 	//                  - This function will create a new file if an existing one isn't found, by default due to C++.
-	// Arguments: None
+	// Parameters: None
 	// Return values: TRUE for success, FALSE for fail.
 	//
 	bool WriteToNotesFile();
 
 	// ReadFromNotesFile - Read from notes file and put contents into memory.
 	//                   - This function will stop copying when the number of lines read reach nArraySize.
-	// Arguments: None
+	// Parameters: None
 	// Return values: TRUE for success, FALSE for fail.
 	//
 	bool ReadFromNotesFile();
 
 	// ClearAllNotes - Clears all notes from notes file and notes array.
 	//               - This is equivalent to performing a full reset of the entire Notes system.
-	// Arguments: None
+	// Parameters: None
 	// Return values: TRUE or 1 for success, FALSE or 0 for fail.
 	// NOTE: Any FALSE return comes from the NotesSystem::WriteToNotesFile() function, and is related to clearing the notes file.
 	//
 	bool ClearAllNotes();
 
 	// GetMemoryNotes - Gets all contents of the notes saved in memory and returns them as a singular string.
-	// Arguments: None
+	// Parameters: None
 	// Return value(s): The singular string containing the contents of the notes saved in memory.
 	//
 	std::string GetMemoryNotes();
 
 
 	// GetFileNotes - Gets all contents of the notes file and returns them as a singular string.
-	// Arguments: None
+	// Parameters: None
 	// Return value(s): The singular string containing the contents of the notes file.
 	//
 	std::string GetFileNotes();
 
 	// GetCurrentNotesCount - Gets the current number of notes in memory.
-	// Arguments: None
+	// Parameters: None
 	// Return value(s): The number of notes in memory, base 1.
 	//
 	size_t GetCurrentNotesCount();
 
 	// GetMaxNotesArraySize - Gets the size of the notes array.
-	// Arguments: None
+	// Parameters: None
 	// Return value(s): The size of the notes array, in the number of elements.
 	//
 	inline int GetMaxNotesArraySize() {
@@ -101,13 +101,13 @@ public:
 	~NotesSystemUI();
 
 	// NotesEditor - Provides an interface to edit notes.
-	// Arguments: None
+	// Parameters: None
 	// Return Value: None
 	//
 	void NotesEditor();
 
 	// NotesViewer - Provides an interface to view notes.
-	// Arguments: None
+	// Parameters: None
 	// Return Value: None
 	//
 	void NotesViewer();

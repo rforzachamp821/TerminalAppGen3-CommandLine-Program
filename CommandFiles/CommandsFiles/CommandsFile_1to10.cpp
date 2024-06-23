@@ -52,16 +52,29 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 
 	// Echo
 	else if (sCommand == "echo" || sCommand == "4") {
+		std::string sEchoString = "";
 
-		// Output what is after echo
-		if (sCommandArgsBuffer != " ") {
-			std::cout << sCommandArgsBuffer;
+		// Arguments Interface
+		for (int i = 0; i < nArgArraySize; i++) {
+			if (cCommandArgs[i] == 'h') {
+				helpmsgs::EchoHelp();
+				return true;
+			}
+
+			// Concatenate all data argument strings
+			sEchoString += sStringDataCommandArgs[i];
 		}
+
 		// Output what user wants to input within echo
-		else {
-			std::string sEcho = StrInput("Input what you would like ZeeTerminal to output: > ");
+		if (sEchoString == "") {
+			sEchoString = StrInput("Input what you would like ZeeTerminal to echo (output): > ");
+
 			// Output the input
-			std::cout << sEcho << std::endl;
+			std::cout << sEchoString << std::endl;
+		}
+		else {
+			// Output the input
+			std::cout << sEchoString;
 		}
 
 		return true;
@@ -246,7 +259,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 
 			std::cout << "\n";
 			colour(LCYN, ConfigObjMain.sColourGlobalBack);
-			std::cout << wordWrap("You can stop a test at any time by pressing a key on the keyboard.");
+			std::cout << wordWrap("You can stop a test at any time by pressing the ESC key on the keyboard.");
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 			CpuStress.nSizeOfOptions = 4;
@@ -933,32 +946,37 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 
 	// Title
 	else if (sCommand == "title" || sCommand == "10") {
+		std::string sTitle = "";
 
-		if (sCommandArgsBuffer == " ") {
+		// Arguments Interface
+		for (int i = 0; i < nArgArraySize; i++) {
+			if (cCommandArgs[i] == 'h') {
+				helpmsgs::TitleHelp();
+				return true;
+			}
+
+			// Concatenate all data arguments
+			sTitle += sStringDataCommandArgs[i];
+		}
+
+		// User UI
+		if (sTitle == "") {
 			CentreColouredText(" ___TITLE___ ", 1);
 			std::cout << "\n";
 
 			// Take title input
-			std::string sTitle = StrInput("Please input your desired title (256 characters max): > ");
-			// Set window title using WindowTitleSet engine function
-			if (SetWindowTitle(sTitle)) {
-				colour(LGRN, ConfigObjMain.sColourGlobalBack);
-				std::cout << wordWrap("Setting console window title succeeded!\n");
-				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-			}
-			else {
-				UserErrorDisplay("Setting console window title failed!\nPlease check if your title is too long. It cannot be longer than 256 characters.\n");
-			}
+			sTitle = StrInput("Please input your desired title (254 characters max): > ");
+		}
+
+		// Set the window title
+		if (SetWindowTitle(sTitle)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("Setting console window title succeeded!\n");
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		}
 		else {
-			if (SetWindowTitle(sCommandArgsBuffer)) {
-				colour(LGRN, ConfigObjMain.sColourGlobalBack);
-				std::cout << wordWrap("Setting console window title succeeded!\n");
-				colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-			}
-			else {
-				UserErrorDisplay("Setting console window title failed!\nPlease check if your title is too long. It cannot be longer than 256 characters.\n");
-			}
+			// Failed - too long of a string
+			UserErrorDisplay("Setting console window title failed!\nPlease check if your title is too long. It cannot be longer than 254 characters.\n");
 		}
 
 		return true;

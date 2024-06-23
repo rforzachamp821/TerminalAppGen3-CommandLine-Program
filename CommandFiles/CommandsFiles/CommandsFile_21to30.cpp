@@ -547,7 +547,7 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 		};
 		oseBeepSounds.sOptions = sOptions;
 
-		int nChoice = oseBeepSounds.OptionSelect("Please select which beep-sound you would like to output:", " ___BEEP SOUNDS___ ");
+		int nChoice = oseBeepSounds.OptionSelect("You can press ESC in the middle of output to exit early.\nPlease select which beep-sound you would like to output:", " ___BEEP SOUNDS___ ");
 		std::cout << '\n';
 		
 		switch (nChoice) {
@@ -759,7 +759,7 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 			// Display prompt if start immediately is false
 			if (bStartImmediately == false) {
 				// Warn user on how to stop before starting
-				std::cout << wordWrap("\nThe program will output random numbers in green text to simulate a hacking-like environment.\nYou can press any key in the middle of the operation to stop.")
+				std::cout << wordWrap("\nThe program will output random numbers in green text to simulate a hacking-like environment.\nYou can press the ESC key in the middle of the operation to stop.")
 					<< wordWrap("\n\nPress any key to begin, or ESC to exit...\n");
 
 				// 27 is ESC key
@@ -773,8 +773,8 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 			colour(LGRN, ConfigObjMain.sColourGlobalBack);
 
 			// Loop for outputting random numbers
-			while (!_kbhit()) {
-				std::cout << RandNum(std::numeric_limits<int>::max(), std::numeric_limits<int>::min()) << ' ';
+			while (!_kbhit() || _getch() != 27) {
+				std::cout << RandNumld(std::numeric_limits<int>::max(), std::numeric_limits<int>::min()) << ' ';
 			}
 
 			// Clear keyboard buffer to erase key from buffer

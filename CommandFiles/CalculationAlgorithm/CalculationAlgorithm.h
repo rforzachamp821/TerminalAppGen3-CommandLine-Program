@@ -50,33 +50,33 @@ protected:
 
 
 	// VerifyIfStringIsNumerical - Checks whether std::string argument is a true number or not
-	// Arguments: sNumberTest - The number string to check.
+	// Parameters: sNumberTest - The number string to check.
 	// Return Values: TRUE or 1 for number, FALSE or 0 for not a number.
 	//
 	bool VerifyIfStringIsNumerical(const std::string sNumberTest);
 
 	// FormatValueForDisplay - Formats a specific value for display output.
 	//                       - Has a max of 15-16dp.
-	// Arguments: dValue - The number to format.
+	// Parameters: dValue - The number to format.
 	// Return Value: Formatted number as a string.
 	//
 	std::string FormatValueForDisplay(long double dValue);
 
 	// FormatValueForAlgorithm - Formats a specific value for internal algorithm calculations.
 	//                         - Has a max of 18-19dp.
-	// Arguments: dValue - The number to format.
+	// Parameters: dValue - The number to format.
 	// Return Value: Formatted number as a string.
 	//
 	std::string FormatValueForAlgorithm(long double dValue);
 
 	// FormatStringForDisplay - Formats a calculation string for display output, by rounding the numbers inside and removing the zeroes from them.
-	// Arguments: sCalculationString - The string to format.
+	// Parameters: sCalculationString - The string to format.
 	// Return value: Formatted string.
 	//
 	std::string FormatStringForDisplay(std::string sCalculationString);
 	
 	// FormatStringForAlgorithm - Formats a calculation string for algorithm use, including changing number formatting to the American notation.
-	// Arguments: sCalculationString - The string to format.
+	// Parameters: sCalculationString - The string to format.
 	// Return value: Formatted string.
 	//
 	std::string FormatStringForAlgorithm(std::string sCalculationString);
@@ -103,28 +103,28 @@ protected:
 	// Calculate - Main calculation algorithm that calculates using each of the 4 basic mathematical operators,
 	//             with negative number support along with that. The nErrorLevel variable is modified when 
 	//             anything goes wrong.
-	// Arguments: sCalculationString - The calculation string to work out the product of/find the answer of.
+	// Parameters: sCalculationString - The calculation string to work out the product of/find the answer of.
 	// Return values: The calculated answer in long double-grade precision.
 	//
 	long double Calculate(std::string sCalculationString);
 
 	// EradicateBrackets - Removes brackets from calculation string and converts them to constant numbers.
 	//                     It has support for numbers before and after the brackets that are attached to the brackets.
-	// Arguments: sCalculationString - The calculation string to remove and simplify the brackets from.
+	// Parameters: sCalculationString - The calculation string to remove and simplify the brackets from.
 	// Return values: Modified string
 	//
 	std::string EradicateBrackets(std::string sCalculationString);
 
 	// RemoveUnnecessaryArithmeticSymbols - Simplifies/removes arithmetic operators that are placed next to each other,
 	//                                 e.g) 5+-++--+-5 simplifies to 5+5
-	// Arguments: sCalculationString - The calculation string to remove the arithmetic symbols from.
+	// Parameters: sCalculationString - The calculation string to remove the arithmetic symbols from.
 	// Return values: Modified string
 	//
 	std::string RemoveUnnecessaryArithmeticSymbols(std::string sCalculationString);
 
 	// RemoveAllFormatting - Remove spaces/thousands separators from mathematical expression.
 	//                     - Required in case user uses spaces/thousands separators, as spaces/thousands separators will cause unintended syntax errors.
-	// Arguments: sCalculationString - The calculation string to remove space/thousands separator characters from.
+	// Parameters: sCalculationString - The calculation string to remove space/thousands separator characters from.
 	// Return values: Modified string
 	//
 	std::string RemoveAllFormatting(std::string sCalculationString);
@@ -141,7 +141,7 @@ public:
 	~CalculationAlgorithm();
 
 	// GetLastCalculationErrorInfo - Gets the last calculation error and outputs details as a string.
-	// Arguments: None
+	// Parameters: None
 	// Return values: Error information string.
 	//
 	std::string GetLastCalculationErrorInfo();
@@ -151,7 +151,7 @@ public:
 	//              1) A math error has occured (e.g division by 0).
 	//              2) A syntax error has occured.
 	//              3) An unknown number parsing error has occured.
-	// Arguments: None
+	// Parameters: None
 	// Return values: Last calculation error value.
 	//
 	inline short int GetLastCalculationErrorValue() 
@@ -162,7 +162,7 @@ public:
 	// SafeCalculate - Calculates and finds the product of a calculation string provided by the user,
 	//                 which utilises all features contained in the calculation algorithm to prepare
 	//                 the calculation string for the calculation.
-	// Arguments: sCalculationString - The string to find the product of/calculate.
+	// Parameters: sCalculationString - The string to find the product of/calculate.
 	// Return values: The calculated answer in long double-grade precision.
 	// 
 	// NOTE: This function returns 0.0 if any errors occur, and sets the error level accordingly.

@@ -292,7 +292,7 @@ void NotesSystemUI::NotesEditor() {
 	size_t nPreviousIterator = 0;
 	for (size_t i = NotesMain.GetCurrentNotesCount(); i < NotesMain.GetMaxNotesArraySize(); bIteratorChange ? i = i : i++) {
 		std::cout << "Note ";
-		colour(colconv::NumberToColour(RandNum(16, 1)), ConfigObjMain.sColourGlobalBack);
+		colour(colconv::NumberToColour(RandNumld(16, 1)), ConfigObjMain.sColourGlobalBack);
 		std::cout << i + 1;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << ": > ";
@@ -384,7 +384,7 @@ void NotesSystemUI::NotesViewer() {
 
 			// Output line with line number appended
 			std::cout << "Note ";
-			colour(colconv::NumberToColour(RandNum(16, 1)), ConfigObjMain.sColourGlobalBack);
+			colour(colconv::NumberToColour(RandNumld(16, 1)), ConfigObjMain.sColourGlobalBack);
 			std::cout << i + 1;
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			std::cout << ": " << sNoteBuffer << "\n";
@@ -411,7 +411,7 @@ void NotesSystemUI::NotesViewer() {
 
 			// Output line with line number appended
 			std::cout << "Note ";
-			colour(colconv::NumberToColour(RandNum(16, 1)), ConfigObjMain.sColourGlobalBack);
+			colour(colconv::NumberToColour(RandNumld(16, 1)), ConfigObjMain.sColourGlobalBack);
 			std::cout << i + 1;
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			std::cout << ": " << sNoteBuffer << "\n";

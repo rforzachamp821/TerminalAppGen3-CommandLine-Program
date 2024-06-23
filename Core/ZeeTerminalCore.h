@@ -28,6 +28,8 @@ extern uint64_t				nNumOfSuccessfulInputtedCommands; // Counter for number of su
 extern std::string				sLastColourFore; // Last set colour of any kind - foreground
 extern std::string				sLastColourBack; // Last set colour of any kind - background
 
+extern bool bToFileFeatureActivated; // ToFile feature
+
 extern TerminalDefaultAttributes	DefaultAttributesObj;
 extern RGBColourPresetSystem	RGBPreset[3]; // Possibly [5] in a future update?
 extern ConfigFileSystem		ConfigObjMain; // Configuration Object
@@ -85,7 +87,8 @@ namespace zt {
 	}
 
 	inline void sleep(long long int);
-	long double RandNum(long double max, long double min);
+	long double RandNumld(long double max, long double min);
+	int64_t RandNumll(int64_t max, int64_t min);
 	bool LogWindowsEvent(std::vector<std::string>, DWORD, LPVOID);
 	void OutputBoxWithText(std::string sText, std::string, std::string, std::string, std::string, bool = false);
 	std::string ws2s(const std::wstring& wstr);
