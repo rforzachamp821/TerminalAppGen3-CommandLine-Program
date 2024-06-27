@@ -18,6 +18,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 			}
 		}
 
+		// Get the current time and initialise time structure
 		time_t currentTime = time(0);
 		struct tm localTime {};
 
@@ -28,15 +29,15 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 		std::cout << "Current Date/Time Info:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
-
+		// Use std::put_time to output time in formatted manner
 		std::cout << "\n\nLocal Date: ";
 		colour(LCYN, ConfigObjMain.sColourGlobalBack);
-		std::cout << localTime.tm_mday << "/" << (localTime.tm_mon + 1) << "/" << (localTime.tm_year + 1900); 
+		std::cout << std::put_time(&localTime, "%d/%m/%Y");
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << " (DD/MM/YYYY)\n";
 		std::cout << "Local Time: ";
 		colour(LCYN, ConfigObjMain.sColourGlobalBack);
-		std::cout << localTime.tm_hour << ":" << localTime.tm_min << ":" << localTime.tm_sec << "\n";
+		std::cout << std::put_time(&localTime, "%H:%M:%S\n");
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 		return true;
@@ -125,7 +126,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 		}
 
 		// Execute multimedia player with the inputted file path
-		VerbosityDisplay("Executing media file using MediaPlayer: \"" + ws2s(wsFilePath) + "\"...\n");
+		VerbosityDisplay("In commands::Commands11To20(): INFO - Executing media file using MediaPlayer: \"" + ws2s(wsFilePath) + "\"...\n");
 		MultimediaEngine meMediaPlayer;
 		meMediaPlayer.DShowMultimediaPlayer(wsFilePath);
 
@@ -137,7 +138,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 	else if (sCommand == "audioplayer" || sCommand == "14") {
 		std::string sFilePath = "";
 
-		CentreColouredText("___AUDIO PLAYER___", 1);
+		CentreColouredText(" ___AUDIOPLAYER___ ", 1);
 		std::cout << '\n';
 
 		// Arguments Interface
@@ -157,7 +158,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 			colourSubheading();
 			std::cout << wordWrap("The following file formats are supported:") << NOULINE_STR;
 			colour(LCYN, ConfigObjMain.sColourGlobalBack);
-			std::cout << wordWrap("\nMP3, MP2, MP1, OGG, WAV, AIFF, FLAC, XM, IT, S3M, MOD, MTM, UMX, WMA, M4A, OPUS, AAC\n\nType \"*open\" without quotes to use the Windows File Dialogue to open an audio file.\n");
+			std::cout << wordWrap("\nMP3, MP2, MP1, OGG, WAV, AIFF, FLAC, XM, IT, S3M, MOD, MTM, UMX, WMA, M4A, OPUS and AAC.\n\nType \"*open\" without quotes to use the Windows File Dialogue to open an audio file.\n");
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 			// Prompt
@@ -185,7 +186,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 			}
 		}
 
-		VerbosityDisplay("Executing audio file using AudioPlayer: \"" + sStringDataCommandArgs[0] + "\"...\n");
+		VerbosityDisplay("In commands::Commands11To20(): INFO - Executing audio file using AudioPlayer: \"" + sStringDataCommandArgs[0] + "\"...\n");
 		MultimediaEngine meAudioPlayer;
 		meAudioPlayer.BASSAudioPlayer(sFilePath);
 
@@ -371,10 +372,10 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 			size_t nFinalMarkPos = sFilePath.find('\"', nFirstMarkPos) - 1;
 			sFilePath = sFilePath.substr(nFirstMarkPos, nFinalMarkPos);
 		}
-
+		
 		fileTestIn.open(sFilePath);
 		if (fileTestIn.fail()) {
-			VerbosityDisplay("In Commands() - ERROR: Unknown directory/file detected. Read operation failed.\n");
+			VerbosityDisplay("In commands::Commands11To20() - ERROR: Unknown directory/file detected. Read operation failed.\n");
 			UserErrorDisplay("ERROR - The directory or file doesn't exist. Please try again with a directory/file that exists.\n");
 
 			fileTestIn.close();
@@ -439,7 +440,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 			else if (sStringDataCommandArgs[0] != "") {
 				// Firstly, check if argument is a real and usable number
 				if (isNumberld(sStringDataCommandArgs[0]) == false) {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands11To20() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("ERROR - Number argument is either too big or not a number.\nPlease try again with a number between 0 and 2 billion.\n");
 
 					return true;
@@ -464,7 +465,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 
 		// Start timer with prompts
 		colour(LBLU, ConfigObjMain.sColourGlobalBack);
-		std::cout << wordWrap("\nPress any key to exit the timer.\n\n");
+		std::cout << wordWrap("\nPress ESC to exit the timer.\n\n");
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 		// Disable cursor visibility
@@ -538,7 +539,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 			if (sStringDataCommandArgs[0] != "") {
 				// Firstly, check if argument is a real and usable number
 				if (isNumberld(sStringDataCommandArgs[0]) == false) {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands11To20() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("ERROR - Your frequency argument is either too big or not a number.\nPlease try again with a number between 0 and 2 billion.\n");
 
 					return true;
@@ -548,7 +549,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 				dFrequency = std::stold(sStringDataCommandArgs[0]);
 
 				if (dFrequency < 0) {
-					VerbosityDisplay("ERROR: In Commands() - Numerical value argument incorrect (negative number).\n");
+					VerbosityDisplay("ERROR: In commands::Commands11To20() - Numerical value argument incorrect (negative number).\n");
 					UserErrorDisplay("ERROR - Your frequency argument is a negative number.\nPlease try again with a number between 0 and 2 billion.\n");
 
 					return true;
@@ -559,7 +560,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 			if (sStringDataCommandArgs[1] != "") {
 				// Firstly, check if argument is a real and usable number
 				if (isNumberld(sStringDataCommandArgs[1]) == false) {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands11To20() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("ERROR - Your time argument is either too big or not a number.\nPlease try again with a number between 0 and 2 billion.\n");
 
 					return true;
@@ -570,7 +571,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 
 				// Negative numbers are not allowed.
 				if (dDuration < 0) {
-					VerbosityDisplay("ERROR: In Commands() - Numerical value argument incorrect (negative number).\n");
+					VerbosityDisplay("ERROR: In commands::Commands11To20() - Numerical value argument incorrect (negative number).\n");
 					UserErrorDisplay("ERROR - Your time argument is a negative number.\nPlease try again with a number between 0 and 2 billion.\n");
 
 					return true;
@@ -635,7 +636,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 					sText = sStringDataCommandArgs[i];
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Vital argument not found.\n");
+					VerbosityDisplay("ERROR: In commands::Commands11To20() - Vital argument not found.\n");
 					UserErrorDisplay("ERROR - No form of text argument found.\nPlease make sure that's there, and try again.\n");
 
 					return true;
@@ -647,7 +648,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 					sCaption = sStringDataCommandArgs[i];
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Vital argument not found.\n");
+					VerbosityDisplay("ERROR: In commands::Commands11To20() - Vital argument not found.\n");
 					UserErrorDisplay("ERROR - No form of caption text argument found.\nPlease make sure that's there, and try again.\n");
 
 					return true;
@@ -660,7 +661,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 					if (nIcon == 1) return true;
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Vital argument not found.\n");
+					VerbosityDisplay("ERROR: In commands::Commands11To20() - Vital argument not found.\n");
 					UserErrorDisplay("ERROR - No form of icon argument found.\nPlease make sure that's there, and try again.\n");
 
 					return true;
@@ -671,7 +672,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 					nButton = MessageBoxButtonSwitch(sStringDataCommandArgs[i]);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Vital argument not found.\n");
+					VerbosityDisplay("ERROR: In commands::Commands11To20() - Vital argument not found.\n");
 					UserErrorDisplay("ERROR - No form of button argument found.\nPlease make sure that's there, and try again.\n");
 
 					return true;
@@ -758,7 +759,7 @@ bool commands::Commands11To20(const std::string sCommand, char* cCommandArgs, co
 
 		if (MessageBoxA(NULL, sText.c_str(), sCaption.c_str(), nButton | nIcon) == false) {
 			// An error occured
-			VerbosityDisplay("In Commands() - ERROR: Possible unknown messagebox return value from OptionSelectEngine::OptionSelect(), or standard WIN32 Function Library error.\n");
+			VerbosityDisplay("In commands::Commands11To20() - ERROR: Possible unknown messagebox return value from OptionSelectEngine::OptionSelect(), or standard WIN32 Function Library error.\n");
 			UserErrorDisplay("An error occured while displaying the message box.\nPlease try again later.\n");
 		}
 		else {

@@ -43,7 +43,7 @@ namespace fparse {
 
 		// 2. Check file stream
 		if (LineParseTest.fail()) {
-			VerbosityDisplay("In InitialiseFileParse(): ERROR - Failed to initialise FileParse System due to bad file path (sFilePath is nonexistent).\n");
+			VerbosityDisplay("In InitialiseFileParse(): ERROR - Failed to initialise FileParse System due to bad file path, lack of permissions or out of memory.\n");
 			LineParseTest.close();
 			UninitialiseFileParse();
 			return false;

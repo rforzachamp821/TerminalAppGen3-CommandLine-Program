@@ -36,7 +36,7 @@ void HighlightColourSettings(short int nResult = 0, int nChoice = 0) {
 			"Modify Background Colour"
 		};
 		oseHighlight.sOptions = sOptions;
-		std::cout << std::endl;
+		std::cout << "\n";
 
 		nResult = oseHighlight.OptionSelect("Please select what you want to do for Highlight Colour:", " ___HIGHLIGHT COLOUR SETTINGS___ ");
 	}
@@ -54,14 +54,16 @@ void HighlightColourSettings(short int nResult = 0, int nChoice = 0) {
 				Exiting();
 				return;
 			}
-			std::cout << std::endl;
+			std::cout << "\n";
 		}
 		
-		ColourForegroundSwitch(&nChoice, &ConfigObjMain.sColourHighlightBack, &ConfigObjMain.sColourHighlight);
+		// Set foreground colour
+		if (ColourForegroundSwitch(&nChoice, &ConfigObjMain.sColourHighlightBack, &ConfigObjMain.sColourHighlight)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Highlight foreground colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("Highlight foreground colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nResult == 2) {
@@ -76,14 +78,16 @@ void HighlightColourSettings(short int nResult = 0, int nChoice = 0) {
 				Exiting();
 				return;
 			}
-			std::cout << std::endl;
+			std::cout << "\n";
 		}
 
-		ColourBackgroundSwitch(&nChoice, &ConfigObjMain.sColourHighlightBack, &ConfigObjMain.sColourHighlight);
+		// Set background colour
+		if (ColourBackgroundSwitch(&nChoice, &ConfigObjMain.sColourHighlightBack, &ConfigObjMain.sColourHighlight)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Highlight background colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("Highlight background colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nResult == -1) {
@@ -111,7 +115,7 @@ void TitleColourSettings(short int nResult = 0, int nChoice = 0) {
 			"Modify Background Colour"
 		};
 		oseTitle.sOptions = sOptions;
-		std::cout << std::endl;
+		std::cout << "\n";
 
 		nResult = oseTitle.OptionSelect("Please select what you want to do for Title Colour:", " ___TITLE COLOUR SETTINGS___ ");
 	}
@@ -129,14 +133,16 @@ void TitleColourSettings(short int nResult = 0, int nChoice = 0) {
 				Exiting();
 				return;
 			}
-			std::cout << std::endl;
+			std::cout << "\n";
 		}
 
-		ColourForegroundSwitch(&nChoice, &ConfigObjMain.sColourTitleBack, &ConfigObjMain.sColourTitle);
+		// Set foreground colour
+		if (ColourForegroundSwitch(&nChoice, &ConfigObjMain.sColourTitleBack, &ConfigObjMain.sColourTitle)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Title foreground colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("Title foreground colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nResult == 2) {
@@ -151,14 +157,16 @@ void TitleColourSettings(short int nResult = 0, int nChoice = 0) {
 				Exiting();
 				return;
 			}
-			std::cout << std::endl;
+			std::cout << "\n";
 		}
 
-		ColourBackgroundSwitch(&nChoice, &ConfigObjMain.sColourTitleBack, &ConfigObjMain.sColourTitle);
+		// Set background colour
+		if (ColourBackgroundSwitch(&nChoice, &ConfigObjMain.sColourTitleBack, &ConfigObjMain.sColourTitle)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Title background colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("Title background colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nResult == -1) {
@@ -204,14 +212,16 @@ void SubheadingColourSettings(short int nResult = 0, int nChoice = 0) {
 				Exiting();
 				return;
 			}
-			std::cout << std::endl;
+			std::cout << "\n";
 		}
 
-		ColourForegroundSwitch(&nChoice, &ConfigObjMain.sColourSubheadingBack, &ConfigObjMain.sColourSubheading);
+		// Set foreground colour
+		if (ColourForegroundSwitch(&nChoice, &ConfigObjMain.sColourSubheadingBack, &ConfigObjMain.sColourSubheading)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Subheading foreground colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("Subheading foreground colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nResult == 2) {
@@ -226,14 +236,16 @@ void SubheadingColourSettings(short int nResult = 0, int nChoice = 0) {
 				Exiting();
 				return;
 			}
-			std::cout << std::endl;
+			std::cout << "\n";
 		}
 
-		ColourBackgroundSwitch(&nChoice, &ConfigObjMain.sColourSubheadingBack, &ConfigObjMain.sColourSubheading);
+		// Set background colour
+		if (ColourBackgroundSwitch(&nChoice, &ConfigObjMain.sColourSubheadingBack, &ConfigObjMain.sColourSubheading)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Subheading background colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("Subheading background colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nResult == -1) {
@@ -374,7 +386,7 @@ void AnsiSettings(short int nChoice = 0) {
 		oseAnsi.sOptions = sOptions;
 		std::cout << std::endl;
 
-		nChoice = oseAnsi.OptionSelect("Please select your desired option for the ANSI setting:\n(Currently set to: " + BoolToString(ConfigObjMain.bAnsiVTSequences) + ")", " ___ANSI SETTINGS___ ");
+		nChoice = oseAnsi.OptionSelect("Please select your desired option for the ANSI setting:\n(Currently set to: " + BoolToString(bAnsiVTSequences) + ")", " ___ANSI SETTINGS___ ");
 	}
 	
 
@@ -533,6 +545,17 @@ void CursorSettings(short int nChoice = 0, short int nChoiceBlink = 0, short int
 				else break;
 			}
 			else break;
+		}
+	}
+
+	if (nChoice == 1 || nChoice == 3) {
+		// Doesn't work without ANSI
+		if (!bAnsiVTSequences) {
+			colour(RED, ConfigObjMain.sColourGlobalBack);
+			std::cout << wordWrap("Sorry, but this setting cannot be modified without terminal ANSI VT support.") << '\n';
+			Exiting();
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+			return;
 		}
 	}
 
@@ -1166,12 +1189,13 @@ void CarDodgeGameSettings(short int nChoiceMain = 0, int nChoiceCarTurnSpeed = 0
 			return;
 		}
 		
-		ColourForegroundSwitch(&nChoiceForeground, &ConfigObjMain.sCarDodgeGameplayColourBack, &ConfigObjMain.sCarDodgeGameplayColourFore);
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		// Set foreground colour
+		if (ColourForegroundSwitch(&nChoiceForeground, &ConfigObjMain.sCarDodgeGameplayColourBack, &ConfigObjMain.sCarDodgeGameplayColourFore)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("CarDodge game foreground colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("CarDodge game foreground colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nChoiceMain == 4) {
@@ -1189,12 +1213,13 @@ void CarDodgeGameSettings(short int nChoiceMain = 0, int nChoiceCarTurnSpeed = 0
 			return;
 		}
 
-		ColourBackgroundSwitch(&nChoiceBackground, &ConfigObjMain.sCarDodgeGameplayColourBack, &ConfigObjMain.sCarDodgeGameplayColourFore);
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		// Set background colour
+		if (ColourBackgroundSwitch(&nChoiceBackground, &ConfigObjMain.sCarDodgeGameplayColourBack, &ConfigObjMain.sCarDodgeGameplayColourFore)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("CarDodge game background colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("CarDodge game background colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nChoiceMain == -1) {
@@ -1239,12 +1264,13 @@ void GuessTheNumberGameSettings(short int nChoiceMain = 0, int nChoiceGameForegr
 			return;
 		}
 
-		ColourForegroundSwitch(&nChoiceGameForeground, &ConfigObjMain.sGTNGameplayColourBack, &ConfigObjMain.sGTNGameplayColourFore);
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		// Set foreground colour
+		if (ColourForegroundSwitch(&nChoiceGameForeground, &ConfigObjMain.sGTNGameplayColourBack, &ConfigObjMain.sGTNGameplayColourFore)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Guess The Number game foreground colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("Guess The Number game foreground colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nChoiceMain == 2) {
@@ -1262,12 +1288,13 @@ void GuessTheNumberGameSettings(short int nChoiceMain = 0, int nChoiceGameForegr
 			return;
 		}
 
-		ColourBackgroundSwitch(&nChoiceGameBackground, &ConfigObjMain.sGTNGameplayColourBack, &ConfigObjMain.sGTNGameplayColourFore);
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		// Set background colour
+		if (ColourBackgroundSwitch(&nChoiceGameBackground, &ConfigObjMain.sGTNGameplayColourBack, &ConfigObjMain.sGTNGameplayColourFore)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Guess The Number game background colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("Guess The Number game background colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nChoiceMain == -1) {
@@ -1293,7 +1320,7 @@ void GuessTheNumberExtremeGameSettings(short int nChoiceMain = 0, int nChoiceGam
 			"Game Background Colour"
 		};
 		oseGTNSettings.sOptions = sOptions;
-		nChoiceMain = oseGTNSettings.OptionSelect("Please select which setting you want to change relating to the Guess The Number Extreme game:", " ___GUESS THE NUMBER GAME SETTINGS___ ");
+		nChoiceMain = oseGTNSettings.OptionSelect("Please select which setting you want to change relating to the Guess The Number Extreme game:", " ___GUESS THE NUMBER EXTREME GAME SETTINGS___ ");
 	}
 
 
@@ -1312,12 +1339,13 @@ void GuessTheNumberExtremeGameSettings(short int nChoiceMain = 0, int nChoiceGam
 			return;
 		}
 
-		ColourForegroundSwitch(&nChoiceGameForeground, &ConfigObjMain.sGTNEGameplayColourBack, &ConfigObjMain.sGTNEGameplayColourFore);
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		// Set foreground colour
+		if (ColourForegroundSwitch(&nChoiceGameForeground, &ConfigObjMain.sGTNEGameplayColourBack, &ConfigObjMain.sGTNEGameplayColourFore)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Guess The Number Extreme game foreground colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("Guess The Number Extreme game foreground colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nChoiceMain == 2) {
@@ -1335,12 +1363,13 @@ void GuessTheNumberExtremeGameSettings(short int nChoiceMain = 0, int nChoiceGam
 			return;
 		}
 
-		ColourBackgroundSwitch(&nChoiceGameBackground, &ConfigObjMain.sGTNEGameplayColourBack, &ConfigObjMain.sGTNEGameplayColourFore);
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		// Set background colour
+		if (ColourBackgroundSwitch(&nChoiceGameBackground, &ConfigObjMain.sGTNEGameplayColourBack, &ConfigObjMain.sGTNEGameplayColourFore)) {
+			colour(LGRN, ConfigObjMain.sColourGlobalBack);
+			std::cout << CentreText("Guess The Number Extreme game background colour successfully set!") << std::endl;
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+		}
 
-		colour(LGRN, ConfigObjMain.sColourGlobalBack);
-		std::cout << CentreText("Guess The Number Extreme game background colour successfully set!") << std::endl;
-		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		return;
 	}
 	else if (nChoiceMain == -1) {

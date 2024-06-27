@@ -82,6 +82,9 @@ bool MultimediaEngine::DShowMultimediaPlayer(std::wstring wsInputFilePath) {
 	bool bRepeatActivated = false;
 	bool bUserCursorVisibilitySetting = true;
 
+	// Turn off cursor visibility, as it would cause flickering when outputting media time
+	bUserCursorVisibilitySetting = DisableCursorVisibility();
+
 	std::cout << '\n';
 
 	// Check for speechmarks in case of copy from file explorer
@@ -172,9 +175,6 @@ playfile:
 			if (bRepeatActivated == false)
 				std::cout << wordWrap("Press space or 'p' to pause/unpause, 'r' to activate repeating media file, and ESC or 'e' to exit.\nPress the left arrow key to go backwards, and the right arrow key to fast forward.\n\n\n\n");
 
-			// Turn off cursor visibility, as it would cause flickering when outputting media time
-			bUserCursorVisibilitySetting = DisableCursorVisibility();
-
 			while (dCurrentPosition < dDuration) {
 
 				// Get current media reading position
@@ -256,7 +256,7 @@ playfile:
 					if (dCurrentPosition + 5 <= dDuration) {
 						hr = pPos->put_CurrentPosition(dCurrentPosition + 5);
 					}
-					else hr = pPos->put_CurrentPosition(dDuration);
+					else hr = pPos->put_CurrentPosition(dDuration - 1); // go to the very end of the media file - 1
 
 					if (FAILED(hr)) {
 						UserErrorDisplay("\nAn error occured when seeking forwards.", nObjectID);
@@ -406,6 +406,9 @@ bool MultimediaEngine::BASSAudioPlayer(std::string sInputFilePath) {
 		VerbosityDisplay("ERROR - Failed to load FLAC plugin.\nPlease check if the bassflac.dll file is in the same directory as ZeeTerminal.\nWill proceed anyway.\n", nObjectID);
 	}
 
+	// Set cursor visibility to false to prevent flickering when showing media time
+	bUserCursorVisibilitySetting = DisableCursorVisibility();
+
 	do {
 		// BASS_STREAM_PRESCAN is incredibly important for skipping to EOF when using BASS_ChannelSetPosition(). 
 		// Provides accurate, rather than approximate, values.
@@ -418,6 +421,11 @@ bool MultimediaEngine::BASSAudioPlayer(std::string sInputFilePath) {
 			BASS_PluginFree(pluginflac);
 			BASS_PluginFree(pluginopus);
 			BASS_Free();
+
+			// Revert cursor visibility back to user default
+			ConfigObjMain.bShowCursor = bUserCursorVisibilitySetting;
+			SetCursorAttributes();
+
 			return false;
 		}
 
@@ -432,6 +440,11 @@ bool MultimediaEngine::BASSAudioPlayer(std::string sInputFilePath) {
 			BASS_PluginFree(pluginflac);
 			BASS_PluginFree(pluginopus);
 			BASS_Free();
+
+			// Revert cursor visibility back to user default
+			ConfigObjMain.bShowCursor = bUserCursorVisibilitySetting;
+			SetCursorAttributes();
+
 			return false;
 		}
 
@@ -462,9 +475,6 @@ bool MultimediaEngine::BASSAudioPlayer(std::string sInputFilePath) {
 			GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbiPlayer);
 			SetCursorPosition(csbiPlayer.dwCursorPosition.X, csbiPlayer.dwCursorPosition.Y - 2);
 		}
-
-		// Set cursor visibility to false to prevent flickering when showing media time
-		bUserCursorVisibilitySetting = DisableCursorVisibility();
 
 		while (dCurrentPosition < dDuration) {
 

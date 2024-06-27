@@ -58,7 +58,7 @@ void CarDodgeMain::UpdatePanelInfo() {
 	SetCursorPosition(nScreenWidth - nRightBorderWidth + 3, 9);
 	std::cout << "Level: " << (nSessionLevel == 12 ? "OMEGA" : std::to_string(nSessionLevel));
 	SetCursorPosition(nScreenWidth - nRightBorderWidth + 3, 10);
-	std::cout << "Interval Period: " << nSessionEnemyCarInterval.count() * (nSessionPowerUp == 1 ? 2 : 1) << "ms ";
+	std::cout << "Interval Period: " << nSessionEnemyCarInterval.count() * (nSessionPowerUp == 1 ? 2 : 1) << (nSessionEnemyCarInterval.count() * (nSessionPowerUp == 1 ? 2 : 1) < 100 ? "ms " : "ms"); // Display milliseconds with a space when less than 100ms (3 digits) interval period to prevent overflow to next line
 	SetCursorPosition(nScreenWidth - nRightBorderWidth + 3, 11);
 	std::cout << "_______________";
 

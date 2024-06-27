@@ -83,7 +83,7 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 
 			// Error
 			else {
-				VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+				VerbosityDisplay("In commands::Commands51To60() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 				UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 			}
 		}
@@ -97,6 +97,8 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 		std::string sFileName = "";
 		RYRYKEY rKey1 = 0;
 		RYRYKEY rKey2 = 0;
+		bool bFirstKeyInputtedAsArg = false;
+		bool bSecondKeyInputtedAsArg = false;
 		int nOption = 0; // 0 is reserved, 1 is encrypt, 2 is decrypt
 
 		// Arguments Interface
@@ -145,11 +147,13 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 					if (i + 1 < nArgArraySize && sStringDataCommandArgs[i + 1] != "") {
 						if (isNumberull(sStringDataCommandArgs[i + 1])) {
 							rKey1 = std::stoull(sStringDataCommandArgs[i + 1]);
+							bFirstKeyInputtedAsArg = true;
 						}
 					}
 					if (i + 2 < nArgArraySize && sStringDataCommandArgs[i + 2] != "") {
 						if (isNumberull(sStringDataCommandArgs[i + 2])) {
 							rKey2 = std::stoull(sStringDataCommandArgs[i + 2]);
+							bSecondKeyInputtedAsArg = true;
 						}
 					}
 				}
@@ -179,7 +183,7 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 			return true;
 		}
 		else if (nOption < -1 || nOption == 0 || nOption > 2) {
-			VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In commands::Commands51To60() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 			return true;
 		}
@@ -222,15 +226,15 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 			}
 		}
 
-		if (bUseWindowsEncryption == false && rKey1 == 0) {
+		if (bUseWindowsEncryption == false && !bFirstKeyInputtedAsArg) {
 			std::string sPrompt = "Please input the first key for ";
-			if (nOption == 1) sPrompt += "encryption";
+			if (nOption == 1) sPrompt += "encryption (to unlock data later)";
 			else if (nOption == 2) sPrompt += "decryption";
 			rKey1 = PositiveNumInputull(sPrompt + ": > ");
 		}
-		if (bUseWindowsEncryption == false && rKey2 == 0) {
+		if (bUseWindowsEncryption == false && !bSecondKeyInputtedAsArg) {
 			std::string sPrompt = "Please input the second key for ";
-			if (nOption == 1) sPrompt += "encryption";
+			if (nOption == 1) sPrompt += "encryption (to unlock data later)";
 			else if (nOption == 2) sPrompt += "decryption";
 			rKey2 = PositiveNumInputull(sPrompt + ": > ");
 		}
@@ -239,7 +243,7 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 		if (nOption == 1) {
 			if (bUseWindowsEncryption) {
 				if (!EncryptFileA(sFileName.c_str())) {
-					VerbosityDisplay("In Commands(): ERROR - EncryptFileA() function failed, with error code " + std::to_string(GetLastError()) + ".\n");
+					VerbosityDisplay("In commands::Commands51To60(): ERROR - EncryptFileA() function failed, with error code " + std::to_string(GetLastError()) + ".\n");
 					UserErrorDisplay("ERROR - An error occured when encrypting data. Failed with error code " + std::to_string(GetLastError()) + ".\n");
 				}
 				else {
@@ -264,7 +268,6 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 							}
 						}
 					}
-
 				}
 				else {
 					if (!FileCryptorObj.EncryptFile(sFileName, rKey1, rKey2)) {
@@ -289,7 +292,7 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 		else if (nOption == 2) {
 			if (bUseWindowsEncryption) {
 				if (!DecryptFileA(sFileName.c_str(), NULL)) {
-					VerbosityDisplay("In Commands(): ERROR - DecryptFileA() function failed, with error code " + std::to_string(GetLastError()) + ".\n");
+					VerbosityDisplay("In commands::Commands51To60(): ERROR - DecryptFileA() function failed, with error code " + std::to_string(GetLastError()) + ".\n");
 					UserErrorDisplay("ERROR - An error occured when decrypting data. Failed with error code " + std::to_string(GetLastError()) + ".\n");
 				}
 				else {
@@ -314,7 +317,6 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 							}
 						}
 					}
-
 				}
 				else {
 					if (!FileCryptorObj.DecryptFile(sFileName, rKey1, rKey2)) {
@@ -403,20 +405,20 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 
 			// 0 means no files have been deleted
 			if (nReturnCode == 0) {
-				VerbosityDisplay("In Commands(): ERROR - Failed to delete file/folder. Error code: 2. Error info: File/folder not found.\n");
+				VerbosityDisplay("In commands::Commands51To60(): ERROR - Failed to delete file/folder. Error code: 2. Error info: File/folder not found.\n");
 				UserErrorDisplay("ERROR - An error occured when deleting file/folder. Error info: File/folder not found.\n");
 				return true;
 			}
 			// -1 means error
 			else if (nReturnCode == -1) {
-				VerbosityDisplay("In Commands(): ERROR - Failed to delete file/folder. Error code: " + std::to_string(ecDelete.value()) + ". Error info: " + ecDelete.message() + ".\n");
+				VerbosityDisplay("In commands::Commands51To60(): ERROR - Failed to delete file/folder. Error code: " + std::to_string(ecDelete.value()) + ". Error info: " + ecDelete.message() + ".\n");
 				UserErrorDisplay("ERROR - An error occured when deleting file/folder. Error code: " + std::to_string(ecDelete.value()) + ".\n");
 				return true;
 			}
 		}
 
 		catch (std::bad_alloc&) {
-			VerbosityDisplay("In Commands(): ERROR - Memory allocation failed for std::filesystem::remove_all().\n");
+			VerbosityDisplay("In commands::Commands51To60(): ERROR - Memory allocation failed for std::filesystem::remove_all().\n");
 			UserErrorDisplay("ERROR - Failed to allocate memory. Please try again later.\n");
 			return true;
 		}
@@ -726,7 +728,7 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 			if (sStringDataCommandArgs[i] != "") {
 				// Incorrect argument type
 				if (!isNumberi(sStringDataCommandArgs[i])) {
-					VerbosityDisplay("In CommandsFile51To60() - ERROR: Number argument (in the form of string) is invalid or out of range.\n");
+					VerbosityDisplay("In commands::Commands51To60() - ERROR: Number argument (in the form of string) is invalid or out of range.\n");
 					UserErrorDisplay("ERROR - Your number argument seems to be incorrect. Make sure it is an integer, and try again later.\n");
 
 					return true;
@@ -735,7 +737,7 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 				else {
 					nNumOfDPOutput = std::stoi(sStringDataCommandArgs[i]);
 					if (nNumOfDPOutput < 1 || nNumOfDPOutput > 1000000) {
-						VerbosityDisplay("In CommandsFile51To60() - ERROR: Number argument is less than 1 or more than 1000000, which exceeds the allowed range for the PiOutput command.\n");
+						VerbosityDisplay("In commands::Commands51To60() - ERROR: Number argument is less than 1 or more than 1000000, which exceeds the allowed range for the PiOutput command.\n");
 						UserErrorDisplay("ERROR - Your number argument seems to be out of range of acceptable arguments of decimal places. Please ensure that the argument is not less than 1 or more than 1 million, and try again.\nSee \"pioutput -h\" for more info.\n");
 
 						return true;
@@ -858,7 +860,8 @@ bool commands::Commands51To60(const std::string sCommand, char* cCommandArgs, co
 		std::cout << wordWrap("\n\n1) I can't see the terminal text. How can I zoom in?\n  1a) You can zoom in, of course. Press and hold the Ctrl button and scroll with the mouse to your desired text size.\n"
 			"\n\n2) The error messages shown aren't detailed enough. How do I get better-quality error messages?\n  2a) To get better quality error messages, just enable the Verbosity Messages setting in the Settings command.\n"
 			"\n\n3) I'm using the Windows 7 terminal. How do I scroll up and down in the terminal without using the mouse?\n  3a) To scroll up and down without the mouse, press Alt + Space and then the keys 'E' and 'L', and then scroll with the up/down arrow keys. Use the PageUp/PageDown keys to scroll full pages in the terminal.\n"
-			"\n\n4) What is the difference between the 'old' and 'new' OptionSelect Session styles?\n  4a) The 'old' style is an inspiration from the TerminalAppGen2, the previous iteration of this program. It is very robust, simple and works by associating a number with each option, which you type in and press ENTER to select.\nThe 'new' style isn't exactly new, and has been in ZeeTerminal since v0.1.0. However, it is newer than the 'old' style, hence it's referred to as 'new'. It relies on using the arrow/WS keys to move a highlight up and down, to select an option.\n\n");
+			"\n\n4) What is the difference between the 'old' and 'new' OptionSelect Session styles?\n  4a) The 'old' style is an inspiration from the TerminalAppGen2, the previous iteration of this program. It is very robust, simple and works by associating a number with each option, which you type in and press ENTER to select.\nThe 'new' style isn't exactly new, and has been in ZeeTerminal since v0.1.0. However, it is newer than the 'old' style, hence it's referred to as 'new'. It relies on using the arrow/WS keys to move a highlight up and down, to select an option.\n"
+			"\n\n5) I want to log the output of a command straight to a file, without outputting anything to the display. How can I do that?\n  5a) To do this, you can use the ToFile feature. Use the --tofile <file> argument on the command that you want to send to a file, and it will work. Insert the file-path within <file> in this case. If you're running in ANSI mode, all escape sequences (except colour sequences) will be outputted along with the text, to the file. The <file> argument is always read from the last data string argument in the command string. Example: echo HelloWorld --tofile \"Test File.txt\"\n\n");
 
 		return true;
 	}
