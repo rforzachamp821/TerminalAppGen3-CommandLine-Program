@@ -7,8 +7,10 @@ namespace helpmsgs
 	// Help
 	void HelpHelp() {
 		CentreColouredText(" ___HELP___ ", 1);
-
 		std::cout << '\n';
+		CentreColouredText("This command displays all the commands that are in ZeeTerminal.", 2);
+		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -26,8 +28,10 @@ namespace helpmsgs
 	// Tutorial
 	void TutorialHelp() {
 		CentreColouredText(" ___TUTORIAL___ ", 1);
-
 		std::cout << '\n';
+		CentreColouredText("This command provides an interface to access a tutorial about ZeeTerminal.", 2);
+		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -64,8 +68,10 @@ namespace helpmsgs
 	// Cls
 	void ClsHelp() {
 		CentreColouredText(" ___CLS___ ", 1);
-
 		std::cout << '\n';
+		CentreColouredText("This command allows you to clear the screen of ZeeTerminal.", 2);
+		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -82,8 +88,10 @@ namespace helpmsgs
 	// DevTools
 	void DevToolsHelp() {
 		CentreColouredText(" ___DEVTOOLS___ ", 1);
-
 		std::cout << '\n';
+		CentreColouredText("This command provides an interface to test features of ZeeTerminal.", 2);
+		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -109,6 +117,7 @@ namespace helpmsgs
 
 	// CpuStress
 	void CpuStressHelp() {
+		// Title is already outputted
 		CentreColouredText("CPUStress can stress or benchmark your CPU in multiple different ways.", 2);
 		std::cout << "\n\n";
 
@@ -134,8 +143,10 @@ namespace helpmsgs
 	// Colour
 	void ColourHelp() {
 		CentreColouredText(" ___COLOUR___ ", 1);
-
 		std::cout << '\n';
+		CentreColouredText("This command provides an interface to change the colour of ZeeTerminal.", 2);
+		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -160,8 +171,10 @@ namespace helpmsgs
 	// Settings
 	void SettingsHelp() {
 		CentreColouredText(" ___SETTINGS___ ", 1);
-
 		std::cout << '\n';
+		CentreColouredText("This command allows you to tweak ZeeTerminal to your liking.", 2);
+		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -218,7 +231,7 @@ namespace helpmsgs
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << wordWrap("\n- This command allows you to set the title of this window, which is the window running ZeeTerminal.\n- The title can only be a maximum of 254 characters.\n\n");
+		std::cout << wordWrap("\n- This command allows you to set the title of this window, which is the window running ZeeTerminal.\n- The title can only be a maximum of 65535 characters.\n\n");
 
 		colourSubheading();
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
@@ -231,8 +244,10 @@ namespace helpmsgs
 	// Date
 	void DateHelp() {
 		CentreColouredText(" ___DATE___ ", 1);
-
 		std::cout << '\n';
+		CentreColouredText("This command displays the date and time of this computer.", 2);
+		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -249,6 +264,10 @@ namespace helpmsgs
 
 	// ColourNumbers
 	void ColourNumbersHelp() {
+		// Title is already outputted
+		CentreColouredText("This command displays the colour numbers for all default colours in ZeeTerminal.", 2);
+		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -265,6 +284,10 @@ namespace helpmsgs
 
 	// MediaPlayer
 	void MediaPlayerHelp() {
+		// Title is already outputted
+		CentreColouredText("This command allows you to play specific media files of your choice using the DirectShow API.", 2);
+		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does: " << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -276,7 +299,7 @@ namespace helpmsgs
 		std::cout << "Possible arguments for this command: " << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\tDisplays this help message.")
-			<< wordWrap("\n <FILE>\tOpens a file for playback/viewing. Put the exact filepath in place of <FILE>.\n\nExample: mediaplayer \"C:\\Media\\media test.mp3\"\n\n")
+			<< wordWrap("\n <FILE>\tOpens a file for playback/viewing. Put the exact filepath in place of <FILE>.\n\nExample: mediaplayer \"C:\\Media\\media test.mp3\"\n")
 			<< wordWrap("\nNOTE: You need to use quotes like shown in the example to use a filename with ANY spaces.\nNOTE: Type in \"*open\" without quotes in place of the file argument to use the Windows File Dialogue to open a file.\n\n");
 
 		return;
@@ -284,10 +307,14 @@ namespace helpmsgs
 
 	// AudioPlayer
 	void AudioPlayerHelp() {
+		// Title is already outputted
+		CentreColouredText("This command allows you to play an audio file using the BASS Audio Libraries.", 2);
+		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << wordWrap("\n- Plays a wide range of popular audio formats, such as FLAC and MP3, in an easy-to-use interface.\n- This is newer than the MediaPlayer, which uses an older DirectShow API.\n- Uses the BASS Audio API, so requires DLLs to be in the same directory as ZeeTerminal.\n- Audio formats supported: MP3, MP2, MP1, OGG, WAV, AIFF, FLAC, XM, IT, S3M, MOD, MTM, UMX, WMA, M4A, OPUS, AAC\n\n");
+		std::cout << wordWrap("\n- Plays a wide range of popular audio formats, such as FLAC and MP3, in an easy-to-use interface.\n- This is newer than the MediaPlayer, which uses an older DirectShow API.\n- Uses the BASS Audio API, so requires DLLs to be in the same directory as ZeeTerminal.\n- Audio formats supported: MP3, MP2, MP1, OGG, WAV, AIFF, FLAC, XM, IT, S3M, MOD, MTM, UMX, WMA, M4A, OPUS and AAC.\n\n");
 
 		colourSubheading();
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
@@ -313,8 +340,8 @@ namespace helpmsgs
 		std::cout << "Possible arguments for this command: " << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\tDisplays this help message.\n <MSG>\tInput text to be said by the computer. Put text in place of <MSG>.\n\n")
-			<< wordWrap("Example: tts \"The quick brown fox jumps over the lazy dog.\"\n\n")
-			<< wordWrap("Note: If the text contains any spaces, put it in speech marks like the example, or it will not work.\n\n");
+			<< wordWrap("Example: tts \"The quick brown fox jumps over the lazy dog.\"\n")
+			<< wordWrap("\nNote: If the text contains any spaces, put it in speech marks like the example, or it will not work.\n\n");
 
 		return;
 	}
@@ -362,13 +389,14 @@ namespace helpmsgs
 
 	// Timer
 	void TimerHelp() {
+		// Title is already outputted
 		CentreColouredText("This is a highly accurate countdown timer that counts time in seconds.", 2);
 		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << wordWrap("\n- Provides access to a highly accurate countdown timer that takes time in seconds.\n- You can press any key to exit the timer while in operation.\n\n");
+		std::cout << wordWrap("\n- Provides access to a highly accurate countdown timer that takes time in seconds.\n- You can press the ESC key to exit the timer while in operation.\n\n");
 		colourSubheading();
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -424,7 +452,7 @@ namespace helpmsgs
 	void CopyFileHelp() {
 		CentreColouredText(" ___COPYFILE___ ", 1);
 		std::cout << "\n";
-		CentreColouredText("This command copies a file from one location to another.", 2);
+		CentreColouredText("This command copies the contents of a file to another file.", 2);
 		std::cout << "\n\n";
 
 		colourSubheading();
@@ -465,7 +493,7 @@ namespace helpmsgs
 		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n -o\t\tEnable overwrite mode. Any existing file with the same filename as the file to copy will be overwritten when specified."
 			"\n -d\t\tEnable folder copy mode. When a folder is specified as a source, the contents of that folder will be recursively copied to the destination."
 			"\n <source>\tThe file to copy. Put the file directory in place of <source>.\n <dest>\t\tThe destination location/directory. Put the directory path in place of <dest>.\n\n"
-			"Syntax: copy <source <dest> (in this exact order).\n\n"
+			"Syntax: copy <source> <dest> (in this exact order).\n\n"
 			"Example: copy \"C:\\test\\a file.txt\" C:\\Users\n\n"
 			"NOTE: For any directory with spaces, use quotes like in the example.\nNOTE: You must have both the source and the destination directories when using them as arguments.\nNOTE: Read this article for information on the different forms of filepaths: ");
 
@@ -499,9 +527,10 @@ namespace helpmsgs
 
 	// ConfigAction
 	void ConfigActionHelp() {
-		std::cout << '\n';
 		CentreColouredText(" ___CONFIGACTION___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command provides an interface to interact with the Config File System.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -522,6 +551,8 @@ namespace helpmsgs
 	void BeepSoundsHelp() {
 		CentreColouredText(" ___BEEPSOUNDS___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command allows you to access a wide range of iconic sounds encoded in beeps.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -543,6 +574,8 @@ namespace helpmsgs
 		std::cout << '\n';
 		CentreColouredText(" ___RICKROLL___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command allows you to continue the age-old meme of rickrolling.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -559,7 +592,7 @@ namespace helpmsgs
 
 	// ShellExecute
 	void ShellExecuteHelp() {
-		CentreColouredText("___SHELLEXECUTE___", 1);
+		CentreColouredText(" ___SHELLEXECUTE___ ", 1);
 		std::cout << "\n";
 		CentreColouredText("This allows for the execution of CMD shell commands from ZeeTerminal.", 2);
 		std::cout << "\n\n";
@@ -582,6 +615,8 @@ namespace helpmsgs
 	void HackerHelp() {
 		CentreColouredText(" ___HACKER___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command provides a number of features to make you look like a hacker.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -650,6 +685,8 @@ namespace helpmsgs
 	void LogoffHelp() {
 		CentreColouredText(" ___LOGOFF___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command provides an interface to log off from your computer.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -668,6 +705,8 @@ namespace helpmsgs
 	void ShutdownHelp() {
 		CentreColouredText(" ___SHUTDOWN___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command provides an interface to shutdown your computer.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -678,7 +717,7 @@ namespace helpmsgs
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n -t <time>\tA time argument for shutdown in seconds. Put time argument in place of <time>. Must be a number.\n -c\t\tCancel any pending shutdown operations.")
-			<< wordWrap("\n\nExample: shutdown -t 5\n\n");
+			<< wordWrap("\n\nExample: shutdown -t 10\n\n");
 
 		return;
 	}
@@ -687,6 +726,8 @@ namespace helpmsgs
 	void RebootHelp() {
 		CentreColouredText(" ___REBOOT___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command provides an interface to reboot your computer.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -697,7 +738,7 @@ namespace helpmsgs
 		std::cout << "Possible arguments for this command:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n -t <time>\tA time argument for reboot in seconds. Put time argument in place of <time>. Must be a number.\n -c\t\tCancel any pending reboot operations.")
-			<< wordWrap("\n\nExample: reboot -t 5\n\n");
+			<< wordWrap("\n\nExample: reboot -t 10\n\n");
 
 		return;
 	}
@@ -706,6 +747,8 @@ namespace helpmsgs
 	void HibernateHelp() {
 		CentreColouredText(" ___HIBERNATE___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command provides an interface to hibernate your computer.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -713,7 +756,7 @@ namespace helpmsgs
 		std::cout << wordWrap("\n- Hibernates the computer that ZeeTerminal is running on.\n- Initiating the hibernate process is immediate and on command.\n- Hibernation will NOT work if hibernation is disabled on the computer running ZeeTerminal.\n\n");
 
 		colourSubheading();
-		std::cout << "What this command does:" << NOULINE_STR;
+		std::cout << "Possible arguments for this command:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\tDisplays this help message.\n\nExample: hibernate -h\n\n");
 
@@ -724,6 +767,8 @@ namespace helpmsgs
 	void ResetExplHelp() {
 		CentreColouredText(" ___RESETEXPL___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command allows you to reset Explorer.exe quickly and easily.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -742,6 +787,8 @@ namespace helpmsgs
 	void MemTestHelp() {
 		CentreColouredText(" ___MEMTEST___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command allows you to quickly test your computer's memory for issues.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -755,7 +802,7 @@ namespace helpmsgs
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n -h\t\tDisplays this help message.\n -f\t\tSimply fill up and allocate the system memory, and then deallocate.\n -b <passes>\tPerform binary searches on allocated memory. Put number of passes in place of <passes>.")
 			<< wordWrap("\n -l <passes>\tPerform linear check searches on allocated memory. Put number of passes in place of <passes>.\n -e <passes>\tPerform extended linear check searches on allocated memory. Put number of passes in place of <passes>.\n -k\t\tRequire a keypress before memory deallocation, with the -f option. Default is false.")
-			<< wordWrap("\n -m\t\tUse multithreading. May increase performance but can increase CPU temperatures.\n -a\t\tUse all the memory available on the host system, rather than just the default available memory. May not work with systems that have paging disabled.\n\nExample: memtest -k -l 6\n\n");
+			<< wordWrap("\n -m\t\tUse multithreading. May increase performance but can increase CPU temperatures. Default is FALSE.\n -a\t\tUse all the memory available on the host system, rather than just the default available memory. May not work with systems that have paging disabled.\n\nExample: memtest -k -l 6\n\n");
 
 		return;
 	}
@@ -764,6 +811,8 @@ namespace helpmsgs
 	void RandColHelp() {
 		CentreColouredText(" ___RANDCOL___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command allows you to randomly pick a colour for ZeeTerminal.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -782,6 +831,8 @@ namespace helpmsgs
 	void PauseHelp() {
 		CentreColouredText(" ___PAUSE___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command allows you to pause the operation of ZeeTerminal until any key/ENTER is pressed.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -800,6 +851,8 @@ namespace helpmsgs
 	void CommandNumHelp() {
 		CentreColouredText(" ___COMMANDNUM___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command displays the statistics of the commands you have inputted since ZeeTerminal startup.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -818,6 +871,8 @@ namespace helpmsgs
 	void SlowCharHelp() {
 		CentreColouredText(" ___SLOWCHAR___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command allows you to slowly output a string.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -837,6 +892,8 @@ namespace helpmsgs
 	void ReverseTextHelp() {
 		CentreColouredText(" ___REVERSETEXT___ ", 1);
 		std::cout << '\n';
+		CentreColouredText("This command provides an interface to output a string in reverse.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -899,6 +956,8 @@ namespace helpmsgs
 	void DispHelp() {
 		CentreColouredText(" ___DISP___ ", 1);
 		std::cout << "\n";
+		CentreColouredText("This command provides an interface to toggle displaying the command input screen.", 2);
+		std::cout << "\n\n";
 
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
@@ -918,6 +977,10 @@ namespace helpmsgs
 
 	// SysInfo
 	void SysInfoHelp() {
+		// Title is already outputted
+		CentreColouredText("This command displays the system information of your computer.", 2);
+		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -1092,6 +1155,7 @@ namespace helpmsgs
 		std::cout << '\n';
 		CentreColouredText("This command allows you to easily encrypt or decrypt files and folders on your computer.", 2);
 		std::cout << "\n\n";
+
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -1203,7 +1267,7 @@ namespace helpmsgs
 		colourSubheading();
 		std::cout << "What this command does:" << NOULINE_STR;
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
-		std::cout << wordWrap("\n- This command outputs an argument-specified number of digits of Pi, up to 1 million decimal places.\n- For speed and efficiency purposes, the number is truncated, not rounded up or down.\n- For speed and simplistic purposes, the value of Pi is not calculated at run-time, however it was hard-coded at the compile-time of this program."
+		std::cout << wordWrap("\n- This command outputs an argument-specified number of digits of Pi, up to 1 million decimal places.\n- For speed and efficiency purposes, the number is truncated, not rounded up or down.\n- For speed and simplistic purposes, the value of Pi is not calculated at run-time, however it was hard-coded at the compile-time of ZeeTerminal."
 			"\n- You can learn more about Pi here: ");
 		colour(LBLU, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("https://en.wikipedia.org/wiki/Pi\n\n");

@@ -31,7 +31,7 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 			if (sStringDataCommandArgs[0] != "") {
 				if (sStringDataCommandArgs[1] == "") {
 					// Error message
-					VerbosityDisplay("In Commands() - ERROR: Vital argument not found.\n");
+					VerbosityDisplay("In commands::Commands21To30() - ERROR: Vital argument not found.\n");
 					UserErrorDisplay("ERROR: You need to have both the file location AND destination file directories included in your arguments.\nSee \"copy -h\" for more info.\n");
 
 					return true;
@@ -113,7 +113,7 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 		
 		// Catch bad memory allocation to avoid exception
 		catch (const std::bad_alloc&) {
-			VerbosityDisplay("In Commands(): ERROR - Memory allocation failed when copying using std::filesystem::copy (std::bad_alloc).\n");
+			VerbosityDisplay("In commands::Commands21To30(): ERROR - Memory allocation failed when copying using std::filesystem::copy (std::bad_alloc).\n");
 			UserErrorDisplay("ERROR - Failed to allocate memory before copy operation. Please try again later.\n");
 
 			return true;
@@ -122,28 +122,28 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 		// Error codes output
 		if (ecTestZone.value() != 0) {
 			if (ecTestZone == std::errc::file_exists) {
-				VerbosityDisplay("In Commands(): ERROR - File exists in the destination location already. -o flag not specified, so copy failed. STDC++ error details: " + ecTestZone.message() + " (std::errc::file_exists).\n");
+				VerbosityDisplay("In commands::Commands21To30(): ERROR - File exists in the destination location already. -o flag not specified, so copy failed. STDC++ error details: " + ecTestZone.message() + " (std::errc::file_exists).\n");
 				UserErrorDisplay("Sorry, but the file exists in the copy location already. Please try again later.\n");
 			}
 			else if (ecTestZone == std::errc::permission_denied) {
-				VerbosityDisplay("In Commands(): ERROR - No sufficient permissions available for file access. STDC++ error details: " + ecTestZone.message() + " (std::errc::permission_denied).\n");
+				VerbosityDisplay("In commands::Commands21To30(): ERROR - No sufficient permissions available for file access. STDC++ error details: " + ecTestZone.message() + " (std::errc::permission_denied).\n");
 				UserErrorDisplay("Sorry, but there aren't any sufficient permissions to access the file. Please try again with elevated permissions.\n");
 			}
 			else if (ecTestZone == std::errc::is_a_directory) {
-				VerbosityDisplay("In Commands(): ERROR - Source argument is a directory, and -d flag not specified, so copy failed. STDC++ error details: " + ecTestZone.message() + " (std::errc::is_a_directory).\n");
+				VerbosityDisplay("In commands::Commands21To30(): ERROR - Source argument is a directory, and -d flag not specified, so copy failed. STDC++ error details: " + ecTestZone.message() + " (std::errc::is_a_directory).\n");
 				UserErrorDisplay("Sorry, but the specified source argument is a directory, not a file.\nIf you want to copy the contents of a directory, use the -d argument.\nPlease try again later.\n");
 			}
 			else if (ecTestZone == std::errc::io_error) {
-				VerbosityDisplay("In Commands(): ERROR - Unknown I/O error occured when copying. STDC++ error details: " + ecTestZone.message() + " (std::errc::io_error).\n");
+				VerbosityDisplay("In commands::Commands21To30(): ERROR - Unknown I/O error occured when copying. STDC++ error details: " + ecTestZone.message() + " (std::errc::io_error).\n");
 				UserErrorDisplay("Sorry, but an unknown I/O error occured when copying.\nThis could possibly relate to losing access to the source file or destination directory, or even a hardware error.\nPlease try again later.\n");
 			}
 			else if (ecTestZone == std::errc::no_such_file_or_directory) {
-				VerbosityDisplay("In Commands(): ERROR - No such file or directory exists in either the source or destination argument paths. STDC++ error details: " + ecTestZone.message() + " (std::errc::no_such_file_or_directory).\n");
+				VerbosityDisplay("In commands::Commands21To30(): ERROR - No such file or directory exists in either the source or destination argument paths. STDC++ error details: " + ecTestZone.message() + " (std::errc::no_such_file_or_directory).\n");
 				UserErrorDisplay("Sorry, but the specified source filepath or destination directory path does not exist.\nPlease check the specified arguments and try again later.\n");
 			}
 			else {
 				// Unknown error
-				VerbosityDisplay("In Commands(): ERROR - Unknown error when copying file. STDC++ error details: " + ecTestZone.message() + " (Error Code " + std::to_string(ecTestZone.value()) + ").\n");
+				VerbosityDisplay("In commands::Commands21To30(): ERROR - Unknown error when copying file. STDC++ error details: " + ecTestZone.message() + " (Error Code " + std::to_string(ecTestZone.value()) + ").\n");
 				UserErrorDisplay("Sorry, but an unknown error of code " + std::to_string(ecTestZone.value()) + " occured when copying. Please try again later.\n");
 			}
 		}
@@ -176,7 +176,7 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 				}
 				else {
 					// Error message
-					VerbosityDisplay("In Commands() - ERROR: Vital argument not found.\n");
+					VerbosityDisplay("In commands::Commands21To30() - ERROR: Vital argument not found.\n");
 					UserErrorDisplay("ERROR: You need to have both the file location AND destination file directories included in your arguments.\nSee \"copyfile -h\" for more info.\n");
 					
 					return true;
@@ -250,8 +250,8 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 		VerbosityDisplay("Copying file " + sOriginalFilePath + " to " + sDestinationFilePath + "...");
 		std::cout << "Copying file...\n";
 		if (!CopyFileA(sOriginalFilePath.c_str(), sDestinationFilePath.c_str(), false)) {
-			VerbosityDisplay("In Commands() - ERROR: Existing file when copying to file directory detected. File copy operation has failed. GetLastError() error code: " + std::to_string(GetLastError()) + "\n");
-			UserErrorDisplay("An error occured while copying the file.\nPossibly the original file is nonexistent?\n");
+			VerbosityDisplay("In commands::Commands21To30() - ERROR: Existing file when copying to file directory possible. File copy operation has failed. GetLastError() error code: " + std::to_string(GetLastError()) + "\n");
+			UserErrorDisplay("An error occured while copying the file.\nPossibly the original file is nonexistent, not enough memory, lack of permissions or invalid destination file?\n");
 		}
 		else {
 			colour(LGRN, ConfigObjMain.sColourGlobalBack);
@@ -460,7 +460,7 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 			return true;
 
 		default:
-			VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In commands::Commands21To30() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 			break;
 		}
@@ -595,7 +595,7 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 			Exiting();
 			return true;
 		default:
-			VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In commands::Commands21To30() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 			Exiting();
 			return true;
@@ -633,14 +633,15 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 				helpmsgs::ShellExecuteHelp();
 				return true;
 			}
-			else if (sStringDataCommandArgs[0] != "") {
-				sCommandText = sStringDataCommandArgs[0];
+			
+			if (sStringDataCommandArgs[i] != "") {
+				sCommandText = sStringDataCommandArgs[i];
 			}
 		}
 
 		// User Interface
 		if (sCommandText == "") {
-			CentreColouredText("___SHELLEXECUTE___", 1);
+			CentreColouredText(" ___SHELLEXECUTE___ ", 1);
 			std::cout << "\n\n";
 
 			sCommandText = StrInput("Please input your desired CMD command to run (0 to exit): > ");
@@ -658,7 +659,7 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
 		// Execute command
-		system(sStringDataCommandArgs[0].c_str());
+		system(sCommandText.c_str());
 
 		colour(LGRN, ConfigObjMain.sColourGlobalBack);
 		std::cout << "\nCommand execution successful!\n";
@@ -699,7 +700,7 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 				if (sStringDataCommandArgs[i] != "")
 				{
 					if (isNumberull(sStringDataCommandArgs[i]) == false) {
-						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+						VerbosityDisplay("In commands::Commands21To30() - ERROR: Could not detect numerical value in string-based number argument.\n");
 						UserErrorDisplay("ERROR: The speed argument given is not a number.\nPlease try again later, or see 'hacker -h' for more details.\n");
 						return true;
 					}
@@ -712,13 +713,13 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 				sFileName = sStringDataCommandArgs[i];
 
 				// If statements for safety
-				if (i + 1 < 128) {
+				if (i + 1 < nArgArraySize) {
 					// Firstly, validate string to be a number
 					// Don't check empty strings
 					if (sStringDataCommandArgs[i + 1] != "") 
 					{
 						if (isNumberull(sStringDataCommandArgs[i + 1]) == false) {
-							VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+							VerbosityDisplay("In commands::Commands21To30() - ERROR: Could not detect numerical value in string-based number argument.\n");
 							UserErrorDisplay("ERROR: The speed argument given is not a number.\nPlease try again later, or see 'hacker -h' for more details.\n");
 							return true;
 						}
@@ -858,7 +859,7 @@ bool commands::Commands21To30(const std::string sCommand, char* cCommandArgs, co
 
 		// Error occured
 		else {
-			VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In commands::Commands21To30() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 		}
 

@@ -1,10 +1,10 @@
 #pragma once
 
 // ZeeTerminal Source Code Version
-constexpr const char* ZT_VERSION = "0.9.0";
+constexpr const char* ZT_VERSION = "1.0.0";
 
 // Array size for all argument arrays
-constexpr int nArgArraySize = 128;
+constexpr int nArgArraySize = 256;
 
 // Text formatting definitions
 #define ULINE 4

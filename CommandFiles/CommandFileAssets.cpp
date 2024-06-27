@@ -260,7 +260,7 @@ void About(bool bFromTutorial) {
 	std::string sScreens[] =
 	{
 		"___ABOUT THIS PROGRAM___\n\nThis is the ZeeTerminal Commandline Program, Build v" + std::string(ZT_VERSION) + ".\n" +
-		"This is a beta build of ZeeTerminal, with an entirely new engine and components.\nThis program is made in C++, with a few very small parts of C." +
+		"This is a public stable release build of ZeeTerminal, with an entirely new engine and components.\nThis program is made in C++, with a few very small parts of C." +
 		"\n\nThis program uses the DirectShow API in the MediaPlayer command, licensed by Microsoft Corp. (c) Microsoft Corp.\n\n" +
 		"This program uses the BASS API in the AudioPlayer command, licensed by Un4Seen Developments. (c) Un4Seen Developments.\n\n" +
 		"This program uses the CarDodge game v0.6.0, accessible in the Game command. CarDodge is licensed under Ryan Zorkot with the MIT License. For more information, visit the archived repo: https://github.com/rforzachamp821/CarDodge\n\n"
@@ -537,7 +537,7 @@ void DevTools(short int nToolNum) {
 	// Colour Tester
 	if (nToolNum == 1) {
 		CentreColouredText(" ___COLOUR TESTER___ ", 1);
-		std::cout << "\n\n";
+		std::cout << wordWrap("\n\nNote that ANSI colour escape sequences may not be interpreted correctly or at all on older terminals, such as Windows 7.\n\n");
 
 		// Firstly, output all default colours
 		// Foreground
@@ -564,11 +564,17 @@ void DevTools(short int nToolNum) {
 		for (int i = 100; i <= 107; i++) {
 			std::cout << "\x1b[" << i << "mThis is background ANSI escape code colour <" << i << ">. 1234567890 (Light)\n";
 		}
-		// Reset background
-		std::cout << "\x1b[49m\n";
+		// Reset background to previous colours
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
-		std::cout << "Press any key to exit...\n";
-		_getch();
+		std::cout << "Press ESC to exit...\n";
+		while (true) {
+			// _kbhit() to exit on ESC keypress
+			if (_kbhit()) {
+				if (_getch() == 27) break;
+			}
+			sleep(10);
+		}
 
 		return;
 	}
@@ -579,12 +585,12 @@ void DevTools(short int nToolNum) {
 
 		std::cout << '\n';
 		colourSubheading();
-		slowcharCentredFn(false, "This is a tester for the 'Beep' function in Windows.");
+		slowcharCentredFn(false, "This is a tester for the 'Beep()' function in Windows.");
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << NOULINE_STR << std::endl;
 		std::cout << wordWrap("ZeeTerminal will output a pitch of sound that increases by 100hz every second, until 22000hz.") << "\n\n";
 		colour(MAG, LYLW);
-		std::cout << wordWrap("You can press any key to exit in the middle of the test.");
+		std::cout << wordWrap("You can press ESC to exit in the middle of the test.");
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\nPress any key to begin the test, or ESC to exit...\n");
 		char cKey = _getch();
@@ -596,11 +602,14 @@ void DevTools(short int nToolNum) {
 		for (int i = 100; i < 22000; i += 100) {
 			// clear line
 			std::cout << "\r                      \r";
-			// output
-			std::cout << "Outputting " << i << " hz...";
+			// output and colour the hertz value
+			std::cout << "Outputting ";
+			colour(LCYN, ConfigObjMain.sColourGlobalBack);
+			std::cout << i << " hz...";
+			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 			Beep(i, 1000);
-			// stop if kbhit is true / keyboard key is pressed
-			if (_kbhit()) {
+			// stop if kbhit is true and ESC key was pressed
+			if (_kbhit() && _getch() == 27) {
 				colour(YLW, ConfigObjMain.sColourGlobalBack);
 				std::cout << "\nBeep Sound Test stopped.\n";
 				ClearKeyboardBuffer();
@@ -616,8 +625,21 @@ void DevTools(short int nToolNum) {
 	// ColourNumbers
 	else if (nToolNum == 3) {
 		// Execute the ColourNumbers command from the Command function
-		char cTemp[3] = { ' ', ' ', ' ' };
-		commands::Commands1To10("colournumbers", cTemp, "");
+		char cTemp[nArgArraySize];
+		for (int i = 0; i < nArgArraySize; i++) {
+			cTemp[i] = ' ';
+		}
+		commands::Commands11To20("colournumbers", cTemp, "");
+
+		std::cout << "\nPress ESC to exit...\n";
+		while (true) {
+			// _kbhit() to exit on ESC keypress
+			if (_kbhit()) {
+				if (_getch() == 27) break;
+			}
+			sleep(10);
+		}
+
 
 		return;
 	}
@@ -755,6 +777,7 @@ void DevTools(short int nToolNum) {
 
 	// TableEngine Tester
 	else if (nToolNum == 6) {
+		// Output title, headings
 		CentreColouredText(" ___TABLE-ENGINE TESTER___ ", 1);
 		std::cout << std::endl;
 		colourSubheading();
@@ -768,7 +791,7 @@ void DevTools(short int nToolNum) {
 			Exiting();
 			return;
 		}
-		uint64_t nNumOfColumns = PositiveNumInputull("\nPlease input now many columns you would like to create (0 to exit): > ");
+		uint64_t nNumOfColumns = PositiveNumInputull("\nPlease input how many columns you would like to create (0 to exit): > ");
 		if (nNumOfColumns <= 0) {
 			Exiting();
 			return;
@@ -808,8 +831,14 @@ void DevTools(short int nToolNum) {
 		// Finally, output table using TableEngine::OutputTable()
 		teTester.OutputTable();
 
-		std::cout << "\n\nPress ENTER to exit...\n";
-		std::cin.ignore(std::numeric_limits<int>::max(), '\n');
+		// Exit on ESC keypress
+		std::cout << "Press ESC to exit...\n";
+		while (true) {
+			if (_kbhit()) {
+				if (_getch() == 27) break;
+			}
+			sleep(10);
+		}
 
 		return;
 	}
@@ -826,7 +855,7 @@ void DevTools(short int nToolNum) {
 		// Prompt to start
 		std::cout << "\n\n";
 		colour(MAG, LYLW);
-		std::cout << wordWrap("You can press any key in the middle of the stopwatch run to stop it.");
+		std::cout << wordWrap("You can press the ESC key in the middle of the stopwatch run to stop it.");
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\n\nPress any key to start the stopwatch, or ESC to exit...");
 		char cKey = _getch();
@@ -842,8 +871,13 @@ void DevTools(short int nToolNum) {
 		auto start = std::chrono::high_resolution_clock::now();
 		auto end = std::chrono::high_resolution_clock::now();
 
-		// _kbhit() to exit on keypress
-		while (!_kbhit()) {
+
+		while (true) {
+			// _kbhit() to exit on ESC keypress
+			if (_kbhit()) {
+				if (_getch() == 27) break;
+			}
+
 			end = std::chrono::high_resolution_clock::now();
 			std::cout << "Time: ";
 			colour(LCYN, ConfigObjMain.sColourGlobalBack);
@@ -876,7 +910,7 @@ void DevTools(short int nToolNum) {
 		slowcharCentredFn(false, "This is a sandbox-style testing enviroment for ANSI (VT) escape codes.");
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
-		std::cout << NOULINE_STR << wordWrap("\n\nYou can test any ANSI escape code here. Everything will be reset after exiting the sandbox (by typing in 0 or \"zero\").");
+		std::cout << NOULINE_STR << wordWrap("\n\nYou can test any ANSI escape code here. Everything will be reset after exiting the sandbox (by typing in 0 or \"zero\").\nSome older terminals, e.g Windows 7 terminals, cannot interpret ANSI escape codes properly, therefore this may not produce intended results on those systems.");
 		colour(LBLU, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\nYou can get a list of ANSI VT escape codes here: https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences") << "\n\n";
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
@@ -906,7 +940,7 @@ void DevTools(short int nToolNum) {
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << NOULINE_STR << wordWrap("\n\nZeeTerminal will output a pitch of sound that starts at 20hz and increases by 100hz every second, until 22000hz.") << "\n\n";
 		colour(MAG, LYLW);
-		std::cout << wordWrap("You can press any key to exit in the middle of the test.");
+		std::cout << wordWrap("You can press ESC to exit in the middle of the test.");
 		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 		std::cout << wordWrap("\nPress any key to begin the test, or ESC to exit now...") << '\n';
 		char cKey = _getch();
@@ -948,7 +982,7 @@ void DevTools(short int nToolNum) {
 }
 
 // A switch-case function for the ColourBackground function.
-void ColourBackgroundSwitch(int* nChoice, std::string* sSettingVariableBack, std::string* sSettingVariable) {
+bool ColourBackgroundSwitch(int* nChoice, std::string* sSettingVariableBack, std::string* sSettingVariable) {
 	// Switch case for selecting colour
 	switch (*nChoice) {
 	case 1:
@@ -1018,16 +1052,17 @@ void ColourBackgroundSwitch(int* nChoice, std::string* sSettingVariableBack, std
 	default:
 		VerbosityDisplay("In ColourBackgroundSwitch() - ERROR: Default switch case statement activated, so nChoice seems to be incorrect.\n");
 		UserErrorDisplay("An error occured, and the colour has not been changed.\nPlease try again later.\n");
-		break;
+		ConfigObjMain.WriteConfigFile();
+		return false;
 	}
 
 	ConfigObjMain.WriteConfigFile();
 
-	return;
+	return true;
 }
 
 // A switch-case function for the ColourForeground function.
-void ColourForegroundSwitch(int* nChoice, std::string* sSettingVariableBack, std::string* sSettingVariable)
+bool ColourForegroundSwitch(int* nChoice, std::string* sSettingVariableBack, std::string* sSettingVariable)
 {
 	// Switch case for selecting colour
 	switch (*nChoice) {
@@ -1098,12 +1133,13 @@ void ColourForegroundSwitch(int* nChoice, std::string* sSettingVariableBack, std
 	default:
 		VerbosityDisplay("In ColourForegroundSwitch() - ERROR: Default switch case statement activated, so nChoice seems to be incorrect.\n");
 		UserErrorDisplay("An error occured, and the colour has not been changed.\nPlease try again later.\n");
-		break;
+		ConfigObjMain.WriteConfigFile();
+		return false;
 	}
 
 	ConfigObjMain.WriteConfigFile();
 
-	return;
+	return true;
 }
 
 // A function that gives an interface to modify the global foreground colour of the terminal.
@@ -1114,22 +1150,22 @@ void ColourForeground(int nChoice = 0) {
 		OptionSelectEngine oseColourFore;
 		oseColourFore.nSizeOfOptions = 17;
 		std::string sOptions[] = {
-			"[1] Black",
-			"[2] Blue",
-			"[3] Green",
-			"[4] Aqua",
-			"[5] Red",
-			"[6] Purple",
-			"[7] Yellow",
-			"[8] White",
-			"[9] Gray",
-			"[10] Light Blue",
-			"[11] Light Green",
-			"[12] Light Aqua",
-			"[13] Light Red",
-			"[14] Light Purple",
-			"[15] Light Yellow",
-			"[16] Bright White (DEFAULT)",
+			"Black",
+			"Blue",
+			"Green",
+			"Aqua",
+			"Red",
+			"Purple",
+			"Yellow",
+			"White",
+			"Gray",
+			"Light Blue",
+			"Light Green",
+			"Light Aqua",
+			"Light Red",
+			"Light Purple",
+			"Light Yellow",
+			"Bright White (DEFAULT)",
 			"Custom RGB Colour Code (Advanced)"
 		};
 		oseColourFore.sOptions = sOptions;
@@ -1244,11 +1280,13 @@ void ColourForeground(int nChoice = 0) {
 		return;
 	}
 
-	ColourForegroundSwitch(&nChoice, &ConfigObjMain.sColourGlobalBack, &ConfigObjMain.sColourGlobal);
+	// Apply foreground colour
+	if (ColourForegroundSwitch(&nChoice, &ConfigObjMain.sColourGlobalBack, &ConfigObjMain.sColourGlobal)) {
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << CentreText("Foreground colour successfully set!") << std::endl;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+	}
 
-	colour(LGRN, ConfigObjMain.sColourGlobalBack);
-	std::cout << CentreText("Foreground colour successfully set!") << std::endl;
-	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 	return;
 }
 
@@ -1260,22 +1298,22 @@ void ColourBackground(int nChoice = 0) {
 		OptionSelectEngine oseColourBack;
 		oseColourBack.nSizeOfOptions = 17;
 		std::string sOptions[] = {
-			"[1] Black (DEFAULT)",
-			"[2] Blue",
-			"[3] Green",
-			"[4] Aqua",
-			"[5] Red",
-			"[6] Purple",
-			"[7] Yellow",
-			"[8] White",
-			"[9] Gray",
-			"[10] Light Blue",
-			"[11] Light Green",
-			"[12] Light Aqua",
-			"[13] Light Red",
-			"[14] Light Purple",
-			"[15] Light Yellow",
-			"[16] Bright White",
+			"Black (DEFAULT)",
+			"Blue",
+			"Green",
+			"Aqua",
+			"Red",
+			"Purple",
+			"Yellow",
+			"White",
+			"Gray",
+			"Light Blue",
+			"Light Green",
+			"Light Aqua",
+			"Light Red",
+			"Light Purple",
+			"Light Yellow",
+			"Bright White",
 			"Custom RGB Colour Code (Advanced)"
 		};
 		oseColourBack.sOptions = sOptions;
@@ -1388,14 +1426,19 @@ void ColourBackground(int nChoice = 0) {
 		return;
 	}
 
-	ColourBackgroundSwitch(&nChoice, &ConfigObjMain.sColourGlobalBack, &ConfigObjMain.sColourGlobal);
+	// Set background colour
+	if (!ColourBackgroundSwitch(&nChoice, &ConfigObjMain.sColourGlobalBack, &ConfigObjMain.sColourGlobal)) {
+		return;
+	}
+	else {
+		// Apply colours to whole screen
+		cls();
 
-	// Apply colours to whole screen
-	cls();
+		colour(LGRN, ConfigObjMain.sColourGlobalBack);
+		std::cout << CentreText("Background colour successfully set!") << std::endl;
+		colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
+	}
 
-	colour(LGRN, ConfigObjMain.sColourGlobalBack);
-	std::cout << CentreText("Background colour successfully set!") << std::endl;
-	colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 	return;
 }
 
@@ -2907,8 +2950,8 @@ bool HackerTyperFile(std::string sFilePath, uint64_t nSpeed = 3) {
 	// Check if the file actually exists
 	std::ifstream FilePathTest(sFinalFilePath);
 	if (FilePathTest.fail()) {
-		VerbosityDisplay("ERROR: In HackerTyperFile() - Test file stream failed to open file path. Incorrect filepath detected.\n");
-		UserErrorDisplay("ERROR - File does not exist. Please ensure the filepath that has been used exists, and try again later.\n");
+		VerbosityDisplay("ERROR: In HackerTyperFile() - Test file stream failed to open file path. Incorrect filepath, lack of permissions, bad memory, etc could be the culprit.\n");
+		UserErrorDisplay("ERROR - File does not exist. Please ensure the filepath that has been used exists, the permissions are there and there is enough system memory, and try again later.\n");
 		FilePathTest.close();
 		return false;
 	}

@@ -132,6 +132,12 @@ namespace zt {
 				else if (sColourBackgroundChoice == LGRN && sColourForegroundChoice == LWHT) {
 					sColourForegroundChoice = BLK;
 				}
+				else if (sColourBackgroundChoice == LCYN && sColourForegroundChoice == LGRN) {
+					sColourForegroundChoice = BLK;
+				}
+				else if (sColourBackgroundChoice == LGRN && sColourForegroundChoice == LCYN) {
+					sColourForegroundChoice = BLK;
+				}
 			}
 
 			// Foreground
@@ -1103,24 +1109,13 @@ namespace zt {
 	// SetWindowTitle - Function to set title for the console window.
 	// Parameters: sTitle for the title string.
 	bool SetWindowTitle(std::string sTitle) {
-		if (bAnsiVTSequences) {
-			if (sTitle.length() > 254) {
-				VerbosityDisplay("ERROR: In SetWindowTitle() - String argument incorrect due to ANSI 254 max string char limit for title.\n");
-				return false;
-			}
-
-			// Use ANSI VT sequences if they work on current terminal
-			std::cout << "\x1b]0;" << sTitle << "\x1b\x5c";
+		// Use Windows SetConsoleTitleA if ANSI VT sequences don't work on current terminal window
+		if (SetConsoleTitleA(sTitle.c_str())) {
+			return true;
 		}
 		else {
-			// Use Windows SetConsoleTitleA if ANSI VT sequences don't work on current terminal window
-			if (SetConsoleTitleA(sTitle.c_str())) {
-				return true;
-			}
-			else {
-				VerbosityDisplay("ERROR: In SetWindowTitle() - String argument incorrect due to WIN32 API 254 max string char limit for title.\n");
-				return false;
-			}
+			VerbosityDisplay("ERROR: In SetWindowTitle() - String argument incorrect due to WIN32 API 65535 max string character limit for title.\n");
+			return false;
 		}
 
 		return true;

@@ -262,7 +262,7 @@ bool commands::Commands61To70(const std::string sCommand, char* cCommandArgs, co
 			converter::KilometresToLightYears(dConverterArgument, bFromArgument);
 			break;
 		default:
-			VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In commands::Commands61To70() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 		}
 
@@ -294,14 +294,14 @@ bool commands::Commands61To70(const std::string sCommand, char* cCommandArgs, co
 						nMinNumber = std::stold(sStringDataCommandArgs[1]);
 					}
 					else {
-						VerbosityDisplay("In Commands61To70() - ERROR: Could not detect numerical value in string-based number argument, due to isNumberld fail.\n");
+						VerbosityDisplay("In commands::Commands61To70() - ERROR: Could not detect numerical value in string-based number argument, due to isNumberld fail.\n");
 						UserErrorDisplay("ERROR - Your minimum number generation boundary argument is invalid. Please try again.\nSee \"randnum -h\" for more info.\n");
 
 						return true;
 					}
 				}
 				else {
-					VerbosityDisplay("In Commands61To70(): ERROR - Failed to detect second mandatory minimum boundary argument for random number generation. Arguments should be re-checked.\n");
+					VerbosityDisplay("In commands::Commands61To70(): ERROR - Failed to detect second mandatory minimum boundary argument for random number generation. Arguments should be re-checked.\n");
 					UserErrorDisplay("ERROR - There was no minimum boundary argument found to generate the random number. This must be included with a maximum boundary. Please add one and try again.\nSee \"randnum -h\" for more info.\n");
 
 					return true;
@@ -312,7 +312,7 @@ bool commands::Commands61To70(const std::string sCommand, char* cCommandArgs, co
 					nMaxNumber = std::stold(sStringDataCommandArgs[0]);
 				}
 				else {
-					VerbosityDisplay("In Commands61To70() - ERROR: Could not detect numerical value in string-based number argument, due to isNumberld fail.\n");
+					VerbosityDisplay("In commands::Commands61To70() - ERROR: Could not detect numerical value in string-based number argument, due to isNumberld fail.\n");
 					UserErrorDisplay("ERROR - Your maximum number generation boundary argument is invalid. Please try again.\nSee \"randnum -h\" for more info.\n");
 
 					return true;

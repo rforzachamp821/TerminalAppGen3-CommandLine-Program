@@ -189,7 +189,7 @@ bool commands::Commands31To40(const std::string sCommand, char* cCommandArgs, co
 				// Check if argument is a number
 				if (sStringDataCommandArgs[0] != "") {
 					if (isNumberull(sStringDataCommandArgs[0]) == false) {
-						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+						VerbosityDisplay("In commands::Commands31To40() - ERROR: Could not detect numerical value in string-based number argument.\n");
 						UserErrorDisplay("ERROR - Passes argument is not a number.\nPlease try again later, or see 'memtest -h' for more details.\n");
 
 						return true;
@@ -205,7 +205,7 @@ bool commands::Commands31To40(const std::string sCommand, char* cCommandArgs, co
 				// Check if argument is a number
 				if (sStringDataCommandArgs[0] != "") {
 					if (isNumberull(sStringDataCommandArgs[0]) == false) {
-						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+						VerbosityDisplay("In commands::Commands31To40() - ERROR: Could not detect numerical value in string-based number argument.\n");
 						UserErrorDisplay("ERROR - Passes argument is not a number.\nPlease try again later, or see 'memtest -h' for more details.\n");
 
 						return true;
@@ -220,7 +220,7 @@ bool commands::Commands31To40(const std::string sCommand, char* cCommandArgs, co
 				// Check if argument is a number
 				if (sStringDataCommandArgs[0] != "") {
 					if (isNumberull(sStringDataCommandArgs[0]) == false) {
-						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+						VerbosityDisplay("In commands::Commands31To40() - ERROR: Could not detect numerical value in string-based number argument.\n");
 						UserErrorDisplay("ERROR - Passes argument is not a number.\nPlease try again later, or see 'memtest -h' for more details.\n");
 
 						return true;
@@ -404,7 +404,7 @@ bool commands::Commands31To40(const std::string sCommand, char* cCommandArgs, co
 
 		// Failed, unknown return value
 		else {
-			VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In commands::Commands31To40() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR: An unknown error occured. Please try again later.\n");
 
 			return true;

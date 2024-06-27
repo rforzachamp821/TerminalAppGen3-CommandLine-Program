@@ -26,7 +26,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 					sNotesText = sStringDataCommandArgs[0];
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Vital argument not found.\n");
+					VerbosityDisplay("ERROR: In commands::Commands41To50() - Vital argument not found.\n");
 					UserErrorDisplay("ERROR - No form of note text argument found.\nPlease make sure that's there, and try again.\nSee \"notes -h\" for more info.\n");
 
 					return true;
@@ -40,7 +40,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 						nNotesLine = std::stoull(sStringDataCommandArgs[0]) - 1;
 						if (nNotesLine > NotesMain.GetCurrentNotesCount() - 1) {
 							// Line number too large
-							VerbosityDisplay("In Commands() - ERROR: String-based number argument is too large/small in correlation to number of notes currently in notes array.\n");
+							VerbosityDisplay("In commands::Commands41To50() - ERROR: String-based number argument is too large/small in correlation to number of notes currently in notes array.\n");
 							UserErrorDisplay("ERROR - Line number is too large/small, and is accessing a nonexistent note line. Please change the argument, and try again.\nSee \"notes -h\" for more info.\n");
 
 							return true;
@@ -48,7 +48,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 					}
 					else {
 						// Not a number or it is negative
-						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument, or argument was negative.\n");
+						VerbosityDisplay("In commands::Commands41To50() - ERROR: Could not detect numerical value in string-based number argument, or argument was negative.\n");
 						UserErrorDisplay("ERROR - Line number is not a number, or it is negative. Please change the argument, and try again.\nSee \"notes -h\" for more info.\n");
 
 						return true;
@@ -69,7 +69,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 					}
 					else {
 						// Not a number or it is negative
-						VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument, or argument was negative.\n");
+						VerbosityDisplay("In commands::Commands41To50() - ERROR: Could not detect numerical value in string-based number argument, or argument was negative.\n");
 						UserErrorDisplay("ERROR - Line number is not a number, or it is negative. Please change the argument, and try again.\nSee \"notes -h\" for more info.\n");
 
 						return true;
@@ -85,7 +85,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 					sNotesText = sStringDataCommandArgs[1];
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Vital argument not found.\n");
+					VerbosityDisplay("ERROR: In commands::Commands41To50() - Vital argument not found.\n");
 					UserErrorDisplay("ERROR - No form of note text argument found.\nPlease make sure that's there, and try again.\nSee \"notes -h\" for more info.\n");
 
 					return true;
@@ -144,7 +144,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Failed to write to notes file and save notes.\n");
+					VerbosityDisplay("In commands::Commands41To50() - ERROR: Failed to write to notes file and save notes.\n");
 					UserErrorDisplay("ERROR - Failed to save new added notes. Exiting anyway...\n");
 
 					return true;
@@ -174,7 +174,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Failed to write to notes file and save notes.\n");
+					VerbosityDisplay("In commands::Commands41To50() - ERROR: Failed to write to notes file and save notes.\n");
 					UserErrorDisplay("ERROR - Failed to remove the notes from the notes file. Exiting anyway...\n");
 
 					return true;
@@ -205,7 +205,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 					colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Failed to write to notes file and save notes.\n");
+					VerbosityDisplay("In commands::Commands41To50() - ERROR: Failed to write to notes file and save notes.\n");
 					UserErrorDisplay("ERROR - Failed to save modified notes. Exiting anyway...\n");
 
 					return true;
@@ -305,7 +305,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 
 		// Error
 		else {
-			VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In commands::Commands41To50() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 
 			return true;
@@ -350,7 +350,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			slowcharfn(true, "Welcome to FileParse!");
 			colour(ConfigObjMain.sColourGlobal, ConfigObjMain.sColourGlobalBack);
 
-			std::cout << "This is where you can run scripts on ZeeTerminal, where commands can be automatically executed.\n\n";
+			std::cout << wordWrap("This is where you can run scripts on ZeeTerminal, where commands can be automatically executed.\n\n");
 
 			sFilePath = StrInput("Please input filepath for custom script (0 to exit, '*open' to open file dialogue): > ");
 
@@ -377,7 +377,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 
 		// Initialise FileParse system
 		if (!fparse::InitialiseFileParse(sFilePath, bExitOnCompletion)) {
-			UserErrorDisplay("ERROR - An error occured while initialising the FileParse System. Possibly a nonexistent file path?\n");
+			UserErrorDisplay("ERROR - An error occured while initialising the FileParse System. Possibly a nonexistent file path, lack of permissions or out of memory? Please try again later.\n");
 			return true;
 		}
 		else {
@@ -447,7 +447,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			}
 			else {
 				// Unknown error
-				VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+				VerbosityDisplay("In commands::Commands41To50() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 				UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 				return true;
 			}
@@ -703,7 +703,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			}
 			else if (sStringOptionCommandArgs[i] == "saytext") {
 				if (sStringDataCommandArgs[i] == "") {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect any argument string after option.\n");
+					VerbosityDisplay("ERROR: In commands::Commands41To50() - Could not detect any argument string after option.\n");
 					UserErrorDisplay("ERROR - No text data argument found. Please check for a text argument, and try again.\nType \"cow -h\" for more info.\n");
 					return true;
 				}
@@ -756,7 +756,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			return true;
 		}
 		else {
-			VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In commands::Commands41To50() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 		}
 
@@ -787,7 +787,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			}
 			else if (sStringOptionCommandArgs[i] == "saytext") {
 				if (sStringDataCommandArgs[i] == "") {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect any argument string after option.\n");
+					VerbosityDisplay("ERROR: In commands::Commands41To50() - Could not detect any argument string after option.\n");
 					UserErrorDisplay("ERROR - No text data argument found. Please check for a text argument, and try again.\nType \"cat -h\" for more info.\n");
 					return true;
 				}
@@ -840,7 +840,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			return true;
 		}
 		else {
-			VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In commands::Commands41To50() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 		}
 
@@ -871,7 +871,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			}
 			else if (sStringOptionCommandArgs[i] == "saytext") {
 				if (sStringDataCommandArgs[i] == "") {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect any argument string after option.\n");
+					VerbosityDisplay("ERROR: In commands::Commands41To50() - Could not detect any argument string after option.\n");
 					UserErrorDisplay("ERROR - No text data argument found. Please check for a text argument, and try again.\nType \"bunny -h\" for more info.\n");
 					return true;
 				}
@@ -924,7 +924,7 @@ bool commands::Commands41To50(const std::string sCommand, char* cCommandArgs, co
 			return true;
 		}
 		else {
-			VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+			VerbosityDisplay("In commands::Commands41To50() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 			UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 		}
 

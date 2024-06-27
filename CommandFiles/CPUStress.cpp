@@ -11,15 +11,32 @@ bool bCpuStressKeyboardTermination = false;
 
 extern ConfigFileSystem ConfigObjMain;
 
+#include <random>
+
 
 // Worker for CPU Stress Test
 void CpuStressTestWorker() {
 	long double ldStress = 1.0; 
 
 	while (!StopCpuStress) {
-		ldStress *= RandNumld(0, 5);
-		ldStress /= RandNumld(0.00000001, 5);
-		ldStress += RandNumld(0, 5);
+		// 15 rounds of random number generation
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
 	}
 
 	return;
@@ -30,11 +47,28 @@ void CpuBenchmarkWorker() {
 	long double ldStress = 1.0;
 
 	while (!StopCpuStress) {
-		ldStress *= RandNumld(0, 5);
-		ldStress /= RandNumld(0.00000001, 5);
-		ldStress += RandNumld(0, 5);
+		// 15 rounds of random number generation
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		ldStress *= RandNumld(M_PI * 2, 0.000000001);
+		ldStress /= RandNumld(M_PI * 2, 0.000000001);
+		
 		nCurrentReiterationNum++;
 	}
+
 	return;
 }
 

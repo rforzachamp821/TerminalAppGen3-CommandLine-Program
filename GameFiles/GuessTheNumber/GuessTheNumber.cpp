@@ -12,7 +12,7 @@ void GuessTheNumber::MainGameFn() {
 	while (true) 
 	{
 		// Set up environment
-		int nCorrectRandNum = RandNumld(100, 0);
+		int nCorrectRandNum = RandNumld(100, 1);
 		int nNumberOfTriesUsed = 0;
 		cls();
 		std::cout << wordWrap("\nLet the games begin!\n");
@@ -35,8 +35,7 @@ void GuessTheNumber::MainGameFn() {
 			}
 
 			// Input guess number prompt
-			int nUserGuessNumber = 0;
-			nUserGuessNumber = NumInputi("\nInput a guess number between 1 and 100 (0 to exit game): > ");
+			int nUserGuessNumber = NumInputi("\nInput a guess number between 1 and 100 (0 to exit game): > ");
 
 			// Exit to menu on 0
 			if (nUserGuessNumber == 0) {
@@ -62,9 +61,9 @@ void GuessTheNumber::MainGameFn() {
 				std::cout << wordWrap("That guess number was higher than 100. Please try again.\n");
 				continue;
 			}
-			// if guess number is less than 0
-			else if (nUserGuessNumber < 0) {
-				std::cout << wordWrap("That guess number was less than 0. Please try again.\n");
+			// if guess number is less than 1
+			else if (nUserGuessNumber < 1) {
+				std::cout << wordWrap("That guess number was less than 1. Please try again.\n");
 				continue;
 			}
 
@@ -175,7 +174,7 @@ void GuessTheNumber::GuessTheNumber_MainMenu()
 			cls();
 			std::cout << "################################# GUESS THE NUMBER ##############################################\n\n";
 
-			slowcharfn(true, "You have " + std::to_string(nNumOfTriesAllowed) + " tries to guess a number between 0 and 100 inclusive. \n");
+			slowcharfn(true, "You have " + std::to_string(nNumOfTriesAllowed) + " tries to guess a number between 1 and 100 inclusive. \n");
 			slowcharfn(true, "If you get the answer wrong, the game will tell you if your answer was higher or lower than the correct number.");
 			std::cout << "\n";
 			slowcharfn(true, "Good luck!\n");

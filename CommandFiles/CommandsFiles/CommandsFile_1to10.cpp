@@ -39,6 +39,9 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			}
 		}
 
+		CentreColouredText(" ___TUTORIAL___ ", 1);
+		std::cout << "\n";
+
 		// Start the tutorial
 		if (YesNoInput("Are you sure you want to start the tutorial? [y/n] > ")) {
 			Tutorial();
@@ -65,8 +68,13 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			sEchoString += sStringDataCommandArgs[i];
 		}
 
+
+
 		// Output what user wants to input within echo
 		if (sEchoString == "") {
+			CentreColouredText(" ___ECHO___ ", 1);
+			std::cout << "\n";
+
 			sEchoString = StrInput("Input what you would like ZeeTerminal to echo (output): > ");
 
 			// Output the input
@@ -197,7 +205,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 				DevTools(9);
 				break;
 			default:
-				VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+				VerbosityDisplay("In commands::Commands1To10() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 				UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 				break;
 			}
@@ -294,7 +302,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 				return true;
 			}
 			else {
-				VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+				VerbosityDisplay("In commands::Commands1To10() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 				UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 
 				return true;
@@ -327,7 +335,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 				}
 				else {
 					// Can't process a non-number
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured while processing your foreground argument. Make sure your argument syntax is correct, and try again.\nSee \"colour -h\" for more info.\n");
 					Exiting();
 					return true;
@@ -344,7 +352,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 				}
 				else {
 					// Can't process a non-number
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured while processing your background argument. Make sure your argument syntax is correct, and try again.\nSee \"colour -h\" for more info.\n");
 					Exiting();
 					return true;
@@ -429,7 +437,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 				break;
 			}
 			else {
-				VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+				VerbosityDisplay("In commands::Commands1To10() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 				UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 				return true;
 			}
@@ -451,10 +459,17 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 
 				// Check if argument is a number, post error message if not and call function if yes
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+					}
+
 					HighlightColourSettings(1, std::stoi(sStringDataCommandArgs[0]));
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -462,10 +477,17 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			}
 			else if (sStringOptionCommandArgs[0] == "highlightback") {
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+					}
+
 					HighlightColourSettings(2, std::stoi(sStringDataCommandArgs[0]));
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -473,40 +495,68 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			}
 			else if (sStringOptionCommandArgs[0] == "titlefore") {
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+					}
+
 					TitleColourSettings(1, std::stoi(sStringDataCommandArgs[0]));
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 				return true;
 			}
 			else if (sStringOptionCommandArgs[0] == "titleback") {
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+					}
+
 					TitleColourSettings(2, std::stoi(sStringDataCommandArgs[0]));
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 				return true;
 			}
 			else if (sStringOptionCommandArgs[0] == "subheadingfore") {
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+					}
+
 					SubheadingColourSettings(1, std::stoi(sStringDataCommandArgs[0]));
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 				return true;
 			}
 			else if (sStringOptionCommandArgs[0] == "subheadingback") {
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+					}
+
 					SubheadingColourSettings(2, std::stoi(sStringDataCommandArgs[0]));
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -520,7 +570,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					VerboseMessagesSettings(2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -534,7 +584,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					DirectionMessagesSettings(2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -548,7 +598,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					AnsiSettings(2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -562,7 +612,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					WordWrapSettings(2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -576,7 +626,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					CursorSettings(1, 2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -590,7 +640,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					CursorSettings(2, 0, 2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -607,7 +657,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					CursorSettings(3, 0, 0, 3);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct 'block', 'underline' or 'bar' value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct 'block', 'underline' or 'bar' value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's either 'block', 'underline', or 'bar'. Type \"settings -h\" for more info.\n");
 				}
 
@@ -618,7 +668,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					OtherSettings(1, std::stoll(sStringDataCommandArgs[0]), true);
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -632,7 +682,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					OtherSettings(2, 0, true, 2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -646,7 +696,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					OtherSettings(3, 0, true, 0, 2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -660,7 +710,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					OtherSettings(4, 0, true, 0, 0, 2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -671,7 +721,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					OtherSettings(5, 0, true, 0, 0, 0, sStringDataCommandArgs[0]);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect any argument string after option.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect any argument string after option.\n");
 					UserErrorDisplay("An error occured. It seems like no option was found. Check your syntax, make sure an option is present and try again. Type \"settings -h\" for more info.\n");
 				}
 
@@ -685,7 +735,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					LogFileSystemSettings(1, 2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -699,7 +749,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					LogFileSystemSettings(2, 0, 2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -713,7 +763,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					LogFileSystemSettings(3, 0, 0, 2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -727,7 +777,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					LogFileSystemSettings(4, 0, 0, 0, 2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -741,7 +791,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					LogFileSystemSettings(5, 0, 0, 0, 0, 2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -755,7 +805,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					OtherSettings(6, 0, true, 0, 0, 0, "", 2);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct t/f or true/false value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct t/f or true/false value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's \"t\" or \"f\" and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -766,7 +816,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					CarDodgeGameSettings(1, std::stoi(sStringDataCommandArgs[0]), 0, 0, 0);
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -792,7 +842,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 					CarDodgeGameSettings(2, 0, 6, 0, 0);
 				}
 				else {
-					VerbosityDisplay("ERROR: In Commands() - Could not detect correct 'kartcar', 'thehoverrocket', 'thesweeper', 'theslicer', 'gtspeed' or 'xtraaero' value in argument string.\n");
+					VerbosityDisplay("ERROR: In commands::Commands1To10() - Could not detect correct 'kartcar', 'thehoverrocket', 'thesweeper', 'theslicer', 'gtspeed' or 'xtraaero' value in argument string.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's either: 'kartcar', 'thehoverrocket', 'thesweeper', 'theslicer', 'gtspeed' or 'xtraaero'. Type \"settings -h\" for more info.\n");
 				}
 
@@ -800,10 +850,18 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			}
 			else if (sStringOptionCommandArgs[0] == "cdforeground") {
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+
+					}
+
 					CarDodgeGameSettings(3, 0, 0, std::stoi(sStringDataCommandArgs[0]), 0);
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -811,10 +869,17 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			}
 			else if (sStringOptionCommandArgs[0] == "cdbackground") {
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+					}
+
 					CarDodgeGameSettings(4, 0, 0, 0, std::stoi(sStringDataCommandArgs[0]));
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -822,10 +887,17 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			}
 			else if (sStringOptionCommandArgs[0] == "gtnforeground") {
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+					}
+
 					GuessTheNumberGameSettings(1, std::stoi(sStringDataCommandArgs[0]), 0);
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -833,10 +905,17 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			}
 			else if (sStringOptionCommandArgs[0] == "gtnbackground") {
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+					}
+
 					GuessTheNumberGameSettings(2, 0, std::stoi(sStringDataCommandArgs[0]));
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -844,10 +923,17 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			}
 			else if (sStringOptionCommandArgs[0] == "gtneforeground") {
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+					}
+
 					GuessTheNumberExtremeGameSettings(1, std::stoi(sStringDataCommandArgs[0]), 0);
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -855,10 +941,17 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			}
 			else if (sStringOptionCommandArgs[0] == "gtnebackground") {
 				if (isNumberi(sStringDataCommandArgs[0])) {
+					// Check if colour number is beyond limits - alert user if so
+					if (std::stoi(sStringDataCommandArgs[0]) < 1 || std::stoi(sStringDataCommandArgs[0]) > 16) {
+						VerbosityDisplay("In commands::Commands1To10() - ERROR: The colour number specified is beyond the acceptable colour number range (1 <= x <= 16).");
+						UserErrorDisplay("ERROR - The specified colour number argument is less than 1 or above 16. Please ensure that the argument is within the acceptable range, and try again later.\n");
+						return true;
+					}
+
 					GuessTheNumberExtremeGameSettings(2, 0, std::stoi(sStringDataCommandArgs[0]));
 				}
 				else {
-					VerbosityDisplay("In Commands() - ERROR: Could not detect numerical value in string-based number argument.\n");
+					VerbosityDisplay("In commands::Commands1To10() - ERROR: Could not detect numerical value in string-based number argument.\n");
 					UserErrorDisplay("An error occured. Your setting option seems to be incorrect. Make sure it's a number and try again.\nType \"settings -h\" for more info.\n");
 				}
 
@@ -935,7 +1028,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 				break;
 
 			default:
-				VerbosityDisplay("In Commands() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
+				VerbosityDisplay("In commands::Commands1To10() - ERROR: Unknown return value from OptionSelectEngine::OptionSelect().\n");
 				UserErrorDisplay("ERROR - Unknown error occured. Please try again later.\n");
 				return true;
 			}
@@ -965,7 +1058,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 			std::cout << "\n";
 
 			// Take title input
-			sTitle = StrInput("Please input your desired title (254 characters max): > ");
+			sTitle = StrInput("Please input your desired title (65535 characters max): > ");
 		}
 
 		// Set the window title
@@ -976,7 +1069,7 @@ bool commands::Commands1To10(const std::string sCommand, char* cCommandArgs, con
 		}
 		else {
 			// Failed - too long of a string
-			UserErrorDisplay("Setting console window title failed!\nPlease check if your title is too long. It cannot be longer than 254 characters.\n");
+			UserErrorDisplay("Setting console window title failed!\nPlease check if your title is too long. It cannot be longer than 65535 characters.\n");
 		}
 
 		return true;

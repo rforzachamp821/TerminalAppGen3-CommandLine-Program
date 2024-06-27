@@ -268,7 +268,7 @@ int main(int argc, char* argv[])
 		std::istringstream sCommandInputIn(sCommandInput);
 
 		// For loop to start checking from after any spaces inputted by the user
-		for (int i = 0; i < sCommandInput.length() && !sCommandInputIn.eof(); i++) {
+		for (size_t i = 0; i < sCommandInput.length() && !sCommandInputIn.eof(); i++) {
 			std::getline(sCommandInputIn, sCommand, ' ');
 			if (sCommand != "") break;
 		}
@@ -301,7 +301,7 @@ int main(int argc, char* argv[])
 		sCommandInputRAW = sCommand;
 
 		// Make all letters inside sCommand lowercase
-		for (int i = 0; i < sCommand.length(); i++) {
+		for (size_t i = 0; i < sCommand.length(); i++) {
 			sCommand[i] = std::tolower(sCommand[i]);
 		}
 
@@ -442,13 +442,17 @@ int main(int argc, char* argv[])
 		for (size_t nFirstMarkerPos = 0, nLastMarkerPos = 0, i = 0, nViableSpacePos = 0; i < nArgArraySize; i++, nFirstMarkerPos = 0, nLastMarkerPos = 0, nViableSpacePos = 0)
 		{
 			// Check for next viable space location
+			bool bExitLoopEarly = false; // optimisation for exiting loop early
 			while (true) 
 			{
 				// a. Find next raw space location
 				nViableSpacePos = sCommandArgsBuffer.find(" ", nViableSpacePos);
 
 				// b. Check if raw space location is at end of string
-				if (nViableSpacePos == std::string::npos || nViableSpacePos == sCommandArgsBuffer.find_last_of(" ", sCommandArgsBuffer.length())) break;
+				if (nViableSpacePos == std::string::npos || nViableSpacePos == sCommandArgsBuffer.find_last_of(" ", std::string::npos)) {
+					bExitLoopEarly = true;
+					break;
+				}
 
 				// c. Increment nViableSpacePos to not just run in loops when checking space location
 				nViableSpacePos++;
@@ -459,6 +463,9 @@ int main(int argc, char* argv[])
 					break;
 				}
 			}
+
+			// Exit the for loop if there is nothing left to find
+			if ((sCommandArgsBuffer.find(" ", nViableSpacePos) == std::string::npos || bExitLoopEarly) && sCommandArgsBuffer.find("\"", 0) == std::string::npos) break;
 
 			// Check what string argument type is first, and then check that first so everything in the array is in order
 			if (sCommandArgsBuffer.find(" ", nViableSpacePos) < sCommandArgsBuffer.find("\"", 0)) 
